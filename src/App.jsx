@@ -1,9 +1,13 @@
+import React from "react"
+import Navbar from "./components/Navbar"
 
+const App = () => {
 
-const App = () => (
-    <div>
-      <h1>Tswaanda MarketPlace</h1>
-    </div>
-)
+    return (
+        <div>
+          <Navbar />
+        </div>
+    )
+  }
 
 export default App

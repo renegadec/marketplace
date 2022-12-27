@@ -1,12 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-
-:root {
-  --bg-color: #F5F5F5;
-  --green-color: #37B068;
-  --grey-color: rgba(150, 150, 150, 0.38);
-  --card-background: rgba(74, 156, 128, 0.13);
+body {
+  background-color: #F5F5F5;
 }
 
 * {

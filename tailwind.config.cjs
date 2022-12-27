@@ -9,9 +9,11 @@ module.exports = {
       colors: {
         primary: "#37B068",
         secondary: "rgba(150, 150, 150, 0.38)",
-        mainBg: "#F5F5F5",
-      }
+      },
+      fontFamily: {
+        'mont': ['Montserrat', 'sans-serif'],
     },
   },
+},
   plugins: [],
 }
