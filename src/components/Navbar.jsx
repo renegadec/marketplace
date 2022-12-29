@@ -1,16 +1,8 @@
 import { React, useState} from 'react';
 import { logo } from "../assets";
-import { navLinks } from '../constants/';
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-
-const navigation = [
-    { name: 'Product', href: '#' },
-    { name: 'Features', href: '#' },
-    { name: 'Marketplace', href: '#' },
-    { name: 'Company', href: '#' },
-    ]
-
+import { navigation } from '../constants/';
         
 const Navbar = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)

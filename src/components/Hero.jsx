@@ -10,8 +10,7 @@ const navigation = [
     { name: 'Company', href: '#' },
     ]   
 
-    export default function Example() {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+const Hero = () => {
 
     return (
         <div className="isolate bg-white">
@@ -107,8 +106,8 @@ const navigation = [
                         y2="474.645"
                         gradientUnits="userSpaceOnUse"
                         >
-                        <stop stopColor="#9089FC" />
-                        <stop offset={1} stopColor="#FF80B5" />
+                        <stop stopColor="#B2F5EA" />
+                        <stop offset={1} stopColor="#37B068" />
                         </linearGradient>
                     </defs>
                     </svg>
@@ -119,47 +118,6 @@ const navigation = [
         </main>
         </div>
     )
-    }
+}
 
-
-
-
-
-
-// import React from 'react'
-// import { heroImg } from '../assets'
-// import Info from './Info'
-
-// const Hero = () => {
-//     return (
-//         <section className='h-screen'>
-//             <img src={heroImg} alt="produce" className='h-full w-full object-cover' />
-//             <div className='absolute inset-0 flex flex-col items-center justify-center h-full w-full'>
-//                 <h1 
-//                     className='text-white text-6xl font-bold mb-8'
-//                 >
-//                     A taste of organically grown African products
-//                 </h1>
-
-//                 <h3 
-//                     className=' text-white text-2xl'
-//                 >
-//                     From land prep to harvest documented products. Zero artificial chemicals
-//                 </h3>
-
-//                 <button 
-//                     className='bg-primary px-8 py-3 rounded-[8px] font-[500] mt-8'
-//                 >
-//                     Explore more
-//                 </button>
-//                 <div className='absolute bottom-0'>
-//                     <Info className='w-full' />
-//                 </div>
-                
-//             </div>
-            
-//         </section>
-//     )
-// }
-
-// export default Hero
+export default Hero
