@@ -1,14 +1,20 @@
 import React from "react"
+
+// Router
 import { 
   BrowserRouter, 
   Routes, 
   Route 
 } from "react-router-dom";
+
+// Navbar
+import Navbar from "./components/Navbar";
+
+// Pages
 import { 
   Market, 
   NotFound 
 } from "./pages"
-import Navbar from "./components/Navbar";
 
 const App = () => {
     return (
