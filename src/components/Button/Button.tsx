@@ -22,8 +22,8 @@ const buttonStyles = cva(["flex", "justify-center", "place-items-center", "round
         ],
       },
       size: {
-        large: ["h-14", "w-40"],
-        medium: ["h-10", "w-40"]
+        large: ["h-12", "w-36"],
+        medium: ["h-10", "w-36"]
       }
     }
 })

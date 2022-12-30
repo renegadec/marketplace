@@ -20,10 +20,10 @@ const Market = () => {
                 size="large" />
             ))}
           </div>
-          <div className="flex w-full place-items-start pt-8 lg:px-28">
+          <div className="flex w-full place-items-start pt-8 lg:px-36">
               <h3>Showing All {productsData['product'].length} Results</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-12">
             {productsData['product'].map((product) => (
               <ProductCard 
                 type={product.type}
