@@ -1,16 +1,24 @@
 import React from "react"
-import Navbar from "./components/Navbar"
-import Hero from "./components/Hero"
-import Features from "./components/Features"
+import { 
+  BrowserRouter, 
+  Routes, 
+  Route 
+} from "react-router-dom";
+import { 
+  Market, 
+  NotFound 
+} from "./pages"
+import Navbar from "./components/Navbar";
 
 const App = () => {
-
     return (
-        <div className="font-mont">
-          <Navbar />
-          <Hero />
-          <Features />
-        </div>
+      <BrowserRouter>
+        <Navbar/>
+        <Routes>
+          <Route index element={<Market />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
     )
   }
 
