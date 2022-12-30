@@ -13,7 +13,7 @@ const buttonStyles = cva(["flex", "justify-center", "place-items-center", "round
         primary: [
           "bg-primary",
           "text-white",
-          "hover:bg-indigo-700"
+          "hover:bg-gray-400"
         ],
         secondary: [
           "bg-white",
