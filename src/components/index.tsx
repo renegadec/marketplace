@@ -3,11 +3,13 @@ import Hero from "./Hero";
 import Info from "./Info";
 import Navbar from "./Navbar";
 import Product from "./Product";
+import ProductCard from "./ProductCard/ProductCard";
 
 export {
     Features,
     Hero,
     Info,
     Navbar,
-    Product
+    Product,
+    ProductCard
 }
