@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 interface ButtonProps {
     text: string,
     handler: Function,
-    variant?: "primary" | "secondary",
+    variant?: "primary" | "secondary" | "outline",
     size?: "medium" | "large"
 }
 
@@ -20,6 +20,14 @@ const buttonStyles = cva(["flex", "justify-center", "place-items-center", "round
           "text-black",
           "hover:bg-gray-200",
         ],
+        outline: [
+          "bg-transparent",
+          "border-2",
+          "border-white",
+          "text-white",
+          "hover:border-gray-200",
+          "hover:text-gray-200"
+        ]
       },
       size: {
         large: ["h-12", "w-36"],
