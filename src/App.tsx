@@ -18,13 +18,15 @@ import {
 
 const App = () => {
     return (
-      <BrowserRouter>
+      <main className="font-mont">
+        <BrowserRouter>
         <Navbar/>
         <Routes>
           <Route index element={<Market />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
+      </main> 
     )
   }
 
