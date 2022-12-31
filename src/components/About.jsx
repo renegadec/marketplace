@@ -268,7 +268,7 @@ const About = (props) => {
                             href="#"
                             className="inline-block rounded-lg bg-primary px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-primary hover:bg-indigo-700 hover:ring-indigo-700"
                         >
-                            Get started
+                            Learnmore
                             <span className="text-indigo-200" aria-hidden="true">
                             &rarr;
                             </span>
@@ -277,7 +277,7 @@ const About = (props) => {
                             href="#"
                             className="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-primary hover:ring-gray-900/20"
                         >
-                            Marketplace
+                            Explore Products
                             <span className="text-gray-400" aria-hidden="true">
                             &rarr;
                             </span>
