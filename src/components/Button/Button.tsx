@@ -4,7 +4,8 @@ interface ButtonProps {
     text: string,
     handler: Function,
     variant?: "primary" | "secondary" | "outline",
-    size?: "medium" | "large"
+    size?: "medium" | "large",
+    width?: "default" | "full"
 }
 
 const buttonStyles = cva(["flex", "justify-center", "place-items-center", "rounded-[12px]", "font-semibold"], {
@@ -30,8 +31,12 @@ const buttonStyles = cva(["flex", "justify-center", "place-items-center", "round
         ]
       },
       size: {
-        large: ["h-12", "w-36"],
-        medium: ["h-10", "w-36"]
+        large: ["h-12"],
+        medium: ["h-10"]
+      },
+      width: {
+        default: "w-36",
+        full: "w-full"
       }
     }
 })
@@ -40,10 +45,13 @@ const Button = ({
      text,
      handler,
      variant = "primary",
-     size = "medium"
+     size = "medium",
+     width = "default"
 }: ButtonProps) => {
     return (
-        <button onClick={() => handler()} className={buttonStyles({ intent: variant, size: size })}>
+        <button 
+          onClick={() => handler()} 
+          className={buttonStyles({ intent: variant, size: size, width: width })}>
             {text}
         </button>
     )
