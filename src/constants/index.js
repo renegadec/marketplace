@@ -1,5 +1,3 @@
-import {  Avocados, Apples, Bananas } from "../assets";
-
 
 export const navigation = [
   { name: "Product", href: "#" },

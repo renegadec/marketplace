@@ -65,24 +65,24 @@ const Hero = () => {
                         Making financial transparency achievable for farmers in a fast and easy way. Explore our new marketplace
                     </p>
                     <div className="mt-8 flex gap-x-4 sm:justify-center">
-                    <a
-                        href="#"
-                        className="inline-block rounded-lg bg-primary px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-primary hover:bg-indigo-700 hover:ring-indigo-700"
-                    >
-                        Get started
-                        <span className="text-indigo-200" aria-hidden="true">
-                        &rarr;
-                        </span>
-                    </a>
-                    <a
-                        href="#"
-                        className="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-primary hover:ring-gray-900/20"
-                    >
-                        Marketplace
-                        <span className="text-gray-400" aria-hidden="true">
-                        &rarr;
-                        </span>
-                    </a>
+                        <a
+                            href="#"
+                            className="inline-block rounded-lg bg-primary px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-primary hover:bg-indigo-700 hover:ring-indigo-700"
+                        >
+                            Get started
+                            <span className="text-indigo-200" aria-hidden="true">
+                            &rarr;
+                            </span>
+                        </a>
+                        <a
+                            href="#"
+                            className="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-primary hover:ring-gray-900/20"
+                        >
+                            Marketplace
+                            <span className="text-gray-400" aria-hidden="true">
+                            &rarr;
+                            </span>
+                        </a>
                     </div>
                 </div>
                 <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
