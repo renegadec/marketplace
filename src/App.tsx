@@ -7,8 +7,8 @@ import {
   Route 
 } from "react-router-dom";
 
-// Navbar
-import Navbar from "./components/Navbar";
+// Components
+import { Navbar, Footer } from "./components";
 
 // Pages
 import { 
@@ -24,6 +24,7 @@ const App = () => {
           <Route index element={<Market />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     )
   }
