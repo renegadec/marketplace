@@ -27,12 +27,12 @@ const ProductCard = ({
                     <h1 className="text-left whitespace-pre-wrap font-semibold text-black text-2xl leading-none m-0">
                         {type}
                     </h1>
-                    <h3 className="text-left text-gray-500 font-medium text-lg leading-none m-0 mt-2">
+                    <h3 className="text-left text-gray-500 font-light font-xs text leading-none m-0 mt-2">
                         {desc}
                     </h3>
                 </div>
                 <div className="flex flex-row justify-between items-end p-0 px-6 lg:px-0 mt-6 box-border">
-                    <button className="bg-primary hover:bg-gray-400 w-4/6 rounded-[12px] flex isolate justify-center items-start p-2 font-bold text-black text-xl box-border">
+                    <button className="bg-primary hover:bg-gray-400 w-4/6 rounded-[12px] flex isolate justify-center items-start p-2 font-medium text-black box-border">
                         View Deal
                     </button>
                     <button className="flex relative group isolate flex-row justify-start items-start p-0 box-border m-0">
