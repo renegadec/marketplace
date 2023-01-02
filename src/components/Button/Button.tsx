@@ -6,7 +6,8 @@ interface ButtonProps {
     variant?: "primary" | "secondary" | "outline",
     size?: "medium" | "large",
     width?: "default" | "full",
-    round?: "none" | "medium"
+    round?: "none" | "medium",
+    outline?: "none" | "primary" | "secondary"
 }
 
 const buttonStyles = cva(["flex", "justify-center", "place-items-center", "rounded-[12px]", "font-semibold"], {
@@ -39,6 +40,11 @@ const buttonStyles = cva(["flex", "justify-center", "place-items-center", "round
         none: ["rounded-[0px]"],
         medium: ["rounded-[12px]"]
       },
+      outline: {
+        none: ["border-0"],
+        primary: ["border-2 border-primary"],
+        secondary: ["border-2 border-white"]
+      },
       width: {
         default: "w-36",
         full: "w-full"
@@ -47,17 +53,24 @@ const buttonStyles = cva(["flex", "justify-center", "place-items-center", "round
 })
 
 const Button = ({
-     text,
-     handler,
-     variant = "primary",
-     size = "medium",
-     width = "default",
-     round = "medium"
+  text,
+  handler,
+  variant = "primary",
+  size = "medium",
+  width = "default",
+  round = "medium",
+  outline = "none"
 }: ButtonProps) => {
     return (
         <button 
           onClick={() => handler()} 
-          className={ `${buttonStyles({ intent: variant, size: size, width: width, round: round })}` }>
+          className={ `${buttonStyles({ 
+            intent: variant, 
+            size: size, 
+            width: width, 
+            round: round,
+            outline: outline
+          })}` }>
             {text}
         </button>
     )
