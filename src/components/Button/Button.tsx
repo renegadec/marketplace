@@ -5,7 +5,8 @@ interface ButtonProps {
     handler: Function,
     variant?: "primary" | "secondary" | "outline",
     size?: "medium" | "large",
-    width?: "default" | "full"
+    width?: "default" | "full",
+    round?: "none" | "medium"
 }
 
 const buttonStyles = cva(["flex", "justify-center", "place-items-center", "rounded-[12px]", "font-semibold"], {
@@ -34,6 +35,10 @@ const buttonStyles = cva(["flex", "justify-center", "place-items-center", "round
         large: ["h-12"],
         medium: ["h-10"]
       },
+      round: {
+        none: ["rounded-[0px]"],
+        medium: ["rounded-[12px]"]
+      },
       width: {
         default: "w-36",
         full: "w-full"
@@ -46,12 +51,13 @@ const Button = ({
      handler,
      variant = "primary",
      size = "medium",
-     width = "default"
+     width = "default",
+     round = "medium"
 }: ButtonProps) => {
     return (
         <button 
           onClick={() => handler()} 
-          className={buttonStyles({ intent: variant, size: size, width: width })}>
+          className={ `${buttonStyles({ intent: variant, size: size, width: width, round: round })}` }>
             {text}
         </button>
     )
