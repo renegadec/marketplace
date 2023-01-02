@@ -28,5 +28,59 @@ export const productsData = {
       desc: "Sweet bananas from eastern Zimbabwe.",
       image: "./src/assets/bananas.png",
     },
+    {
+      id: 4,
+      type: "Cucumber",
+      desc: "Cucumbers from the western region.",
+      image: "./src/assets/cucumbers.png",
+    },
+    {
+      id: 5,
+      type: "Pepper",
+      desc: "Colorful pepper from the northern region.",
+      image: "./src/assets/pepper.png",
+    },
+    {
+      id: 6,
+      type: "Potatoes",
+      desc: "Potatoes from the southern region.",
+      image: "./src/assets/potato.png",
+    },
+    {
+      id: 7,
+      type: "Round Nuts",
+      desc: "Round Nuts from the eastern region.",
+      image: "./src/assets/roundnuts.png",
+    },
+    {
+      id: 8,
+      type: "Peas",
+      desc: "Firm peas from the western region.",
+      image: "./src/assets/peas.png",
+    },
+    {
+      id: 9,
+      type: "Raspberry",
+      desc: "Juicy Raspberry from the southern region.",
+      image: "./src/assets/rasberry.png",
+    },
+    {
+      id: 10,
+      type: "Macadamia",
+      desc: "Tasty macadamia nuts from the northern region.",
+      image: "./src/assets/macadamia.png",
+    },
+    {
+      id: 11,
+      type: "Strawberries",
+      desc: "Red and sweet strawberries from the western region.",
+      image: "./src/assets/strawberries.png",
+    },
+    {
+      id: 12,
+      type: "Brocoli",
+      desc: "Refreshing melons from the eastern region.",
+      image: "./src/assets/brocoli.png",
+    }
   ],
 };

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Searchbar from "../components/Searchbar/Searchbar";
+import SearchBar from "../components/SearchBar/SearchBar";
 import Button from "../components/Button/Button";
 import { ProductCard } from "../components";
 import { productsData } from "../constants";
@@ -10,13 +10,14 @@ const Market = () => {
     const [activeCategory, setActiveCategory] = useState("All")
     return (
         <div className="flex flex-col place-items-center p-8 pt-12 min-h-screen w-full font-mont">
-          <Searchbar />
+          <SearchBar />
           <div className="hidden xl:flex flex-row w-full justify-around px-28 pt-12">
-            {categories.map((catgeory) => (
-              <Button 
-                text={catgeory}
-                handler={() => setActiveCategory(catgeory)}
-                variant={catgeory === activeCategory ? 'primary' : 'secondary'}
+            {categories.map((category) => (
+              <Button
+                key={category}
+                text={category}
+                handler={() => setActiveCategory(category)}
+                variant={category === activeCategory ? 'primary' : 'secondary'}
                 size="large" />
             ))}
           </div>
@@ -25,7 +26,8 @@ const Market = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-12">
             {productsData['product'].slice(0, 6).map((product) => (
-              <ProductCard 
+              <ProductCard
+                key={product.type}
                 type={product.type}
                 desc={product.desc}
                 image={product.image}

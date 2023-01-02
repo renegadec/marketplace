@@ -11,7 +11,7 @@ const ProductCard = ({
     image,
     type,
     desc
- }: ProductProps) => {
+}: ProductProps) => {
     return (
         <div className="flex flex-col relative bg-productBg w-64 lg:w-72 h-80 justify-start items-center p-0 px-8 box-border rounded-[12px] md:mx-8 mb-14">
             <div className="absolute -top-8 w-60">
