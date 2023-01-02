@@ -73,7 +73,7 @@ export const productsData = {
     {
       id: 11,
       type: "Strawberries",
-      desc: "Red and sweet strawberries from the western region.",
+      desc: "Sweet strawberries from the western region.",
       image: "./src/assets/strawberries.png",
     },
     {

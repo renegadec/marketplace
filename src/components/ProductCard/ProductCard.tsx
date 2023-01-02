@@ -24,10 +24,10 @@ const ProductCard = ({
                     />
                 </div>
                 <div className="flex flex-col justify-start items-start p-0 px-6 lg:px-0 border-box mt-4">
-                    <h1 className="text-left whitespace-pre-wrap text-black font-bold text-2xl leading-none m-0">
+                    <h1 className="text-left whitespace-pre-wrap font-semibold text-black text-2xl leading-none m-0">
                         {type}
                     </h1>
-                    <h3 className="text-left text-gray-500 font-bold text-lg leading-none m-0 mt-2">
+                    <h3 className="text-left text-gray-500 font-medium text-lg leading-none m-0 mt-2">
                         {desc}
                     </h3>
                 </div>
