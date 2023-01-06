@@ -13,19 +13,23 @@ import { Navbar, Footer } from "./components";
 // Pages
 import { 
   Market, 
-  NotFound 
+  NotFound,
+  Product
 } from "./pages"
 
 const App = () => {
     return (
-      <BrowserRouter>
-        <Navbar/>
-        <Routes>
-          <Route index element={<Market />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+      <main className="font-mont">
+        <BrowserRouter>
+          <Navbar/>
+          <Routes>
+            <Route index element={<Market />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="product/:id" element={<Product />} />
+          </Routes>
+          <Footer />
+        </BrowserRouter>
+      </main>
     )
   }
 
