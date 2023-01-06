@@ -228,12 +228,13 @@ const Product = () => {
             </div>
             <div className="flex flex-row ml-12 mt-16">
                 {productsData['product'].slice(0, 3).map((product) => (
-                <ProductCard 
-                    key={product.id}
-                    type={product.type}
-                    desc={product.desc}
-                    image={product.image}
-                />
+                    <ProductCard 
+                        key={product.id}
+                        id={String(product.id - 1)}
+                        type={product.type}
+                        desc={product.desc}
+                        image={product.image}
+                    />
                 ))}
             </div>
         </div>
