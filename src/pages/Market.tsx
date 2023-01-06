@@ -1,22 +1,24 @@
+import React from "react";
 import { useState } from "react";
-import Searchbar from "../components/Searchbar/Searchbar";
+import SearchBar from "../components/SearchBar/SearchBar";
 import Button from "../components/Button/Button";
 import { ProductCard } from "../components";
 import { productsData } from "../constants";
 
-const categories = ["All", "Fruits", "Nuts", "Legumes", "Spices"]
+const categories = ["All", "Fruits", "Nuts", "Legumes", "Spices", "Vegetables"]
 
 const Market = () => {
     const [activeCategory, setActiveCategory] = useState("All")
     return (
-        <div className="flex flex-col place-items-center p-8 pt-12 min-h-screen w-full font-mont">
-          <Searchbar />
+        <div className="flex flex-col place-items-center p-8 pt-12 min-h-screen w-full">
+          <SearchBar />
           <div className="hidden xl:flex flex-row w-full justify-around px-28 pt-12">
-            {categories.map((catgeory) => (
-              <Button 
-                text={catgeory}
-                handler={() => setActiveCategory(catgeory)}
-                variant={catgeory === activeCategory ? 'primary' : 'secondary'}
+            {categories.map((category) => (
+              <Button
+                key={category}
+                text={category}
+                handler={() => setActiveCategory(category)}
+                variant={category === activeCategory ? 'primary' : 'secondary'}
                 size="large" />
             ))}
           </div>

@@ -1,4 +1,6 @@
-const Searchbar = () => {
+import React from "react"
+
+const SearchBar = () => {
     return (
         <div className="flex h-[50px] w-full xl:w-2/5 bg-gray-200 border-primary p-1 border-[1px] rounded-[40px]">
             <input 
@@ -14,4 +16,4 @@ const Searchbar = () => {
     )
 }
 
-export default Searchbar
+export default SearchBar

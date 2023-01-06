@@ -75,11 +75,5 @@ export const productsData = {
       desc: "Sweet strawberries from the western region.",
       image: "../src/assets/strawberries.png",
     },
-    {
-      id: 12,
-      type: "Brocoli",
-      desc: "Refreshing melons from the eastern region.",
-      image: "../src/assets/brocoli.png",
-    }
   ],
 };
