@@ -12,6 +12,7 @@ import { Navbar, Footer } from "./components";
 
 // Pages
 import { 
+  Account,
   Market, 
   NotFound,
   Product
@@ -26,6 +27,7 @@ const App = () => {
             <Route index element={<Market />} />
             <Route path="*" element={<NotFound />} />
             <Route path="product/:id" element={<Product />} />
+            <Route path="account" element={<Account />} />
           </Routes>
           <Footer />
         </BrowserRouter>
