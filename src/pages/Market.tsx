@@ -26,6 +26,7 @@ const Market = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-12">
             {productsData['product'].slice(0, 6).map((product) => (
               <ProductCard 
+                key={product.id}
                 type={product.type}
                 desc={product.desc}
                 image={product.image}
