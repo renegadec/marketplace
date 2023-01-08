@@ -12,6 +12,7 @@ import { Navbar, Footer } from "./components";
 // Pages
 import { 
   Account,
+  Home,
   Market, 
   NotFound,
   Product
@@ -23,9 +24,10 @@ const App = () => {
         <BrowserRouter>
           <Navbar/>
           <Routes>
-            <Route index element={<Market />} />
+            <Route index element={<Home />} />
             <Route path="*" element={<NotFound />} />
             <Route path="product/:id" element={<Product />} />
+            <Route path="market" element={<Market />} />
             <Route path="account" element={<Account />} />
           </Routes>
           <Footer />

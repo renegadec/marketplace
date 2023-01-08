@@ -4,7 +4,7 @@ import heroImg from "./hero.png"
 import Avocados from "./avocados.png";
 import Apples from "./apples.png";
 import Like from "./like.png";
-
+import Farmer from "./farmer.png";
 import Bananas from "./bananas.png";
 import Facebook from "./social/facebook.svg";
 import Github from "./social/github.svg";
@@ -15,7 +15,8 @@ import Mail from "./social/mail.svg";
 export { 
     logo, 
     whitelogo,
-    heroImg, 
+    heroImg,
+    Farmer, 
     Avocados, 
     Like, 
     Apples, 

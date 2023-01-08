@@ -1,7 +1,6 @@
 import React from "react";
 import {  Like } from "../assets"
-import { styled } from "@mui/material/styles";
-import { productsData } from "../constants";
+
 
 const Product = (props) => {
     const products = props.products.map((product) => {
