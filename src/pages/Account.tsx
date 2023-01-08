@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "../components";
+import { Phone } from 'react-telephone';
 
 const infoItems = ["Dashboard", "Orders", "Downloads", "Addresses", "Account details", "Logout"]
 
@@ -13,7 +14,7 @@ const Account = () => {
             <div className="flex flex-row ml-24 items-start w-full">
                 {infoItems.map((item) => (
                     <button onClick={() => setActiveInfo(item)} 
-                        className={`mr-4 border-b-2 pb-4 ${item === activeInfo ? 'border-black' : 'border-transparent'}`}>
+                        className={`mr-9 border-b-2 pb-4 ${item === activeInfo ? 'border-black' : 'border-transparent'}`}>
                         <h3 className={`font-semibold text-lg ${item === activeInfo ? 'text-black' : 'text-gray-600'}`}>
                             {item} 
                         </h3>
@@ -87,13 +88,23 @@ const Account = () => {
                                 type="text" 
                                 className="bg-transparent outline-none w-[40vw] mb-2 border-b-2 border-gray-400 focus:border-primary" 
                                 placeholder="Display name*" />
-                            <p className="text-gray-600 text-sm mb-10">
+                            <p className="text-gray-400 text-xs mb-6 w-[40vw]">
                                 This will be how your name will be displayed in the account section and in reviews.
                             </p>
+                            <Phone>
+                                <Phone.Country 
+                                    className="bg-transparent outline-none w-[40vw] mb-10 border-b-2 border-gray-400 focus:border-primary"  
+                                /><br />
+                                <Phone.Number 
+                                    className="bg-transparent outline-none w-[40vw] mb-10 border-b-2 border-gray-400 focus:border-primary" 
+                                    placeholder="Phone number*" 
+                                />
+                            </Phone>
                             <input 
                                 type="text" 
                                 className="bg-transparent outline-none w-[40vw] mb-10 border-b-2 border-gray-400 focus:border-primary" 
                                 placeholder="Email address*" />
+                            
                             <div className="w-[40vw] mt-40">
                                 <Button 
                                     text="Save Changes"

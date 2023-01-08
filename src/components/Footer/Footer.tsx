@@ -1,146 +1,9 @@
 import { 
     whitelogo,
-    Facebook,
-    Github,
-    Instagram,
-    Linkedin,
-    Mail
 } from "../../assets";
-
+import { socialLinks, menuLinks } from "../../constants";
 import { Button } from "../index";
 
-const socialLinks = [
-    {
-        name: "Facebook",
-        logo: Facebook,
-        link: "#"
-    },
-    {
-        name: "Instagram",
-        logo: Instagram,
-        link: "#"
-    },   
-    {
-        name: "Github",
-        logo: Github,
-        link: "#"
-    },
-    {
-        name: "Linkedin",
-        logo: Linkedin,
-        link: "#"
-    },
-    {
-        name: "Mail",
-        logo: Mail,
-        link: "#"
-    },
-]
-
-const menuLinks = {
-    Product: [
-        {
-            name: "Fruits",
-            link: "#"
-        },
-        {
-            name: "Vegetables",
-            link: "#"
-        },
-        {
-            name: "Spice Products",
-            link: "#"
-        },
-        {
-            name: "Frozen Products",
-            link: "#"
-        }
-    ],
-    Markets: [
-        {
-            name: "Europe",
-            link: "#"
-        },
-        {
-            name: "East Africa",
-            link: "#"
-        },
-        {
-            name: "West Africa",
-            link: "#"
-        }
-    ],
-    Resources: [
-        {
-            name: "Tswaanda Home",
-            link: "#"
-        },
-        {
-            name: "Blog",
-            link: "#"
-        },
-        {
-            name: "Getting Started",
-            link: "#"
-        },
-        {
-            name: "Supplying",
-            link: "#"
-        },
-        {
-            name: "Developers",
-            link: "#"
-        },
-        {
-            name: "Support",
-            link: "#"
-        }
-    ],
-    Company: [
-        {
-            name: "About Us",
-            link: "#"
-        },
-        {
-            name: "Careers",
-            link: "#"
-        },    
-        {
-            name: "FAQs",
-            link: "#"
-        },
-        {
-            name: "Teams",
-            link: "#"
-        }, 
-        {
-            name: "Contact Us",
-            link: "#"
-        }, 
-    ],
-    Bottom: [
-        {
-            name: "Privacy Policy",
-            link: "#"
-        }, 
-        {
-            name: "Terms of Use",
-            link: "#"
-        },   
-        {
-            name: "Sales and Documentation",
-            link: "#"
-        }, 
-        {
-            name: "Legal",
-            link: "#"
-        },   
-        {
-            name: "Sitemap",
-            link: "#"
-        },    
-    ]
-}
 
 const Footer = () => {
     return (
@@ -151,7 +14,8 @@ const Footer = () => {
                         <img 
                             className="h-12 w-auto"
                             src={whitelogo} 
-                            alt="Logo" />
+                            alt="Logo" 
+                        />
                         <div className="flex flex-row w-full justify-between">
                             {socialLinks.map((social) => (
                                 <a className="bg-white hover:bg-gray-200 rounded-[5px] p-2 mt-6" 
@@ -178,7 +42,7 @@ const Footer = () => {
                         </h3>
                         {menuLinks['Product'].map((menuItem) => (
                             <a href={menuItem.link} 
-                                className="font-normal text-xl hover:text-gray-200">
+                                className="font-normal hover:text-gray-200">
                                 {menuItem.name}
                             </a>
                         ))}
@@ -187,7 +51,7 @@ const Footer = () => {
                         </h3>
                         {menuLinks['Markets'].map((menuItem) => (
                             <a href={menuItem.link} 
-                                className="font-normal text-xl hover:text-gray-200">
+                                className="font-normal hover:text-gray-200">
                                 {menuItem.name}
                             </a>
                         ))}
@@ -198,7 +62,7 @@ const Footer = () => {
                         </h3>
                         {menuLinks['Resources'].map((menuItem) => (
                             <a href={menuItem.link} 
-                                className="font-normal text-xl hover:text-gray-200">
+                                className="font-normal hover:text-gray-200">
                                 {menuItem.name}
                             </a>
                         ))}
@@ -209,7 +73,7 @@ const Footer = () => {
                         </h3>
                         {menuLinks['Company'].map((menuItem) => (
                             <a href={menuItem.link} 
-                                className="font-normal text-xl hover:text-gray-200">
+                                className="font-normal hover:text-gray-200">
                                 {menuItem.name}
                             </a>
                         ))}

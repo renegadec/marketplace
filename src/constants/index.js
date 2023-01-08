@@ -1,4 +1,4 @@
-import {  Avocados, Apples, Bananas } from "../assets";
+import { Facebook, Github, Instagram, Linkedin, Mail } from "../assets";
 
 export const navigation = [
   { name: "Product", href: "#" },
@@ -75,5 +75,144 @@ export const productsData = {
       desc: "Sweet strawberries from the western region.",
       image: "../src/assets/strawberries.png",
     },
+    {
+      id: 12,
+      type: "Paprika",
+      desc: "Dark sweet blue berries from Zimbabwe",
+      image: "../src/assets/paprika.png",
+    },
   ],
 };
+
+export const socialLinks = [
+  {
+    name: "Facebook",
+    logo: Facebook,
+    link: "#",
+  },
+  {
+    name: "Instagram",
+    logo: Instagram,
+    link: "#",
+  },
+  {
+    name: "Github",
+    logo: Github,
+    link: "#",
+  },
+  {
+    name: "Linkedin",
+    logo: Linkedin,
+    link: "#",
+  },
+  {
+    name: "Mail",
+    logo: Mail,
+    link: "#",
+  },
+];
+
+export const menuLinks = {
+  Product: [
+      {
+          name: "Fruits",
+          link: "#"
+      },
+      {
+          name: "Vegetables",
+          link: "#"
+      },
+      {
+          name: "Spice Products",
+          link: "#"
+      },
+      {
+          name: "Frozen Products",
+          link: "#"
+      }
+  ],
+  Markets: [
+      {
+          name: "Europe",
+          link: "#"
+      },
+      {
+          name: "East Africa",
+          link: "#"
+      },
+      {
+          name: "West Africa",
+          link: "#"
+      }
+  ],
+  Resources: [
+      {
+          name: "Tswaanda Home",
+          link: "#"
+      },
+      {
+          name: "Blog",
+          link: "#"
+      },
+      {
+          name: "Getting Started",
+          link: "#"
+      },
+      {
+          name: "Supplying",
+          link: "#"
+      },
+      {
+          name: "Developers",
+          link: "#"
+      },
+      {
+          name: "Support",
+          link: "#"
+      }
+  ],
+  Company: [
+      {
+          name: "About Us",
+          link: "#"
+      },
+      {
+          name: "Careers",
+          link: "#"
+      },    
+      {
+          name: "FAQs",
+          link: "#"
+      },
+      {
+          name: "Teams",
+          link: "#"
+      }, 
+      {
+          name: "Contact Us",
+          link: "#"
+      }, 
+  ],
+  Bottom: [
+      {
+          name: "Privacy Policy",
+          link: "#"
+      }, 
+      {
+          name: "Terms of Use",
+          link: "#"
+      },   
+      {
+          name: "Sales and Documentation",
+          link: "#"
+      }, 
+      {
+          name: "Legal",
+          link: "#"
+      },   
+      {
+          name: "Sitemap",
+          link: "#"
+      },    
+  ]
+}
