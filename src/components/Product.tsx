@@ -6,7 +6,9 @@ import { productsData } from "../constants";
 const Product = (props) => {
     const products = props.products.map((product) => {
         return (
+
             <div key={product.id} className="flex relative bg-productBg w-[394px] h-[535px] justify-start items-start p-0 box-border rounded-[12px] mx-8">
+
                 <div className="flex absolute isolate flex-col justify-start items-start p-0 box-border left-0 top-0">
                     <img
                         src={product.image}
@@ -40,6 +42,7 @@ const Product = (props) => {
     });
 
     return <div className="flex flex-wrap justify-between">{products}</div>
+
     
 }
 

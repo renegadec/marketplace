@@ -1,3 +1,4 @@
+
 /* This example requires Tailwind CSS v3.0+ */
 import { useState } from 'react'
 import { Dialog } from '@headlessui/react'
@@ -83,6 +84,7 @@ const Hero = () => {
                         &rarr;
                         </span>
                     </a>
+
                     </div>
                 </div>
                 <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">

@@ -4,6 +4,7 @@ import heroImg from "./hero.png"
 import Avocados from "./avocados.png";
 import Apples from "./apples.png";
 import Like from "./like.png";
+
 import Bananas from "./bananas.png";
 import Facebook from "./social/facebook.svg";
 import Github from "./social/github.svg";
@@ -25,3 +26,4 @@ export {
     Linkedin,
     Mail 
 };
+

@@ -1,3 +1,4 @@
+
 // Router
 import { 
   BrowserRouter, 
@@ -30,6 +31,7 @@ const App = () => {
           <Footer />
         </BrowserRouter>
       </main>
+
     )
   }
 

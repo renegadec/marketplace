@@ -1,8 +1,10 @@
+
 import { useState} from 'react';
 import { logo } from "../assets";
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { navigation } from '../constants';
+
         
 const Navbar = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -77,8 +79,10 @@ const Navbar = () => {
                             <span className="sr-only">Your Company</span>
                             <img
                             className="h-8"
+
                             src={logo}
                             alt="logo"
+
                             />
                         </a>
                         </div>
