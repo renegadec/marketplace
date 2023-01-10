@@ -25,6 +25,6 @@ export {
     Github,
     Instagram,
     Linkedin,
-    Mail 
+    Mail,
 };
 

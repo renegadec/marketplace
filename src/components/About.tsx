@@ -15,19 +15,19 @@ const About = (props) => {
                 <div className="flex relative isolate flex-col justify-center items-center p-0 box-border">
                 <div className="flex relative isolate flex-col justify-start items-start p-0 box-border m-0">
                     <h1 className="text-center text-primary font-bold text-4xl mb-4">
-                    About Us
+                        About Us
                     </h1>
 
                     <h3 className="text-left text-black font-bold text-lg mb-4">
-                    We always prioritize efficiency without compromising quality
+                        We always prioritize efficiency without compromising quality
                     </h3>
 
                     <p className="text-left text-gray-600 ">
-                    Tswaanda is dedicated to providing our customers with professional
-                    services for economic utilisation of the major markets for
-                    agriculture. We speak directly to the farmers’ pains by being a
-                    complete commercial platform that helps farmers grow and manage
-                    their farming business.
+                        Tswaanda is dedicated to providing our customers with professional
+                        services for economic utilisation of the major markets for
+                        agriculture. We speak directly to the farmers’ pains by being a
+                        complete commercial platform that helps farmers grow and manage
+                        their farming business.
                     </p>
                 </div>
                 </div>

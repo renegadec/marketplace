@@ -1,12 +1,12 @@
 
-import { Facebook, Github, Instagram, Linkedin, Mail } from "../assets";
+import { Facebook, Github, Instagram, Linkedin, Mail, } from "../assets";
 
 
 export const navigation = [
-  { name: "Product", href: "#" },
-  { name: "Features", href: "#" },
-  { name: "Marketplace", href: "#" },
-  { name: "Company", href: "#" },
+  { name: "Marketplace", to: "/market" },
+  { name: "Services", to: "/services" },
+  { name: "Company", to: "/company" },
+  
 ];
 
 export const productsData = {
@@ -218,3 +218,24 @@ export const menuLinks = {
       },    
   ]
 }
+
+export const teamData = [
+  {
+    name: "Confidence Nyirenda",
+    position: "Co-Founder & CTO",
+    desc: "Confidence drives the technical strategy of the Tswaanda ecosystem and brand.",
+    image: "../src/assets/team/confidence.png"
+  },
+  {
+    name: "Selestine Mabhunuh",
+    position: "Co-Founder & COO",
+    desc: "Selestine drives the operations strategy of the Tswaanda ecosystem and brand.",
+    image: "../src/assets/team/selestine.png"
+  },
+  {
+    name: "Isheanesu N. Misi",
+    position: "Lead Developer",
+    desc: "Nigel is a seasoned full-stack developer with 5 years of experience in web development .",
+    image: "../src/assets/team/nigel.png"
+  },
+]

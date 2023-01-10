@@ -12,10 +12,12 @@ import { Navbar, Footer } from "./components";
 // Pages
 import { 
   Account,
+  Company,
   Home,
   Market, 
   NotFound,
-  Product
+  Product,
+  Services
 } from "./pages"
 
 const App = () => {
@@ -29,6 +31,8 @@ const App = () => {
             <Route path="product/:id" element={<Product />} />
             <Route path="market" element={<Market />} />
             <Route path="account" element={<Account />} />
+            <Route path="services" element={<Services />} />
+            <Route path="company" element={<Company />} />
           </Routes>
           <Footer />
         </BrowserRouter>

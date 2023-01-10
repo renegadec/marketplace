@@ -3,11 +3,15 @@ import Market from "./Market";
 import NotFound from "./NotFound";
 import Product from "./Product";
 import Home from "./Home";
+import Services from "./Services";
+import Company from "./Company";
 
 export { 
     Home,
     Account,
     Market,
     NotFound,
-    Product
+    Product,
+    Services,
+    Company,
 }
