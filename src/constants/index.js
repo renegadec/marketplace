@@ -128,10 +128,6 @@ export const menuLinks = {
           name: "Spice Products",
           link: "#"
       },
-      {
-          name: "Frozen Products",
-          link: "#"
-      }
   ],
   Markets: [
       {
@@ -149,51 +145,37 @@ export const menuLinks = {
   ],
   Resources: [
       {
-          name: "Tswaanda Home",
-          link: "#"
-      },
-      {
           name: "Blog",
           link: "#"
       },
       {
-          name: "Getting Started",
-          link: "#"
+        name: "Supplying",
+        link: "#"
       },
       {
-          name: "Supplying",
-          link: "#"
+        name: "White Paper",
+        link: "#"
       },
-      {
-          name: "Developers",
-          link: "#"
-      },
-      {
-          name: "Support",
-          link: "#"
-      }
+      
   ],
   Company: [
       {
-          name: "About Us",
-          link: "#"
+        name: "FAQs",
+        link: "#"
+      },
+      {
+        name: "Team",
+        link: "#"
       },
       {
           name: "Careers",
           link: "#"
-      },    
-      {
-          name: "FAQs",
-          link: "#"
       },
       {
-          name: "Teams",
-          link: "#"
-      }, 
-      {
-          name: "Contact Us",
-          link: "#"
-      }, 
+        name: "About Us",
+        link: "#"
+      },    
+
   ],
   Bottom: [
       {

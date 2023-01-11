@@ -2,7 +2,7 @@ import { Farmer } from "../assets";
 
 const About = (props) => {
     return (
-        <section className="flex relative flex-row w-full h-[564px] justify-start items-center p-0 mb-6">
+        <section className="flex relative flex-row sm:grid-cols-1 w-full h-[564px] justify-start items-center p-0 mb-6">
             <div className="flex relative flex-col justify-center items-center p-0 h-full w-1/2">
                 <img
                 src={Farmer}
