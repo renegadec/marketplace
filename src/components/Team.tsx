@@ -10,17 +10,17 @@ const Team = () => {
                     <p className="font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">Our team consist of 10 years experience in farming industry and 8 years of combined experience in business management.</p>
                 </div> 
                 <div className="grid gap-8 mb-6 lg:mb-16 md:grid-cols-2">
-                    {teamData.map((item) => (
+                    {teamData.map((member) => (
                         <div className="items-center rounded-lg shadow sm:flex">
                             <a href="#">
-                                <img className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg" src={item.image} alt="Confidence" />
+                                <img className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg" src={member.image} alt="Confidence" />
                             </a>
                         <div className="p-5">
                             <h3 className="text-xl font-bold tracking-tight text-primary">
-                                <a href="#">{item.name}</a>
+                                <a href="#">{member.name}</a>
                             </h3>
-                            <span className="text-gray-500 dark:text-gray-400">{item.position}</span>
-                            <p className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">{item.desc}</p>
+                            <span className="text-gray-500 dark:text-gray-400">{member.position}</span>
+                            <p className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">{member.desc}</p>
                             <ul className="flex space-x-4 sm:mt-0">
                                 <li>
                                     <a href="#" className="text-gray-500 hover:text-primary dark:hover:text-primary">

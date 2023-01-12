@@ -58,7 +58,7 @@ const Navbar = () => {
                         </div>
                         <div className="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-center lg:gap-x-12">
                             {navigation.map((item) => (
-                                <NavLink key={item.name} to={item.to} target={item.target} className="font-semibold text-gray-900 hover:text-gray-900">
+                                <NavLink key={item.name} to={item.to} className="font-semibold text-gray-900 hover:text-gray-900">
                                     {item.name}
                                 </NavLink>
                             ))}
@@ -103,14 +103,15 @@ const Navbar = () => {
                             <div className="-my-6 divide-y divide-gray-500/10">
                             <div className="space-y-2 py-6">
                                 {navigation.map((item) => (
-                                <a
+                                <NavLink
                                     key={item.name}
-                                    href={item.href}
+                                    to={item.to}
                                     className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10"
                                 >
                                     {item.name}
-                                </a>
+                                </NavLink>
                                 ))}
+                                <a href="https://tswaanda.medium.com/" target="_blank" className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10">Blog</a>
                             </div>
                             <div className="py-6">
                                 <a
