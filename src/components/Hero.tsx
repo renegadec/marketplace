@@ -40,7 +40,7 @@ const Hero = () => {
                         <div className="relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-primary hover:ring-gray-900/20">
                         <span className="text-gray-600">
                             Announcing our next round of funding.{' '}
-                            <a href="#" className="font-semibold text-indigo-600">
+                            <a href="#" className="font-semibold text-primary hover:text-blue-600">
                             <span className="absolute inset-0" aria-hidden="true" />
                             Read more <span aria-hidden="true">&rarr;</span>
                             </a>
@@ -57,7 +57,7 @@ const Hero = () => {
                         <div className="mt-8 flex gap-x-4 sm:justify-center">
                         <a
                             href="#"
-                            className="inline-block rounded-lg bg-primary px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-primary hover:bg-indigo-700 hover:ring-indigo-700"
+                            className="inline-block rounded-lg bg-primary px-4 py-1.5 text-base font-semibold leading-7 text-white hover:text-primary shadow-sm ring-1 ring-primary hover:bg-white hover:ring-primary"
                         >
                             Get started
                             <span className="text-indigo-200" aria-hidden="true">
@@ -66,7 +66,7 @@ const Hero = () => {
                         </a>
                         <Link
                             to="/market"
-                            className="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-primary hover:ring-gray-900/20"
+                            className="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-primary hover:text-primary hover:ring-gray-900/20"
                         >
                             Marketplace
                             <span className="text-gray-400" aria-hidden="true">
