@@ -38,7 +38,7 @@ const Market = () => {
           </div>
           <div className="flex w-full lg:px-36">
             <div className="flex bg-primary rounded-[12px] w-full py-8 justify-center items-center">
-              <h3 className="text-2xl text-white font-extrabold">
+              <h3 className="md:text-2xl text-white font-extrabold px-3 text-center">
                 Create an account now and get 20% <span className="text-yellow-200">discount</span> on first purchase!
               </h3>
             </div>

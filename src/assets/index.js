@@ -1,11 +1,8 @@
 import logo from "./logo.png";
 import whitelogo from "./white_logo.png"
-import heroImg from "./hero.png"
-import Avocados from "./avocados.png";
-import Apples from "./apples.png";
+import heroImg from "./hero.png";
 import Like from "./like.png";
 import Farmer from "./farmer.png";
-import Bananas from "./bananas.png";
 import Facebook from "./social/facebook.svg";
 import Github from "./social/github.svg";
 import Instagram from "./social/instagram.svg";
@@ -17,10 +14,7 @@ export {
     whitelogo,
     heroImg,
     Farmer, 
-    Avocados, 
     Like, 
-    Apples, 
-    Bananas,
     Facebook,
     Github,
     Instagram,

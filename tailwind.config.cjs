@@ -13,8 +13,11 @@ module.exports = {
       },
       fontFamily: {
         'mont': ['Montserrat', 'sans-serif'],
-    },
+      },
+      gridTemplateRows: {
+          '[auto,auto,1fr]': 'auto auto 1fr',
+      },
   },
 },
-  plugins: [require("daisyui")],
+  plugins: [],
 }

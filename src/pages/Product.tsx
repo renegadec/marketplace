@@ -51,18 +51,18 @@ const Product = () => {
         <div className="px-28 pt-8 pb-10">
             <div className="flex flex-row mb-12">
                 <div className="w-2/12 flex flex-col justify-end items-end">
-                    {images.map((image, index) => (
+                    {productsData['product'][id]['images'].map((imageSrc, index) => (
                         <button onClick={() => setActiveImg(index)}
                             className="h-24 w-24 my-2 rounded-[8px] border-primary hover:border-gray-400 border-2">
                             <img className="h-full w-full"
-                                src={`../src/assets/blueberries/${image.src}`} 
+                                src={`${imageSrc}`} 
                                 alt="Product Image" />
                         </button>
                     ))}
                 </div>
                 <div className="flex px-8 py-2 w-5/12">
-                    <img className="h-9/12 w-auto border-primary border-2 rounded-[8px]"
-                        src={`../src/assets/blueberries/${images[activeImg].src}`} 
+                    <img className="h-[27rem] w-auto border-primary border-2 rounded-[8px]"
+                        src={`${productsData['product'][id]['images'][activeImg]}`} 
                         alt="Product Image" />
                 </div>
                 <div className="flex flex-col py-2 w-5/12">
