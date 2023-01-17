@@ -1,11 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../components";
 import { Phone } from 'react-telephone';
+import { supabase } from "../config/supabase";
+import { useNavigate } from "react-router-dom";
 
 const infoItems = ["Dashboard", "Orders", "Downloads", "Addresses", "Account details", "Logout"]
 
 const Account = () => {
     const [activeInfo, setActiveInfo] = useState("Dashboard");
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const navigate = useNavigate();
+    const [isMounted, setIsMounted] = useState(false)
+
+    useEffect(() => {
+        async function checkAuth() {  
+            let userSession = await supabase.auth.getUser()
+                if(userSession.data.user) {
+                    setIsLoggedIn(true)
+                } else {
+                    navigate('/login')
+                }
+            }
+        checkAuth().then(() => {
+            setIsMounted(true)
+        })
+    },[])
+
+    if(!isMounted) {
+        return null
+    }
+
     return (
         <div className="flex flex-col place-items-center p-8 pt-12 min-h-screen w-full font-mont overflow-x-hidden">
             <h1 className="font-semibold text-4xl mb-8">
