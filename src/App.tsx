@@ -3,7 +3,8 @@
 import { 
   BrowserRouter, 
   Routes, 
-  Route 
+  Route,
+  Navigate
 } from "react-router-dom";
 
 // Components
@@ -19,6 +20,26 @@ import {
   Product,
   Services
 } from "./pages"
+
+import { supabase } from "./config/supabase";
+
+const useAuth = async() => {
+  let user = await supabase.auth.getSession()
+  return user.data.session
+}
+
+const ProtectedRoute = ({ children }) => {
+  
+  const isLoggedIn = useAuth()
+
+  console.log(isLoggedIn)
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Account />;
+};
 
 const App = () => {
     return (
