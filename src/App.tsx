@@ -8,7 +8,7 @@ import {
 
 // Components
 import { Navbar, Footer } from "./components";
-import { Login } from "./components"
+import { Login, SignUp } from "./components"
 
 // Pages
 import { 
@@ -35,6 +35,7 @@ const App = () => {
             <Route path="services" element={<Services />} />
             <Route path="company" element={<Company />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
           </Routes>
           <Footer />
         </BrowserRouter>
