@@ -4,21 +4,6 @@ import { productsData } from "../constants";
 import { Button, ProductCard } from "../components";
 import { Facebook, Mail, Instagram } from "../assets";
 
-const images = [
-    {
-        src: "1.png"
-    },
-    {
-        src: "2.png"
-    },
-    {
-        src: "3.png"
-    },
-    {
-        src: "4.png"
-    },
-] 
-
 const initReviews = [
     {
         name: "Scarlet Johnson",

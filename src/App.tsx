@@ -8,6 +8,7 @@ import {
 
 // Components
 import { Navbar, Footer } from "./components";
+import { Login } from "./components"
 
 // Pages
 import { 
@@ -33,6 +34,7 @@ const App = () => {
             <Route path="account" element={<Account />} />
             <Route path="services" element={<Services />} />
             <Route path="company" element={<Company />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
           <Footer />
         </BrowserRouter>
