@@ -6,9 +6,11 @@ import Navbar from "./Navbar";
 import ProductCard from "./ProductCard/ProductCard";
 import Footer from "./Footer/Footer";
 import Login from "./Authentication/Login";
+import SignUp from "./Authentication/SignUp";
 
 export {
     Login,
+    SignUp,
     Button,
     Features,
     Hero,
