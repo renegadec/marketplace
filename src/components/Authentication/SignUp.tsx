@@ -25,7 +25,7 @@ const SignUp = () => {
         }) 
 
         if(data.user) {
-            navigate("/market")
+            navigate("/account")
         }
 
         if(error) {

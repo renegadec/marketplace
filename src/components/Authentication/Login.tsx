@@ -18,7 +18,7 @@ const Login = () => {
         }) 
 
         if(data.user) {
-            navigate("/market")
+            navigate("/account")
         }
 
         if(error) {
