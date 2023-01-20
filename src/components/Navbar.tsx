@@ -31,6 +31,27 @@ const Navbar = () => {
         return null
     }
 
+    function toggleMenuItem(selection: 'Notifications' | 'Apps' | 'Profile') {
+        console.log(selection)
+        switch(selection) {
+            case 'Notifications':
+                setIsNotificationsOpen(!isNotificationsOpen)
+                setIsAppsOpen(false)
+                setIsProfileOpen(false)
+                break
+            case 'Apps':
+                setIsAppsOpen(!isAppsOpen)
+                setIsNotificationsOpen(false)
+                setIsProfileOpen(false)
+                break
+            case 'Profile':
+                setIsProfileOpen(!isProfileOpen)
+                setIsAppsOpen(false)
+                setIsNotificationsOpen(false)
+                break
+        }
+    }
+
     return (
         <nav className="bg-white pb-4">
             {session === null ?
@@ -135,8 +156,7 @@ const Navbar = () => {
                                 <span className="sr-only">Toggle sidebar</span>
                             </button> */}
                             <a href="/" className="flex mr-4">
-                                <img src={logo} className="mr-3 h-8" alt="logo" />
-                                
+                                <img src={logo} className="mr-3 h-8" alt="logo" />        
                             </a>
                             <form action="#" method="GET" className="hidden lg:block lg:pl-2">
                                 <label htmlFor="search" className="sr-only">Search</label>
@@ -164,7 +184,7 @@ const Navbar = () => {
                                 <svg aria-hidden="true" className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path></svg>
                             </button>
                             {/* -- Notifications -- */}
-                            <button type="button"  onClick={() => setIsNotificationsOpen(!isNotificationsOpen)} className="p-2 mr-1 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
+                            <button type="button"  onClick={() => toggleMenuItem('Notifications')} className="p-2 mr-1 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
                                 <span className="sr-only">View notifications</span>
                                 {/* -- Bell icon -- */}
                                 <svg aria-hidden="true" className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
@@ -199,7 +219,7 @@ const Navbar = () => {
                                 </a>
                             </div>}
                             {/* -- Apps -- */}
-                            <button type="button" onClick={() => setIsAppsOpen(!isAppsOpen)} className="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
+                            <button type="button" onClick={() => toggleMenuItem('Apps')} className="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
                                 <span className="sr-only">View notifications</span>
                                 {/* -- Icon -- */}
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
@@ -250,7 +270,7 @@ const Navbar = () => {
                                 </a>
                                 </div>
                             </div>}
-                            <button onClick={() => setIsProfileOpen(!isProfileOpen)} className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
+                            <button onClick={() => toggleMenuItem('Profile')} className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
                                 <span className="sr-only">Open user menu</span>
                                 <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" />
                             </button>
