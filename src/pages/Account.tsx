@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext, useLayoutEffect } from "react";
 import { Button } from "../components";
 import { Phone } from 'react-telephone';
 import { supabase } from "../config/supabase";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../UserContext";
 
 const infoItems = ["Dashboard", "Orders", "Downloads", "Addresses", "Account details", "Logout"]
 
@@ -12,11 +13,10 @@ const Account = () => {
     const navigate = useNavigate();
     const [isMounted, setIsMounted] = useState(true)
 
+    let session = useContext(UserContext);
+
     useEffect(() => {
-        
-        supabase.auth.onAuthStateChange((event, session) => {
-            console.log(event, session)
-        })
+        if(session === null) navigate('/login')
     },[])
 
     if(!isMounted) {

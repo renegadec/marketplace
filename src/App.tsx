@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 
 // Router
 import { 
@@ -43,28 +44,37 @@ const ProtectedRoute = ({ children }) => {
 };
 
 const App = () => {
+    const [session, setSession] = useState(null)
+
+    useEffect(() => {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        setSession(session)
+      })
+
+      supabase.auth.onAuthStateChange((_event, session) => {
+        setSession(session)
+      })
+    }, [])
+
     return (
       <main className="font-mont">
-        <BrowserRouter>
-        <UserContext.Provider value>
-          <Navbar/>
-        </UserContext.Provider>
-          
-          <Routes>
-            <Route index element={<Home />} />
-            <Route path="*" element={<NotFound />} />
-            <Route path="account" element={<Account />} />
-            <Route path="services" element={<Services />} />
-            <Route path="company" element={<Company />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <UserContext.Provider value={}>
+        <UserContext.Provider value={session}>
+          <BrowserRouter>
+            <Navbar/>         
+            <Routes>
+              <Route index element={<Home />} />
+              <Route path="*" element={<NotFound />} />
+              <Route path="account" element={<Account />} />
+              <Route path="services" element={<Services />} />
+              <Route path="company" element={<Company />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} />
               <Route path="product/:id" element={<Product />} />
               <Route path="market" element={<Market />} />
-            </UserContext.Provider>
-          </Routes>
-          <Footer />
-        </BrowserRouter>
+            </Routes>
+            <Footer />
+          </BrowserRouter>
+        </UserContext.Provider>
       </main>
 
     )
