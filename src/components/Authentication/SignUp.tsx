@@ -48,19 +48,6 @@ const SignUp = () => {
                         <form className="space-y-4 md:space-y-6" action="#">
                             <div>
                                 <label htmlFor="email" className="block mb-2 text-sm font-medium text-primary">Your email</label>
-<<<<<<< HEAD
-                                <input type="email" name="email" id="email" className=" border border-primary text-black sm:text-sm rounded-lg focus:ring-primary focus:border-primary-600 block w-full p-2.5 dark:border-primary dark:placeholder-gray-400 dark:text-black  dark:focus:border-primary" placeholder="name@company.com" required />
-                            </div>
-                            <div>
-                                <label htmlFor="password" className="block mb-2 text-sm font-medium text-primary">Password</label>
-                                <input type="password" name="password" id="password" placeholder="••••••••" className="border border-primary text-black sm:text-sm rounded-lg focus:ring-primary focus:border-primary-600 block w-full p-2.5  dark:border-primary dark:placeholder-gray-400 dark:text-black  dark:focus:border-primary" required />
-                            </div>
-                            <div>
-                                <label htmlFor="confirm_password" className="block mb-2 text-sm font-medium text-primary">Confirm Password</label>
-                                <input type="password" name="confirm_password" id="confirm_password" placeholder="••••••••" className="border border-primary text-black sm:text-sm rounded-lg focus:ring-primary focus:border-primary-600 block w-full p-2.5  dark:border-primary dark:placeholder-gray-400 dark:text-black  dark:focus:border-primary" required />
-                            </div>
-                            <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 ring-primary focus:outline-none focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary dark:hover:bg-primary-700 dark:focus:ring-primary">Sign up</button>
-=======
                                 <input type="email" onChange={(e) => setEmail(e.target.value)} name="email" id="email" className=" border border-primary text-black sm:text-sm rounded-lg focus:ring-primary focus:border-primary-600 block w-full p-2.5 dark:border-primary dark:placeholder-gray-400 dark:text-black  dark:focus:border-primary" placeholder="name@company.com" required />
                             </div>
                             <div>
@@ -72,7 +59,6 @@ const SignUp = () => {
                                 <input type="password" onChange={(e) => setRPassword(e.target.value)} name="confirm_password" id="confirm_password" placeholder="••••••••" className="border border-primary text-black sm:text-sm rounded-lg focus:ring-primary focus:border-primary-600 block w-full p-2.5  dark:border-primary dark:placeholder-gray-400 dark:text-black  dark:focus:border-primary" required />
                             </div>
                             <button type="submit" onClick={(e) => SignUpHandler(e)} className="w-full text-white bg-primary hover:bg-primary-700 focus:ring-4 ring-primary focus:outline-none focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary dark:hover:bg-primary-700 dark:focus:ring-primary">Sign up</button>
->>>>>>> 52d0bc91e66912e01409d13151cc1864caf9ba4a
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                                 Already have an account? <a href="/login" className="font-medium text-primary hover:underline dark:text-primary">Sign In</a>
                             </p>

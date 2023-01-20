@@ -290,3 +290,37 @@ export const teamData = [
     image: "../src/assets/team/nigel.png"
   },
 ]
+
+export const notifications = [
+  {
+    image: 'https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png',
+    subject: 'New message',
+    username: 'Admin',
+    message: 'Cargo dispatched from Zimbabwe, check account for details.',
+    time: 'few minutes ago...'
+  },
+  {
+    image: 'https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png',
+    subject: 'Reminder',
+    username: 'Jane Smith',
+    message: 'Documentation uploaded. Waiting for approval.',
+    time: '2022-01-19 T 09:00:00'
+  },
+  {
+    image: 'https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png',
+    subject: 'Reminder',
+    username: 'Tswaanda Sales',
+    message: 'Funds secured with custodial wallet.',
+    time: '2022-01-19T09:00:00'
+  },
+  {
+    image: 'https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png',
+    subject: 'Reminder',
+    username: 'Admin',
+    message: 'Update billing address.',
+    time: '2022-01-19T09:00:00'
+  },
+
+];
+
+

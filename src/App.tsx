@@ -22,6 +22,7 @@ import {
 } from "./pages"
 
 import { supabase } from "./config/supabase";
+import { UserContext } from "./UserContext";
 
 const useAuth = async() => {
   let user = await supabase.auth.getSession()
@@ -45,17 +46,22 @@ const App = () => {
     return (
       <main className="font-mont">
         <BrowserRouter>
+        <UserContext.Provider value>
           <Navbar/>
+        </UserContext.Provider>
+          
           <Routes>
             <Route index element={<Home />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="product/:id" element={<Product />} />
-            <Route path="market" element={<Market />} />
             <Route path="account" element={<Account />} />
             <Route path="services" element={<Services />} />
             <Route path="company" element={<Company />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <UserContext.Provider value={}>
+              <Route path="product/:id" element={<Product />} />
+              <Route path="market" element={<Market />} />
+            </UserContext.Provider>
           </Routes>
           <Footer />
         </BrowserRouter>

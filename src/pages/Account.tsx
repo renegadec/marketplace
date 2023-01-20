@@ -10,19 +10,12 @@ const Account = () => {
     const [activeInfo, setActiveInfo] = useState("Dashboard");
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const navigate = useNavigate();
-    const [isMounted, setIsMounted] = useState(false)
+    const [isMounted, setIsMounted] = useState(true)
 
     useEffect(() => {
-        async function checkAuth() {  
-            let userSession = await supabase.auth.getUser()
-                if(userSession.data.user) {
-                    setIsLoggedIn(true)
-                } else {
-                    navigate('/login')
-                }
-            }
-        checkAuth().then(() => {
-            setIsMounted(true)
+        
+        supabase.auth.onAuthStateChange((event, session) => {
+            console.log(event, session)
         })
     },[])
 
