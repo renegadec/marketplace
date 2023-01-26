@@ -10,7 +10,7 @@ const Features = (props) => {
 
                 <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
                     {productsData['product'].slice(0, 3).map((product) => (
-                        <div className='group relative'>
+                        <div className='group relative' key={product.id}>
                             <div className='flex justify-center w-full lg:aspect-none lg:h-80'>
                                 <ProductCard 
                                     key={product.id}

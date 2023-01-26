@@ -17,7 +17,9 @@ const Footer = () => {
                 </Link>
                 <div className="flex flex-row w-full justify-between">
                     {socialLinks.map((social) => (
-                        <a className="bg-white hover:bg-gray-200 rounded-[5px] p-2 mt-6" 
+                        <a 
+                            key={social.name}
+                            className="bg-white hover:bg-gray-200 rounded-[5px] p-2 mt-6" 
                             href={social.link}>
                             <img 
                                 src={social.logo} 
@@ -38,7 +40,7 @@ const Footer = () => {
                     <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Product</h2>
                     <ul className="text-white ">
                         {menuLinks['Product'].map((menuItem) => (
-                            <li className="mb-4">
+                            <li className="mb-4" key={menuItem.name}>
                                 <a href={menuItem.link} className="hover:underline">    {menuItem.name}
                                 </a>
                             </li>
@@ -50,7 +52,7 @@ const Footer = () => {
                     <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Market</h2>
                     <ul className="text-white">
                         {menuLinks['Markets'].map((menuItem) => (
-                            <li className="mb-4">
+                            <li className="mb-4" key={menuItem.name}>
                                 <a href={menuItem.link} className="hover:underline">    {menuItem.name}
                                 </a>
                             </li>
@@ -61,7 +63,7 @@ const Footer = () => {
                     <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Resources</h2>
                     <ul className="text-white">
                         {menuLinks['Resources'].map((menuItem) => (
-                            <li className="mb-4">
+                            <li className="mb-4" key={menuItem.name}>
                                 <a href={menuItem.link} className="hover:underline">    {menuItem.name}
                                 </a>
                             </li>
@@ -72,8 +74,8 @@ const Footer = () => {
                     <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Company</h2>
                     <ul className="text-white">
                         {menuLinks['Company'].map((menuItem) => (
-                            <li className="mb-4">
-                                <a href={menuItem.link} className="hover:underline">    {menuItem.name}
+                            <li className="mb-4" key={menuItem.name}>
+                                <a href={menuItem.link} className="hover:underline" key={menuItem.index}>    {menuItem.name}
                                 </a>
                             </li>
                         ))}
@@ -88,7 +90,9 @@ const Footer = () => {
             </span>
             <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
                         {menuLinks['Bottom'].map((menuItem) => (
-                            <a href={menuItem.link} 
+                            <a 
+                                key={menuItem.name}
+                                href={menuItem.link} 
                                 className="text-sm text-white hover:text-gray-200">
                                 {menuItem.name}
                             </a>

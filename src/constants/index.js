@@ -275,46 +275,55 @@ export const teamData = [
     name: "Confidence Nyirenda",
     position: "Co-Founder & CTO",
     desc: "Confidence drives the technical strategy of the Tswaanda ecosystem and brand.",
-    image: "../src/assets/team/confidence.png"
+    image: "../src/assets/team/confidence.png",
+    facebook: "https://www.facebook.com/africoiner",
+    twitter: "https://twitter.com/crnyirenda",
+    github: "https://github.com/renegadec"
   },
   {
     name: "Selestine Mabhunuh",
     position: "Co-Founder & COO",
     desc: "Selestine drives the operations strategy of the Tswaanda ecosystem and brand.",
-    image: "../src/assets/team/selestine.png"
+    image: "../src/assets/team/selestine.png",
+    facebook: "https://www.facebook.com/selestine.rutendo",
+    twitter: "https://twitter.com/selestine_tendo",
+    github: "#"
   },
   {
     name: "Isheanesu N. Misi",
     position: "Lead Developer",
     desc: "Nigel is a seasoned full-stack developer with 5 years of experience in web development .",
-    image: "../src/assets/team/nigel.png"
+    image: "../src/assets/team/nigel.png",
+    facebook: "https://www.facebook.com/isheanesumisi",
+    twitter: "https://twitter.com/thisisisheanesu",
+    github: "https://github.com/thisisisheanesu"
   },
 ]
 
 export const notifications = [
   {
-    image: 'https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png',
+    image: '../src/assets/team/admin.png',
     subject: 'New message',
     username: 'Admin',
     message: 'Cargo dispatched from Zimbabwe, check account for details.',
     time: 'few minutes ago...'
   },
   {
-    image: 'https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png',
+    image: '../src/assets/team/jane.png',
     subject: 'Reminder',
     username: 'Jane Smith',
     message: 'Documentation uploaded. Waiting for approval.',
     time: '2022-01-19 T 09:00:00'
   },
   {
-    image: 'https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png',
+    image: '../src/assets/team/admin.png',
     subject: 'Reminder',
     username: 'Tswaanda Sales',
     message: 'Funds secured with custodial wallet.',
     time: '2022-01-19T09:00:00'
   },
   {
-    image: 'https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png',
+    image: '../src/assets/team/admin.png',
     subject: 'Reminder',
     username: 'Admin',
     message: 'Update billing address.',

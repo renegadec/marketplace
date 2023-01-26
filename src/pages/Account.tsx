@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext, useLayoutEffect } from "react";
 import { Button } from "../components";
 import { Phone } from 'react-telephone';
-import { supabase } from "../config/supabase";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
@@ -29,9 +28,9 @@ const Account = () => {
                 My Account
             </h1>
             <div className="flex flex-row ml-24 items-start w-full">
-                {infoItems.map((item) => (
+                {infoItems.map((item, index) => (
                     <button onClick={() => setActiveInfo(item)} 
-                        className={`mr-9 border-b-2 pb-4 ${item === activeInfo ? 'border-black' : 'border-transparent'}`}>
+                        className={`mr-9 border-b-2 pb-4 ${item === activeInfo ? 'border-black' : 'border-transparent'}`} key={index}>
                         <h3 className={`font-semibold text-lg ${item === activeInfo ? 'text-black' : 'text-gray-600'}`}>
                             {item} 
                         </h3>
@@ -41,7 +40,7 @@ const Account = () => {
             <div className="flex ml-12 mt-8">
                 {activeInfo === "Dashboard" &&
                     (<div className="flex flex-col">
-                        <p>Hello Susan (not Susan? <span className="text-primary">Log out</span>)</p>
+                        <p>Hello James (not James? <span className="text-primary">Log out</span>)</p>
                         <p>From your account dashboard you can view your <span className="text-primary">recent orders</span>, 
                             manage your <span className="text-primary">shipping and billing addresses</span>, and edit your 
                             <span className="text-primary"> password and account details</span>.</p>

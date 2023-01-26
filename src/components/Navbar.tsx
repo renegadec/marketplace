@@ -132,8 +132,8 @@ const Navbar = () => {
                                 </div>
                                 <div className="py-6">
                                     <a
-                                    href="#"
-                                    className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-6 text-gray-900 hover:bg-gray-400/10"
+                                        href="#"
+                                        className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-6 text-gray-900 hover:bg-gray-400/10 cursor-pointer"
                                     >
                                     Log in
                                     </a>
