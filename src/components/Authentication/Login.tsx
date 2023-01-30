@@ -12,12 +12,16 @@ const Login = () => {
 
     const LoginHandler = async (e) => {  
         
-        e.preventDefault()
+        e.preventDefault();
+
+        setLoading(true);
 
         const { data, error } = await supabase.auth.signInWithPassword({
             email: email,
             password: password,
         }) 
+
+        setLoading(false);
 
         if(data.user) {
             navigate("/account")
