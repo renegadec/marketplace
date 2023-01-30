@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { productsData } from "../constants";
-import { Button, ProductCard } from "../components";
+import { Button, ProductCard, Loader } from "../components";
 import { Facebook, Mail, Instagram } from "../assets";
 
 const initReviews = [
@@ -16,6 +16,15 @@ const initReviews = [
 const minOrder = 50;
 const infoItems = ["Description", "Additional Information", "Reviews (1)"]
 
+const preload = src => new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload = resolve
+    img.onerror = reject
+    img.src = src
+})
+
+const preloadAllImages = srcs => Promise.all(srcs.map(preload))
+
 const Product = () => {
 
     let { id } = useParams();
@@ -23,6 +32,7 @@ const Product = () => {
     const [qty, setQty] = useState(minOrder);
     const [activeInfo, setActiveInfo] = useState("Description");
     const [reviews, setReviews] = useState(initReviews);
+    const [loading, setLoading] = useState(true);
 
     const changeQty = (increment: boolean) => {
         if(increment) { 
@@ -31,6 +41,32 @@ const Product = () => {
         } 
         if(qty > minOrder) setQty(qty - 1)
     }
+
+    const images = productsData['product'][id]['images']
+
+    const preloaded = async () => {
+        await preloadAllImages(images)
+            .then(
+                (result) => { 
+                    console.log(result);
+                }
+            )
+            .finally(() => 
+                setTimeout(() => {
+                    setLoading(false)
+                }, 400)              
+            )
+    }
+
+    useEffect(() => {
+        preloaded()
+    },[])
+
+    if(loading) return (
+        <div className="flex justify-center items-center px-7 lg:px-28 pt-8 pb-10 h-[70vh]">
+            <Loader />
+        </div>
+    )
 
     return (
         <div className="px-7 lg:px-28 pt-8 pb-10">
