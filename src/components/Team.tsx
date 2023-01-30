@@ -14,7 +14,7 @@ const Team = () => {
                     {teamData.map((member, index) => (
                         <div className="items-center rounded-lg shadow sm:flex" key={index}>
                             <a href="#">
-                                <img className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg" src={member.image} alt="Confidence" />
+                                <img className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg" src={member.image} alt={member.name} />
                             </a>
                         <div className="p-5">
                             <h3 className="text-xl font-bold tracking-tight text-primary">
