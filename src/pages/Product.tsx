@@ -71,14 +71,7 @@ const Product = () => {
     return (
         <div className="px-7 lg:px-28 pt-8 pb-10">
             <div className="grid grid-rows-1 md:flex flex-row mb-12">
-                <div className="flex justify-center md:px-8 md:py-2 md:w-5/12">
-                    <img 
-                        className="h-[20rem] lg:h-[27rem] w-auto border-primary border-2 rounded-[8px]"
-                        src={`${productsData['product'][id]['images'][activeImg]}`} 
-                        alt="Product Image" 
-                    />
-                </div>
-                <div className="md:w-2/12 grid grid-cols-3 justify-center md:flex flex-col md:justify-start md:items-start">
+                <div className="hidden md:w-2/12 lg:grid grid-cols-3 justify-center md:flex flex-col md:justify-start md:items-start">
                     {productsData['product'][id]['images'].map((imageSrc, index) => (
                         <button onClick={() => setActiveImg(index)}
                             key={index}
@@ -88,6 +81,13 @@ const Product = () => {
                                 alt="Product Image" />
                         </button>
                     ))}
+                </div>
+                <div className="flex justify-center md:px-8 md:py-2 md:w-5/12">
+                    <img 
+                        className="h-[20rem] lg:h-[27rem] w-auto border-primary border-2 rounded-[8px]"
+                        src={`${productsData['product'][id]['images'][activeImg]}`} 
+                        alt="Product Image" 
+                    />
                 </div>
                 <div className="flex flex-col py-2 md:w-5/12">
                     <h1 className="font-extrabold text-3xl">
