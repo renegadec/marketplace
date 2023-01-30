@@ -8,6 +8,7 @@ import Footer from "./Footer/Footer";
 import Login from "./Authentication/Login";
 import SignUp from "./Authentication/SignUp";
 import Loader from "./Loader";
+import Backdrop from "./Backdrop";
 
 export {
     Login,
@@ -19,5 +20,6 @@ export {
     Navbar,
     ProductCard,
     Footer,
-    Loader
+    Loader,
+    Backdrop
 }
