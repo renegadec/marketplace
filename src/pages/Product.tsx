@@ -69,26 +69,27 @@ const Product = () => {
     )
 
     return (
-        <div className="px-7 lg:px-28 pt-8 pb-10">
+        <div className="px-7 lg:px-28 pt-8 pb-10">     
+            <section id="top"> 
             <div className="grid grid-rows-1 md:flex flex-row mb-12">
-                <div className="hidden md:w-2/12 lg:grid grid-cols-3 justify-center md:flex flex-col md:justify-start md:items-start">
-                    {productsData['product'][id]['images'].map((imageSrc, index) => (
-                        <button onClick={() => setActiveImg(index)}
-                            key={index}
-                            className="h-24 w-24 my-2 rounded-[8px] border-primary hover:border-gray-400 border-2">
-                            <img className="h-full w-full"
-                                src={`${imageSrc}`} 
-                                alt="Product Image" />
-                        </button>
-                    ))}
-                </div>
-                <div className="flex justify-center md:px-8 md:py-2 md:w-5/12">
-                    <img 
-                        className="h-[20rem] lg:h-[27rem] w-auto border-primary border-2 rounded-[8px]"
-                        src={`${productsData['product'][id]['images'][activeImg]}`} 
-                        alt="Product Image" 
-                    />
-                </div>
+                    <div className="hidden md:w-2/12 justify-center md:flex flex-col md:justify-start md:items-start">
+                        {productsData['product'][id]['images'].map((imageSrc, index) => (
+                            <button onClick={() => setActiveImg(index)}
+                                key={index}
+                                className="h-24 w-24 my-2 rounded-[8px] border-primary hover:border-gray-400 border-2">
+                                <img className="h-full w-full"
+                                    src={`${imageSrc}`} 
+                                    alt="Product Image" />
+                            </button>
+                        ))}
+                    </div>
+                    <div className="flex justify-center md:px-8 md:py-2 md:w-5/12">
+                        <img 
+                            className="h-[20rem] lg:h-[27rem] w-auto border-primary border-2 rounded-[8px]"
+                            src={`${productsData['product'][id]['images'][activeImg]}`} 
+                            alt="Product Image" 
+                        />
+                    </div>
                 <div className="flex flex-col py-2 md:w-5/12">
                     <h1 className="font-extrabold text-3xl">
                         {productsData['product'][id]['type']}
@@ -176,7 +177,9 @@ const Product = () => {
                         </div>
                     </div>
                 </div>
+                
             </div>
+            </section>
             <div className="flex flex-row md:ml-24">
                 {infoItems.map((item, index) => (
                     <button onClick={() => setActiveInfo(item)} key={index}
