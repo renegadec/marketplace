@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { productsData } from "../constants";
 import { Button, ProductCard, Loader } from "../components";
-import { Facebook, Mail, Instagram } from "../assets";
+import { Facebook, Mail, Instagram, ArrowBack, ArrowForward } from "../assets";
 
 const initReviews = [
     {
@@ -58,11 +58,26 @@ const Product = () => {
                     setLoading(false)
                     const element = document.getElementById(`top-${id}`);
                     if (element) {
-                      // 👇 Will scroll smoothly to the top of the next section
                         element.scrollIntoView({ behavior: 'smooth' });
                     }
                 }, 400)              
             )
+    }
+
+    const scrollImage = (isRight: boolean) => {
+        if(isRight) {
+            if(activeImg === (productsData['product'][id]['images'].length - 1)) {
+                setActiveImg(0)
+            } else {
+                setActiveImg(activeImg + 1)
+            }
+        } else {
+            if(activeImg === 0) {
+                setActiveImg((productsData['product'][id]['images'].length - 1))
+            } else {
+                setActiveImg(activeImg - 1)
+            }           
+        }
     }
 
     useEffect(() => {
@@ -79,7 +94,7 @@ const Product = () => {
         <div className="px-7 lg:px-28 pt-8 pb-10">     
             <section ref={fieldRef} id={`top-${id}`}> 
                 <div className="grid grid-rows-1 md:flex flex-row mb-12">
-                        <div className="hidden lg:ml-20 md:w-1/12 justify-center md:flex flex-col md:justify-start md:items-start">
+                        <div className="hidden lg:ml-20 md:w-1/12 justify-center lg:flex flex-col md:justify-start md:items-start">
                             {productsData['product'][id]['images'].map((imageSrc, index) => (
                                 <button onClick={() => setActiveImg(index)}
                                     key={index}
@@ -90,12 +105,24 @@ const Product = () => {
                                 </button>
                             ))}
                         </div>
-                        <div className="flex justify-center md:px-8 md:py-2 md:w-5/12">
+                        <div className="flex flex-col justify-center md:px-8 md:py-2 md:w-5/12 mb-[10rem] md:mb-0">
                             <img 
                                 className="h-[20rem] lg:h-[27rem] w-auto border-primary border-2 rounded-[8px]"
                                 src={`${productsData['product'][id]['images'][activeImg]}`} 
                                 alt="Product Image" 
                             />
+                            <div className="flex md:hidden justify-between w-full px-6 mt-[-12rem]">
+                                <button onClick={() => scrollImage(false)} className="flex justify-center items-center bg-white rounded-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+                                        <path d="M20 44 0 24 20 4l2.8 2.85L5.65 24 22.8 41.15Z"/>
+                                    </svg>
+                                </button>
+                                <button onClick={() => scrollImage(true)} className="flex justify-center items-center bg-white rounded-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+                                        <path d="m15.2 43.9-2.8-2.85L29.55 23.9 12.4 6.75l2.8-2.85 20 20Z"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     <div className="flex flex-col py-2 md:w-5/12">
                         <h1 className="font-extrabold text-3xl">
