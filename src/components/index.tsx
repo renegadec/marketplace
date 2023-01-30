@@ -7,6 +7,7 @@ import ProductCard from "./ProductCard/ProductCard";
 import Footer from "./Footer/Footer";
 import Login from "./Authentication/Login";
 import SignUp from "./Authentication/SignUp";
+import Loader from "./Loader";
 
 export {
     Login,
@@ -17,5 +18,6 @@ export {
     Info,
     Navbar,
     ProductCard,
-    Footer
+    Footer,
+    Loader
 }
