@@ -10,7 +10,7 @@ const SignUp = () => {
     const [password, setPassword] = useState("")
     const [rpassword, setRPassword] = useState("")
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const SignUpHandler = async (e) => {  
         

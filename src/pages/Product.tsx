@@ -59,7 +59,7 @@ const Product = () => {
                     const element = document.getElementById(`top-${id}`);
                     if (element) {
                       // 👇 Will scroll smoothly to the top of the next section
-                      element.scrollIntoView({ behavior: 'smooth' });
+                        element.scrollIntoView({ behavior: 'smooth' });
                     }
                 }, 400)              
             )
@@ -79,7 +79,7 @@ const Product = () => {
         <div className="px-7 lg:px-28 pt-8 pb-10">     
             <section ref={fieldRef} id={`top-${id}`}> 
                 <div className="grid grid-rows-1 md:flex flex-row mb-12">
-                        <div className="hidden md:w-2/12 justify-center md:flex flex-col md:justify-start md:items-start">
+                        <div className="hidden lg:ml-20 md:w-1/12 justify-center md:flex flex-col md:justify-start md:items-start">
                             {productsData['product'][id]['images'].map((imageSrc, index) => (
                                 <button onClick={() => setActiveImg(index)}
                                     key={index}
