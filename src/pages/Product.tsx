@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { productsData } from "../constants";
 import { Button, ProductCard, Loader } from "../components";
@@ -27,6 +27,8 @@ const preloadAllImages = srcs => Promise.all(srcs.map(preload))
 
 const Product = () => {
 
+    const fieldRef = useRef<HTMLInputElement>(null);
+
     let { id } = useParams();
     const [activeImg, setActiveImg] = useState(0);
     const [qty, setQty] = useState(minOrder);
@@ -54,12 +56,13 @@ const Product = () => {
             .finally(() => 
                 setTimeout(() => {
                     setLoading(false)
+                    fieldRef.current.scrollIntoView();
                 }, 400)              
             )
     }
 
     useEffect(() => {
-        preloaded()
+        preloaded();
     },[])
 
     if(loading) return (
@@ -70,7 +73,7 @@ const Product = () => {
 
     return (
         <div className="px-7 lg:px-28 pt-8 pb-10">     
-            <section id={`top-${id}`}> 
+            <section ref={fieldRef}> 
                 <div className="grid grid-rows-1 md:flex flex-row mb-12">
                         <div className="hidden md:w-2/12 justify-center md:flex flex-col md:justify-start md:items-start">
                             {productsData['product'][id]['images'].map((imageSrc, index) => (
