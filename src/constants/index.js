@@ -239,27 +239,27 @@ export const socialLinks = [
   {
     name: "Facebook",
     logo: Facebook,
-    link: "#",
+    link: "https://www.facebook.com/tswaanda/",
   },
   {
     name: "Instagram",
     logo: Instagram,
-    link: "#",
+    link: "https://www.instagram.com/tswaanda/",
   },
   {
     name: "Github",
     logo: Github,
-    link: "#",
+    link: "https://github.com/tswaanda",
   },
   {
     name: "Linkedin",
     logo: Linkedin,
-    link: "#",
+    link: "https://www.linkedin.com/company/tswaanda/",
   },
   {
-    name: "Mail",
+    name: "Telegram",
     logo: Mail,
-    link: "#",
+    link: "https://t.me/+yApXyrnb5Cs1YmU0",
   },
 ];
 
