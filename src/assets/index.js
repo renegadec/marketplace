@@ -9,6 +9,9 @@ import Instagram from "./social/instagram.svg";
 import Linkedin from "./social/linkedin.svg";
 import Mail from "./social/mail.svg";
 
+import ArrowBack from "./arrow_back.svg";
+import ArrowForward from "./arrow_forward.svg";
+
 import Confidence from "./team/confidence.png";
 import Selestine from "./team/selestine.png";
 import Nigel from "./team/nigel.png";
@@ -104,6 +107,8 @@ export {
     Instagram,
     Linkedin,
     Mail,
+    ArrowBack,
+    ArrowForward,
     Confidence,
     Selestine,
     Nigel,
