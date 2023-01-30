@@ -56,14 +56,18 @@ const Product = () => {
             .finally(() => 
                 setTimeout(() => {
                     setLoading(false)
-                    fieldRef.current.scrollIntoView();
+                    const element = document.getElementById(`top-${id}`);
+                    if (element) {
+                      // 👇 Will scroll smoothly to the top of the next section
+                      element.scrollIntoView({ behavior: 'smooth' });
+                    }
                 }, 400)              
             )
     }
 
     useEffect(() => {
         preloaded();
-    },[])
+    },[id])
 
     if(loading) return (
         <div className="flex justify-center items-center px-7 lg:px-28 pt-8 pb-10 h-[70vh]">
@@ -73,7 +77,7 @@ const Product = () => {
 
     return (
         <div className="px-7 lg:px-28 pt-8 pb-10">     
-            <section ref={fieldRef}> 
+            <section ref={fieldRef} id={`top-${id}`}> 
                 <div className="grid grid-rows-1 md:flex flex-row mb-12">
                         <div className="hidden md:w-2/12 justify-center md:flex flex-col md:justify-start md:items-start">
                             {productsData['product'][id]['images'].map((imageSrc, index) => (
