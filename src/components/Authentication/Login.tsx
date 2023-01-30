@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { logo } from '../../assets'
 import { supabase } from '../../config/supabase'
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const Login = () => {
     const [email, setEmail] = useState("")
@@ -60,7 +60,7 @@ const Login = () => {
                             </div>
                             <button type="submit" onClick={(e) => LoginHandler(e)} className="w-full text-white bg-primary hover:bg-primary-700 focus:ring-4 ring-primary focus:outline-none focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary dark:hover:bg-primary-700 dark:focus:ring-primary">Sign in</button>
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                                Don’t have an account yet? <a href="/signup" className="font-medium text-primary hover:underline dark:text-primary">Sign up</a>
+                                Don’t have an account yet? <Link to="/signup" className="font-medium text-primary hover:underline dark:text-primary">Sign up</Link>
                             </p>
                         </form>
                     </div>

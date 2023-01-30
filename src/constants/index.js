@@ -1,5 +1,81 @@
 
-import { Facebook, Github, Instagram, Linkedin, Mail, } from "../assets";
+import {
+  Apples,
+  Apple1,
+  Apple2,
+  Apple3,
+  Apple4,
+  Avocados,
+  Avocado1,
+  Avocado2,
+  Avocado3,
+  Avocado4,
+  Bananas,
+  Banana1,
+  Banana2,
+  Banana3,
+  Banana4,
+  Blueberries,
+  Blueberry1,
+  Blueberry2,
+  Blueberry3,
+  Blueberry4,
+  Cucumbers,
+  Cucumber1,
+  Cucumber2,
+  Cucumber3,
+  Cucumber4,
+  Macadamia,
+  Macadamia1,
+  Macadamia2,
+  Macadamia3,
+  Macadamia4,
+  Paprika,
+  Paprika1,
+  Paprika2,
+  Paprika3,
+  Paprika4,
+  Peas,
+  Peas1,
+  Peas2,
+  Peas3,
+  Peas4,
+  Pepper,
+  Pepper1,
+  Pepper2,
+  Pepper3,
+  Pepper4,
+  Potatoes,
+  Potatoes1,
+  Potatoes2,
+  Potatoes3,
+  Potatoes4,
+  Raspberries,
+  Raspberry1,
+  Raspberry2,
+  Raspberry3,
+  Raspberry4,
+  Roundnuts,
+  Roundnuts1,
+  Roundnuts2,
+  Roundnuts3,
+  Roundnuts4,
+  Strawberries,
+  Strawberry1,
+  Strawberry2,
+  Strawberry3,
+  Strawberry4,
+  Facebook,
+  Github,
+  Instagram,
+  Linkedin,
+  Mail,
+  Confidence,
+  Selestine,
+  Jane,
+  Admin,
+  Nigel
+  } from "../assets";
 
 
 export const navigation = [
@@ -15,144 +91,144 @@ export const productsData = {
       id: 1,
       type: "Avocados",
       desc: "Southern Africa green-skin variety.",
-      image: "../src/assets/avocados/avocados.png",
+      image: Avocados,
       images: [
-              "../src/assets/avocados/1.png",
-              "../src/assets/avocados/2.png",
-              "../src/assets/avocados/3.png",
-              "../src/assets/avocados/4.png"
+              Avocado1,
+              Avocado2,
+              Avocado3,
+              Avocado4,
       ]
     },
     {
       id: 2,
       type: "Apples",
       desc: "Sweet apples from eastern Zimbabwe.",
-      image: "../src/assets/apples/apples.png",
+      image: Apples,
       images: [
-        "../src/assets/apples/1.png",
-        "../src/assets/apples/2.png",
-        "../src/assets/apples/3.png",
-        "../src/assets/apples/4.png"
+              Apple1,
+              Apple2,
+              Apple3,
+              Apple4,
       ]
     },
     {
       id: 3,
       type: "Bananas",
       desc: "Sweet bananas from eastern Zimbabwe.",
-      image: "../src/assets/bananas/bananas.png",
+      image: Bananas,
       images: [
-        "../src/assets/bananas/1.png",
-        "../src/assets/bananas/2.png",
-        "../src/assets/bananas/3.png",
-        "../src/assets/bananas/4.png"
+              Banana1,
+              Banana2,
+              Banana3,
+              Banana4,
       ]
     },
     {
       id: 4,
       type: "Cucumber",
       desc: "Cucumbers from the western region.",
-      image: "../src/assets/cucumbers/cucumbers.png",
+      image: Cucumbers,
       images: [
-        "../src/assets/cucumbers/1.png",
-        "../src/assets/cucumbers/2.png",
-        "../src/assets/cucumbers/3.png",
-        "../src/assets/cucumbers/4.png"
+              Cucumber1,
+              Cucumber2,
+              Cucumber3,
+              Cucumber4,
       ]
     },
     {
       id: 5,
       type: "Pepper",
       desc: "Colorful pepper from the northern region.",
-      image: "../src/assets/pepper/pepper.png",
+      image: Pepper,
       images: [
-        "../src/assets/pepper/1.png",
-        "../src/assets/pepper/2.png",
-        "../src/assets/pepper/3.png",
-        "../src/assets/pepper/4.png"
+              Pepper1,
+              Pepper2,
+              Pepper3,
+              Pepper4,
       ]
     },
     {
       id: 6,
       type: "Potatoes",
       desc: "Potatoes from the southern region.",
-      image: "../src/assets/potatoes/potato.png",
+      image: Potatoes,
       images: [
-        "../src/assets/potatoes/1.png",
-        "../src/assets/potatoes/2.png",
-        "../src/assets/potatoes/3.png",
-        "../src/assets/potatoes/4.png"
+              Potatoes1,
+              Potatoes2,
+              Potatoes3,
+              Potatoes4,
       ]
     },
     {
       id: 7,
       type: "Round Nuts",
       desc: "Round Nuts from the eastern region.",
-      image: "../src/assets/roundnuts/roundnuts.png",
+      image: Roundnuts,
       images: [
-        "../src/assets/roundnuts/1.png",
-        "../src/assets/roundnuts/2.png",
-        "../src/assets/roundnuts/3.png",
-        "../src/assets/roundnuts/4.png"
+              Roundnuts1,
+              Roundnuts2,
+              Roundnuts3,
+              Roundnuts4,
       ]
     },
     {
       id: 8,
       type: "Peas",
       desc: "Firm peas from the western region.",
-      image: "../src/assets/peas/peas.png",
+      image: Peas,
       images: [
-        "../src/assets/peas/1.png",
-        "../src/assets/peas/2.png",
-        "../src/assets/peas/3.png",
-        "../src/assets/peas/4.png"
+              Peas1,
+              Peas2,
+              Peas3,
+              Peas4,
       ]
     },
     {
       id: 9,
       type: "Raspberry",
       desc: "Juicy Raspberry from the southern region.",
-      image: "../src/assets/rasberry/rasberry.png",
+      image: Raspberries,
       images: [
-        "../src/assets/rasberry/1.png",
-        "../src/assets/rasberry/2.png",
-        "../src/assets/rasberry/3.png",
-        "../src/assets/rasberry/4.png"
+              Raspberry1,
+              Raspberry2,
+              Raspberry3,
+              Raspberry4,
       ]
     },
     {
       id: 10,
       type: "Macadamia",
       desc: "Tasty macadamia nuts from the northern region.",
-      image: "../src/assets/macadamia/macadamia.png",
+      image: Macadamia,
       images: [
-        "../src/assets/macadamia/1.png",
-        "../src/assets/macadamia/2.png",
-        "../src/assets/macadamia/3.png",
-        "../src/assets/macadamia/4.png"
+              Macadamia1,
+              Macadamia2,
+              Macadamia3,
+              Macadamia4,
       ]
     },
     {
       id: 11,
       type: "Strawberries",
       desc: "Sweet strawberries from the western region.",
-      image: "../src/assets/strawberry/strawberries.png",
+      image: Strawberries,
       images: [
-        "../src/assets/strawberry/1.png",
-        "../src/assets/strawberry/2.png",
-        "../src/assets/strawberry/3.png",
-        "../src/assets/strawberry/4.png"
+              Strawberry1,
+              Strawberry2,
+              Strawberry3,
+              Strawberry4,
       ]
     },
     {
       id: 12,
       type: "Paprika",
       desc: "Dark sweet blue berries from Zimbabwe",
-      image: "../src/assets/paprika/paprika.png",
+      image: Paprika,
       images: [
-        "../src/assets/paprika/1.png",
-        "../src/assets/paprika/2.png",
-        "../src/assets/paprika/3.png",
-        "../src/assets/paprika/4.png"
+              Paprika1,
+              Paprika2,
+              Paprika3,
+              Paprika4,
       ]
     },
   ],
@@ -275,7 +351,7 @@ export const teamData = [
     name: "Confidence Nyirenda",
     position: "Co-Founder & CTO",
     desc: "Confidence drives the technical strategy of the Tswaanda ecosystem and brand.",
-    image: "../src/assets/team/confidence.png",
+    image: Confidence,
     facebook: "https://www.facebook.com/africoiner",
     twitter: "https://twitter.com/crnyirenda",
     github: "https://github.com/renegadec"
@@ -284,7 +360,7 @@ export const teamData = [
     name: "Selestine Mabhunuh",
     position: "Co-Founder & COO",
     desc: "Selestine drives the operations strategy of the Tswaanda ecosystem and brand.",
-    image: "../src/assets/team/selestine.png",
+    image: Selestine,
     facebook: "https://www.facebook.com/selestine.rutendo",
     twitter: "https://twitter.com/selestine_tendo",
     github: "#"
@@ -293,7 +369,7 @@ export const teamData = [
     name: "Isheanesu N. Misi",
     position: "Lead Developer",
     desc: "Nigel is a seasoned full-stack developer with 5 years of experience in web development .",
-    image: "../src/assets/team/nigel.png",
+    image: Nigel,
     facebook: "https://www.facebook.com/isheanesumisi",
     twitter: "https://twitter.com/thisisisheanesu",
     github: "https://github.com/thisisisheanesu"
@@ -302,32 +378,32 @@ export const teamData = [
 
 export const notifications = [
   {
-    image: '../src/assets/team/admin.png',
+    image: Admin,
     subject: 'New message',
     username: 'Admin',
     message: 'Cargo dispatched from Zimbabwe, check account for details.',
     time: 'few minutes ago...'
   },
   {
-    image: '../src/assets/team/jane.png',
+    image: Jane,
     subject: 'Reminder',
     username: 'Jane Smith',
     message: 'Documentation uploaded. Waiting for approval.',
-    time: '2022-01-19 T 09:00:00'
+    time: '2023-01-19 T 09:00:00'
   },
   {
-    image: '../src/assets/team/admin.png',
+    image: Admin,
     subject: 'Reminder',
     username: 'Tswaanda Sales',
     message: 'Funds secured with custodial wallet.',
-    time: '2022-01-19T09:00:00'
+    time: '2022-02-19 T 09:00:00'
   },
   {
-    image: '../src/assets/team/admin.png',
+    image: Admin,
     subject: 'Reminder',
     username: 'Admin',
     message: 'Update billing address.',
-    time: '2022-01-19T09:00:00'
+    time: '2022-05-19 T 09:00:00'
   },
 
 ];

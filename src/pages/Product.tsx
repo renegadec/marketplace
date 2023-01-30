@@ -253,7 +253,12 @@ const Product = () => {
                     </div>
                 )}
             </div>
-            <div className="flex flex-col md:flex-row ml-12 mt-16">
+            <div className="ml-24">
+                <h1 className="font-bold mt-10 text-3xl text-primary">Related Products</h1>
+            </div>
+            
+            <div className="flex flex-col justify-center md:flex-row ml-12 mt-16">
+            
                 {productsData['product'].slice(0, 3).map((product) => (
                     <ProductCard 
                         key={product.id}
