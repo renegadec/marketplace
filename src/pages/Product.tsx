@@ -105,19 +105,19 @@ const Product = () => {
                                 </button>
                             ))}
                         </div>
-                        <div className="flex flex-col justify-center md:px-8 md:py-2 md:w-5/12 mb-[10rem] md:mb-0">
+                        <div className="flex flex-col justify-center object-cover md:px-8 md:py-2 md:w-5/12 mb-[10rem] md:mb-0">
                             <img 
-                                className="h-[20rem] lg:h-[27rem] w-auto border-primary border-2 rounded-[8px]"
+                                className=" border-primary border-2 rounded-[8px]"
                                 src={`${productsData['product'][id]['images'][activeImg]}`} 
                                 alt="Product Image" 
                             />
-                            <div className="flex md:hidden justify-between w-full px-6 mt-[-12rem]">
-                                <button onClick={() => scrollImage(false)} className="flex justify-center items-center bg-white rounded-md">
+                            <div className="flex lg:hidden justify-between w-full px-6 mt-[-12rem]">
+                                <button onClick={() => scrollImage(false)} className="flex justify-center items-center rounded-md">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
                                         <path d="M20 44 0 24 20 4l2.8 2.85L5.65 24 22.8 41.15Z"/>
                                     </svg>
                                 </button>
-                                <button onClick={() => scrollImage(true)} className="flex justify-center items-center bg-white rounded-md">
+                                <button onClick={() => scrollImage(true)} className="flex justify-center items-center  rounded-md">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
                                         <path d="m15.2 43.9-2.8-2.85L29.55 23.9 12.4 6.75l2.8-2.85 20 20Z"/>
                                     </svg>
@@ -226,7 +226,7 @@ const Product = () => {
             </div>
             <div className="md:ml-24 mt-8">
                 {activeInfo === infoItems[0] && (
-                    <p className="font-[400] text-gray-600 text-sm md:text-lg">
+                    <p className=" text-gray-600 text-sm md:text-lg">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam placerat, augue a volutpat hendrerit, sapien tortor faucibus augue, a maximus elit ex vitae libero. Sed quis mauris eget arcu facilisis consequat sed eu felis. Nunc sed porta augue. Morbi porta tempor odio, in molestie diam bibendum sed.
                     </p>
                 )}

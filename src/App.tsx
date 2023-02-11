@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import styles from "./style";
 
 // Router
 import { 
@@ -57,22 +58,78 @@ const App = () => {
     }, [])
 
     return (
-      <main className="font-mont">
+      <main className="font-mont" >
         <UserContext.Provider value={session}>
           <BrowserRouter>
-            <Navbar/>         
+          <div className={`${styles.paddingX} ${styles.flexCenter}`}>
+            <div className={`${styles.boxWidth}`}>
+              <Navbar/> 
+            </div>
+          </div>        
             <Routes>
               <Route index element={<Home />} />
               <Route path="*" element={<NotFound />} />
-              <Route path="account" element={<Account />} />
-              <Route path="services" element={<Services />} />
-              <Route path="company" element={<Company />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="product/:id" element={<Product />} />
-              <Route path="market" element={<Market />} />
+              <Route path="account" element={
+                <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                  <div className={`${styles.boxWidth}`}>
+                    <Account />
+                  </div>
+                </div>
+                  
+                } />
+              <Route path="services" element={
+                <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                  <div className={`${styles.boxWidth}`}>
+                    <Services />
+                  </div>
+                </div>
+                  
+                } 
+              />
+              <Route path="company" element={
+                <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                  <div className={`${styles.boxWidth}`}>
+                    <Company />
+                  </div>
+                </div>
+                
+              } />
+              <Route path="/login" element={
+                <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                  <div className={`${styles.boxWidth}`}>
+                    <Login />
+                  </div>
+                </div>
+                
+                } />
+              <Route path="/signup" element={
+                <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                  <div className={`${styles.boxWidth}`}>
+                    <SignUp />
+                  </div>
+                </div>
+              
+              } />
+              <Route path="product/:id" element={
+                <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                  <div className={`${styles.boxWidth}`}>
+                    <Product />
+                  </div>
+                </div>
+              } />
+              <Route path="market" element={
+              <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                <div className={`${styles.boxWidth}`}>
+                  <Market />
+                </div>
+              </div>
+              } />
             </Routes>
-            <Footer />
+            <div className={`${styles.paddingX} ${styles.flexCenter}`}>
+              <div className={`${styles.boxWidth}`}>
+                <Footer/> 
+              </div>
+          </div>
           </BrowserRouter>
         </UserContext.Provider>
       </main>

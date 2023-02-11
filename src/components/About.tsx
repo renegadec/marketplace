@@ -11,9 +11,11 @@ const About = () => {
                 />
                 <div className="mt-4 md:mt-0">
                     <h1 className="lg:text-left sm:text-center  text-primary font-bold text-4xl mb-4">
-                                    About Us
+                        About Us
                     </h1>
-                    <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-black ">We always prioritize efficiency without compromising quality.</h2>
+                    <h2 className="mb-4 md:text-2xl tracking-tight font-semibold text-black ">
+                        We always prioritize efficiency without compromising quality.
+                    </h2>
                     <p className="mb-6 font-light text-gray-500 md:text-lg dark:text-gray-400">
                         Tswaanda is dedicated to providing our customers with professional
                         services for economic utilisation of the major markets for

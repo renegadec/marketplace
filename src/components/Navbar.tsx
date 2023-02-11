@@ -7,6 +7,7 @@ import { navigation, notifications } from '../constants';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { supabase } from '../config/supabase';
 import { UserContext } from '../UserContext';
+import styles from '../style';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -138,7 +139,8 @@ const Navbar = () => {
                                 </div>
                                 <div className="py-6">
                                     <a
-                                        onClick={() => navigate('/login')}
+                                        href='/login'
+                                        onClick={() => setMobileMenuOpen(false)}
                                         className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-6 text-gray-900 hover:bg-gray-400/10 cursor-pointer"
                                     >
                                     Log in
