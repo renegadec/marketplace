@@ -25,7 +25,7 @@ const Market = () => {
           <div className="flex w-full place-items-start pt-8 lg:px-36">
               <h3>Showing All {productsData['product'].length} Results</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:space-x-5 lg:grid-cols-3 pt-12">
             {productsData['product'].slice(0, 6).map((product) => (
               <ProductCard 
                 key={product.id}
@@ -43,7 +43,7 @@ const Market = () => {
               </h3>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:space-x-5 lg:grid-cols-3 pt-12">
             {productsData['product'].slice(6).map((product) => (
               <ProductCard 
                 key={product.id}

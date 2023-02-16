@@ -15,8 +15,10 @@ import ArrowForward from "./arrow_forward.svg";
 import Confidence from "./team/confidence.png";
 import Selestine from "./team/selestine.png";
 import Nigel from "./team/nigel.png";
+import Elivia from "./team/elivia.png";
+import Asif from "./team/asif.png";
 import Admin from "./team/admin.png";
-import Jane from "./team/jane.png"
+import Jane from "./team/jane.png";
 
 import Apples from "./apples/apples.png"
 import Apple1 from "./apples/1.png"
@@ -112,6 +114,8 @@ export {
     Confidence,
     Selestine,
     Nigel,
+    Elivia,
+    Asif,
     Jane,
     Admin,
     Apples,

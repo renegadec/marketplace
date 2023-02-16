@@ -72,6 +72,8 @@ import {
   Mail,
   Confidence,
   Selestine,
+  Asif,
+  Elivia,
   Jane,
   Admin,
   Nigel
@@ -374,6 +376,16 @@ export const teamData = [
     twitter: "https://twitter.com/thisisisheanesu",
     github: "https://github.com/thisisisheanesu"
   },
+  {
+    name: "Rakibul Hasan Asif",
+    position: "Web Developer",
+    desc: "Rakibul has vast experience in designing user interface and has 3 years experience working as developer",
+    image: Asif,
+    facebook: "https://www.facebook.com/",
+    twitter: "https://twitter.com/asifrakibul",
+    github: "https://github.com/asif2508"
+  },
+  
 ]
 
 export const notifications = [

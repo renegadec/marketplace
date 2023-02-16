@@ -44,6 +44,24 @@ const ProtectedRoute = ({ children }) => {
   return <Account />;
 };
 
+function Alert({message}) {
+  const [show, setShow] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {setShow(false)}, 7000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return show ? (
+    <div className="alert alert-warning shadow-lg">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current flex-shrink-0 w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>{message}</span>
+      </div>
+    </div>
+  ) : null;
+}
+
 const App = () => {
     const [session, setSession] = useState(null)
 
@@ -63,6 +81,9 @@ const App = () => {
           <BrowserRouter>
           <div className={`${styles.paddingX} ${styles.flexCenter}`}>
             <div className={`${styles.boxWidth}`}>
+              <div>
+                <Alert message="This is a MVP, to be used for testing purposes only." />
+              </div>
               <Navbar/> 
             </div>
           </div>        
