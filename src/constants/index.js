@@ -175,8 +175,8 @@ export const productsData = {
     },
     {
       id: 8,
-      type: "Peas",
-      desc: "Firm peas from the western region.",
+      type: "Somerwood Peas",
+      desc: "A heavy cropping pea with excellent taste and texture.",
       image: Peas,
       images: [
               Peas1,

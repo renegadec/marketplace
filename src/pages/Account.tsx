@@ -2,26 +2,32 @@ import { useState, useEffect, useContext, useLayoutEffect } from "react";
 import { Button } from "../components";
 import { Phone } from 'react-telephone';
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../UserContext";
 import styles from "../style";
+import { UserContext } from "../UserContext";
+import { useAuth } from "../hooks";
 
 const infoItems = ["Dashboard", "Orders", "Downloads", "Addresses", "Account details"]
 
 const Account = () => {
     const [activeInfo, setActiveInfo] = useState("Dashboard");
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    // const [isLoggedIn, setIsLoggedIn] = useState(false)
     const navigate = useNavigate();
-    const [isMounted, setIsMounted] = useState(true)
-
-    let session = useContext(UserContext);
+    const [isMounted, setIsMounted] = useState(false);
+    const { session, setSession } = useContext(UserContext);
+    const { isLoggedIn } = useAuth(session, setSession);
 
     useEffect(() => {
-        if(session === null) navigate('/login')
+        // if(identity) navigate('/account')
+        checkAuth()
     },[])
 
-    if(!isMounted) {
-        return null
+    const checkAuth = async () => {
+        let user = await isLoggedIn();
+        if(!user) return navigate('/');
+        if(user) setIsMounted(true);
     }
+
+    if(!isMounted) return null
 
     return (
         <div className="flex flex-col md:items-center md:p-8 pt-12 min-h-screen w-full overflow-x-hidden">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import styles from "./style";
 
 // Router
@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 
 // Components
-import { Navbar, Footer, SignUp, Login } from "./components";
+import { Navbar, Footer } from "./components";
 
 // Pages
 import { 
@@ -23,29 +23,26 @@ import {
   Services
 } from "./pages"
 
-import { supabase } from "./config/supabase";
+
 import { UserContext } from "./UserContext";
 
-const useAuth = async() => {
-  let user = await supabase.auth.getSession()
-  return user.data.session
-}
+import { useAuth } from "./hooks";
 
-const ProtectedRoute = ({ children }) => {
+// const ProtectedRoute = ({ children }) => {
   
-  const isLoggedIn = useAuth()
+//   const { session } = useContext(UserContext)
 
-  console.log(isLoggedIn)
+//   console.log(session)
 
-  if (!isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
+//   if (!session) {
+//     return <Navigate to="/login" replace />;
+//   }
 
-  return <Account />;
-};
+//   return <Account />;
+// };
 
 function Alert({message}) {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {setShow(false)}, 7000);
@@ -63,21 +60,21 @@ function Alert({message}) {
 }
 
 const App = () => {
-    const [session, setSession] = useState(null)
+    const [session, setSession] = useState<boolean>(false)
+
+    const { login, isLoggedIn } = useAuth(session, setSession);
+
+    const checkAuth = async () => {
+      if(await isLoggedIn()) setSession(true)
+    }
 
     useEffect(() => {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        setSession(session)
-      })
-
-      supabase.auth.onAuthStateChange((_event, session) => {
-        setSession(session)
-      })
+      checkAuth()
     }, [])
 
     return (
       <main className="font-mont" >
-        <UserContext.Provider value={session}>
+        <UserContext.Provider value={{session, setSession}}>
           <BrowserRouter>
           <div className={`${styles.paddingX} ${styles.flexCenter}`}>
             <div className={`${styles.boxWidth}`}>
@@ -115,22 +112,7 @@ const App = () => {
                 </div>
                 
               } />
-              <Route path="/login" element={
-                <div className={`${styles.paddingX} ${styles.flexStart}`}>
-                  <div className={`${styles.boxWidth}`}>
-                    <Login />
-                  </div>
-                </div>
-                
-                } />
-              <Route path="/signup" element={
-                <div className={`${styles.paddingX} ${styles.flexStart}`}>
-                  <div className={`${styles.boxWidth}`}>
-                    <SignUp />
-                  </div>
-                </div>
               
-              } />
               <Route path="product/:id" element={
                 <div className={`${styles.paddingX} ${styles.flexStart}`}>
                   <div className={`${styles.boxWidth}`}>

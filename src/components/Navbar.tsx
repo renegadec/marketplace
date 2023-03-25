@@ -1,13 +1,14 @@
 
-import React, { useEffect, useState, useContext} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { logo } from "../assets";
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { navigation, notifications } from '../constants';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { supabase } from '../config/supabase';
-import { UserContext } from '../UserContext';
 import styles from '../style';
+import { UserContext } from '../UserContext';
+
+import { useAuth } from "../hooks";
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -16,21 +17,16 @@ const Navbar = () => {
     const [isAppsOpen, setIsAppsOpen] = useState(false)
     const [isProfileOpen, setIsProfileOpen] = useState(false)
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [isMounted, setIsMounted] = useState(true)
+    // const [isLoggedIn, setIsLoggedIn] = useState(false)
+    // const [isMounted, setIsMounted] = useState(true)
 
-    let session = useContext(UserContext);
+    const { session, setSession } = useContext(UserContext)
 
-    async function logout() {
-        localStorage.clear();
-        await supabase.auth.signOut()
-        const { error } = await supabase.auth.signOut()
-        if (error) throw error       
-    }
+    const { login, logout } = useAuth(session, setSession);
 
-    if(!isMounted) {
-        return null
-    }
+    useEffect(() => {
+
+    }, [])
 
     function toggleMenuItem(selection: 'Notifications' | 'Apps' | 'Profile') {
         
@@ -55,7 +51,7 @@ const Navbar = () => {
 
     return (
         <nav className="bg-white pb-4">
-            {session === null ?
+            {!session ?
                 (<div className="px-6 pt-6 lg:px-8">
                     <div>
                         <nav className="flex h-9 items-center justify-between" aria-label="Global">
@@ -84,7 +80,10 @@ const Navbar = () => {
                             </div>
                             <div className="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-end">
                                 <button
-                                    onClick={() => navigate("/login")}
+                                    onClick={() => login(
+                                        () => navigate("/account"),
+                                        () => console.log('Error')
+                                    )}
                                     className="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-primary hover:ring-gray-900/20"
                                 >
                                     Log in

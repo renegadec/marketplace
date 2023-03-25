@@ -5,14 +5,10 @@ import Info from "./Info";
 import Navbar from "./Navbar";
 import ProductCard from "./ProductCard/ProductCard";
 import Footer from "./Footer/Footer";
-import Login from "./Authentication/Login";
-import SignUp from "./Authentication/SignUp";
 import Loader from "./Loader";
 import Backdrop from "./Backdrop";
 
 export {
-    Login,
-    SignUp,
     Button,
     Features,
     Hero,
