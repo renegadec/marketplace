@@ -13,7 +13,7 @@ function SubscribeForm() {
         setErrorMsg("")
         console.log(e.target[0].value);
         const errHandler = console.log
-   
+
         try {
             handler(email, errHandler)
             setState(2);

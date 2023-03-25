@@ -1,7 +1,7 @@
 import { AuthClient } from "@dfinity/auth-client";
 import { Actor, HttpAgent } from '@dfinity/agent';
 
-const canisterId = "rm7b6-jqaaa-aaaak-aehia-cai";
+const canisterId = import.meta.env.VITE_DFINITY_CANISTER_ID
 
 import { useContext } from "react";
 import { UserContext } from "../UserContext";

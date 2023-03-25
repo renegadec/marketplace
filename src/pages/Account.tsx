@@ -10,14 +10,12 @@ const infoItems = ["Dashboard", "Orders", "Downloads", "Addresses", "Account det
 
 const Account = () => {
     const [activeInfo, setActiveInfo] = useState("Dashboard");
-    // const [isLoggedIn, setIsLoggedIn] = useState(false)
     const navigate = useNavigate();
     const [isMounted, setIsMounted] = useState(false);
     const { session, setSession } = useContext(UserContext);
     const { isLoggedIn } = useAuth(session, setSession);
 
     useEffect(() => {
-        // if(identity) navigate('/account')
         checkAuth()
     },[])
 
