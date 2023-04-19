@@ -4,8 +4,6 @@ function getRequestParams(email) {
   const API_KEY = import.meta.env.VITE_MAILCHIMP_API_KEY;
   const LIST_ID = import.meta.env.VITE_MAILCHIMP_LIST_ID;
 
-  console.log(import.meta.env);
-
   const DATACENTER = API_KEY.split("-")[1];
   const url = `https://${DATACENTER}.api.mailchimp.com/3.0/lists/${LIST_ID}/members`;
 

@@ -1,0 +1,5 @@
+export { default as Blueberries } from "./blueberries.png"
+export { default as Blueberry1 } from "./1.png"
+export { default as Blueberry2 } from "./2.png"
+export { default as Blueberry3 } from "./3.png"
+export { default as Blueberry4 } from "./4.png"

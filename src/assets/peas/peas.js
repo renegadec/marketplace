@@ -1,0 +1,5 @@
+export { default as Peas } from "./peas.png"
+export { default as Pea1 } from "./1.png"
+export { default as Pea2 } from "./2.png"
+export { default as Pea3 } from "./3.png"
+export { default as Pea4 } from "./4.png"

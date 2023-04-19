@@ -30,7 +30,7 @@ const Hero = () => {
                                 </p>
                                 <div className="mt-8 flex gap-x-4 sm:justify-center">
                                 <Link
-                                    to="/signup"
+                                    to="#"
                                     className="inline-block rounded-lg bg-primary px-4 py-1.5 text-base font-semibold leading-7 text-white hover:text-primary shadow-sm ring-1 ring-primary hover:bg-white hover:ring-primary"
                                 >
                                     Get started
