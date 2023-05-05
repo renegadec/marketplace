@@ -47,51 +47,53 @@ const App = () => {
             </div>
           </div>
             <Suspense fallback={<h1>Loading...</h1>}>
-              <Routes>
-                <Route index element={<Home />} />
-                <Route path="*" element={<NotFound />} />
-                <Route path="account" element={
-                  <div className={`${styles.paddingX} ${styles.flexStart}`}>
-                    <div className={`${styles.boxWidth}`}>
-                      <Account />
-                    </div>
-                  </div>
-                    
-                  } />
-                <Route path="services" element={
-                  <div className={`${styles.paddingX} ${styles.flexStart}`}>
-                    <div className={`${styles.boxWidth}`}>
-                      <Services />
-                    </div>
-                  </div>
-                    
-                  } 
-                />
-                <Route path="company" element={
-                  <div className={`${styles.paddingX} ${styles.flexStart}`}>
-                    <div className={`${styles.boxWidth}`}>
-                      <Company />
-                    </div>
-                  </div>
+                <Routes>
+                  <Route index element={<Home />} />
+                  <Route path="*" element={<NotFound />} />
+                  <Route path="account" element={
+                        <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                          <div className={`${styles.boxWidth}`}>
+                            <Account />
+                          </div>
+                        </div>
+                      } 
+                    />
+                  <Route path="services" element={
+                      <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                        <div className={`${styles.boxWidth}`}>
+                          <Services />
+                        </div>
+                      </div>
+                    } 
+                  />
+                  <Route path="company" element={
+                      <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                        <div className={`${styles.boxWidth}`}>
+                          <Company />
+                        </div>
+                      </div>
+                    } 
+                  />
                   
-                } />
-                
-                <Route path="product/:id" element={
-                  <div className={`${styles.paddingX} ${styles.flexStart}`}>
-                    <div className={`${styles.boxWidth}`}>
-                      <Product />
-                    </div>
-                  </div>
-                } />
-                <Route path="market" element={
-                <div className={`${styles.paddingX} ${styles.flexStart}`}>
-                  <div className={`${styles.boxWidth}`}>
-                    <Market />
-                  </div>
-                </div>
-                } />
-              </Routes>
-            </Suspense>        
+                  <Route path="product/:id" element={
+                      <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                        <div className={`${styles.boxWidth}`}>
+                          <Product />
+                        </div>
+                      </div>
+                    } 
+                  />
+                  <Route path="market" element={
+                      <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                        <div className={`${styles.boxWidth}`}>
+                          <Market />
+                        </div>
+                      </div>
+                    } 
+                  />
+                </Routes>
+            </Suspense>
+                    
             <div className={`${styles.paddingX} ${styles.flexCenter}`}>
               <div className={`${styles.boxWidth}`}>
                 <Footer/> 

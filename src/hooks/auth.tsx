@@ -3,8 +3,6 @@ import { Actor, HttpAgent } from '@dfinity/agent';
 
 const canisterId = import.meta.env.VITE_DFINITY_CANISTER_ID;
 
-// import { useContext } from "react";
-// import { UserContext } from "../UserContext";
 interface authHandlerProps {
     successHandler?: Function,
     errorHandler?: Function
@@ -51,7 +49,7 @@ const useAuth = (session, setSession) => {
       authClientInstance.login({
         onSuccess: async () => {
           successHandler();
-          console.log('Logged in')
+          // console.log('Logged in')
           setSession(true);
         },
         onError: async () => {
@@ -59,8 +57,7 @@ const useAuth = (session, setSession) => {
           setSession(false);
         },
         identityProvider: "https://identity.ic0.app/#authorize",
-        // `http://localhost:${process.env.REPLICA_PORT}?canisterId=${process.env.INTERNET_IDENTITY_CANISTER_ID}#authorize`,
-        // Maximum authorization expiration is 8 days
+        
         maxTimeToLive: days * hours * nanoseconds,
       });
     }

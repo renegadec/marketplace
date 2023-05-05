@@ -17,9 +17,6 @@ const Navbar = () => {
     const [isAppsOpen, setIsAppsOpen] = useState(false)
     const [isProfileOpen, setIsProfileOpen] = useState(false)
 
-    // const [isLoggedIn, setIsLoggedIn] = useState(false)
-    // const [isMounted, setIsMounted] = useState(true)
-
     const { session, setSession } = useContext(UserContext)
 
     const { login, logout } = useAuth(session, setSession);

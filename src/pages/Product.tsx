@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { productsData } from "../constants";
 import { Button, ProductCard, Loader } from "../components";
-import { ArrowBack, ArrowForward } from "../assets";
+
 import { Instagram, Facebook, Mail } from "../assets/social/socials.js";
 
 const initReviews = [

@@ -11,6 +11,6 @@ const NotFound = () => {
         </div>
     </section>
     )
-  }
+}
 
-export default NotFound
+export default NotFound;
