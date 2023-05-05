@@ -1,9 +1,13 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
+import { useNavigate } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import { productsData } from "../constants";
 import { Button, ProductCard, Loader } from "../components";
-
 import { Instagram, Facebook, Mail } from "../assets/social/socials.js";
+
+import { useAuth } from "../hooks";
+import { UserContext } from "../UserContext";
+
 
 const initReviews = [
     {
@@ -27,6 +31,41 @@ const preload = src => new Promise((resolve, reject) => {
 const preloadAllImages = srcs => Promise.all(srcs.map(preload))
 
 const Product = () => {
+    const navigate = useNavigate();
+
+    // checking if user is logged in 
+    const { session, setSession } = useContext(UserContext)
+
+    const { isLoggedIn, login } = useAuth(session, setSession);
+
+    const handlePlaceOrder = () => {
+        isLoggedIn()
+        .then((authenticated) => {
+            if (authenticated) {
+                placeOrder();
+            } else {
+                promptSignIn();
+            }
+        })
+        .catch((error) => {
+            console.log("Error checking authentication:", error);
+        });
+
+        const promptSignIn = () => {
+            login(
+                () => {
+                    placeOrder();
+                },
+                () => {
+                    console.log("Error occurred during login");
+                }
+                );
+            };
+
+        const placeOrder = () => {
+            window.alert("Order successfully placed!");
+        }
+    }
 
     const fieldRef = useRef<HTMLInputElement>(null);
 
@@ -178,7 +217,8 @@ const Product = () => {
                                     round="none"
                                     outline="primary"
                                     variant="secondary"
-                                    handler={() => console.log()}/>
+                                    handler={handlePlaceOrder}
+                                />
                             </div>
                         </div>
                         <div className="flex flex-row mt-10">
@@ -234,17 +274,14 @@ const Product = () => {
                 {activeInfo === infoItems[1] && (
                     <>
                         <p className="font-semibold text-sm md:text-md text-black mb-6">
-                            Weight: <span className="text-gray-600 ml-2">1kg per pack</span>
+                            Weight: <span className="text-gray-600 ml-2">500kg</span>
                         </p>
                         <p className="font-semibold text-sm md:text-md text-black mb-6">
-                            Packaging Dimensions: <span className="text-gray-600 ml-2">15 x 10 x 1 cm</span>
+                            Price: <span className="text-gray-600 ml-2">$15/Kg</span>
                         </p>
                         <p className="font-semibold text-sm md:text-md text-black mb-6">
-                            Colours: <span className="text-gray-600 ml-2">Dark Purple</span>
-                        </p> 
-                        <p className="font-semibold text-sm md:text-md text-black mb-6">
-                            Materials: <span className="text-gray-600 ml-2">Plastic Packing</span>
-                        </p>                                                  
+                            Availability: <span className="text-gray-600 ml-2">2 weeks</span>
+                        </p>                                                 
                     </>
                 )}
                 {activeInfo === infoItems[2] && (
