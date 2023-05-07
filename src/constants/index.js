@@ -245,7 +245,7 @@ export const productsData = {
     {
       id: 12,
       type: "Paprika",
-      desc: "Dark sweet blue berries from Zimbabwe",
+      desc: "Organically farmed paprika from Zimbabwe",
       image: PaprikaImg,
       images: [
               PaprikaImg1,
