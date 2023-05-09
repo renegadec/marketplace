@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, useLayoutEffect } from "react";
 import { Button } from "../components";
+import BillingAddress from "../components/BillingAddress";
 import { Phone } from 'react-telephone';
 import { useNavigate } from "react-router-dom";
 import styles from "../style";
@@ -14,6 +15,7 @@ const Account = () => {
     const [isMounted, setIsMounted] = useState(false);
     const { session, setSession } = useContext(UserContext);
     const { isLoggedIn } = useAuth(session, setSession);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     useEffect(() => {
         checkAuth()
@@ -26,6 +28,10 @@ const Account = () => {
     }
 
     if(!isMounted) return null
+
+    const handleAddAddress = () => {
+        setIsPopupOpen(true);
+    }
 
     return (
         <div className="flex flex-col md:items-center md:p-8 pt-12 min-h-screen w-full overflow-x-hidden">
@@ -74,22 +80,15 @@ const Account = () => {
                         <div className="flex flex-row w-[60vw] mt-6">
                             <div className="flex flex-col w-1/2 items-start">
                                 <h3 className="font-semibold text-lg">
-                                    Billing address
+                                    Billing & Shipping Address
                                 </h3>
-                                <button className="text-primary font-semibold uppercase mt-8">
+                                <button 
+                                    className="text-primary font-semibold uppercase mt-8"
+                                    onClick={handleAddAddress}
+                                >
                                     Add
                                 </button>
-                                <p className="font-normal text-gray-600 mt-2">
-                                    You have not set up this type of address yet.
-                                </p>
-                            </div>
-                            <div className="flex flex-col w-1/2 items-start">
-                                <h3 className="font-semibold text-lg">
-                                    Shipping address
-                                </h3>
-                                <button className="text-primary font-semibold uppercase mt-8">
-                                    Add
-                                </button>
+                                {isPopupOpen && <BillingAddress onClose={() => setIsPopupOpen(false)} />}
                                 <p className="font-normal text-gray-600 mt-2">
                                     You have not set up this type of address yet.
                                 </p>
