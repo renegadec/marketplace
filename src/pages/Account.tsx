@@ -1,6 +1,9 @@
 import { useState, useEffect, useContext, useLayoutEffect } from "react";
 import { Button } from "../components";
+
 import BillingAddress from "../components/BillingAddress";
+
+import Orders from "../components/Orders";
 import { Phone } from 'react-telephone';
 import { useNavigate } from "react-router-dom";
 import styles from "../style";
@@ -38,7 +41,7 @@ const Account = () => {
             <h1 className="font-semibold text-4xl mb-8">
                 My Account
             </h1>
-            <div className="flex flex-row items-start w-full">
+            <div className="flex flex-row items-center w-full">
                 {infoItems.map((item, index) => (
                     <button onClick={() => setActiveInfo(item)} 
                         className={`mr-9 border-b-2 pb-4 ${item === activeInfo ? 'border-black' : 'border-transparent'}`} key={index}>
@@ -62,10 +65,7 @@ const Account = () => {
                     </div>)}
                 {activeInfo === "Orders" &&
                     (<div className="flex flex-row justify-between w-[60vw] bg-gray-200 p-6 border-t-2 border-[#A18A68]">
-                        <p className={`${styles.paragraph}`}>No order has been made yet</p>
-                        <a href="/" className="uppercase text-primary">
-                            Browse Product
-                        </a>
+                        <Orders />
                     </div>)}   
                 {activeInfo === "Downloads" &&
                     (<div className="flex flex-row justify-between w-[60vw] bg-gray-200 p-6 border-t-2 border-[#A18A68]">
