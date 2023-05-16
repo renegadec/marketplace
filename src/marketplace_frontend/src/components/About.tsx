@@ -1,4 +1,4 @@
-import { Farmer } from "../assets";
+
 
 const About = () => {
     return (
@@ -6,7 +6,7 @@ const About = () => {
             <div className="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6">
                 <img 
                     className="m-0 w-full rounded-xl" 
-                    src={Farmer} 
+                    src="./farmer.png"
                     alt="farmer" 
                 />
                 <div className="mt-4 md:mt-0">

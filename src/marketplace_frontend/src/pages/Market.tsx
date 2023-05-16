@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import SearchBar from "../components/SearchBar/SearchBar";
+import SearchBar from "../components/Searchbar/Searchbar";
 import Button from "../components/Button/Button";
 import { ProductCard } from "../components";
 import { productsData } from "../constants";

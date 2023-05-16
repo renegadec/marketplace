@@ -1,7 +1,7 @@
 import { AuthClient } from "@dfinity/auth-client";
 import { Actor, HttpAgent } from '@dfinity/agent';
 
-const canisterId = import.meta.env.VITE_DFINITY_CANISTER_ID;
+const canisterId = process.env.CANISTER_ID_MARKETPLACE_FRONTEND;
 
 interface authHandlerProps {
     successHandler?: Function,

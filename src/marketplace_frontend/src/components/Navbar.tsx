@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState, useContext } from 'react';
-import { logo } from "../assets";
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { navigation, notifications } from '../constants';
@@ -54,7 +53,7 @@ const Navbar = () => {
                         <nav className="flex h-9 items-center justify-between" aria-label="Global">
                             <div className="flex lg:min-w-0 lg:flex-1" aria-label="Global">
                                 <Link to="/" className="-m-1.5 p-1.5">
-                                    <img className="h-8" src={logo} alt="logo" />
+                                    <img className="h-8" src="./logo.png" alt="logo" />
                                 </Link>
                             </div>
                             <div className="flex lg:hidden">
@@ -95,8 +94,7 @@ const Navbar = () => {
                                     <span className="sr-only">Your Company</span>
                                     <img
                                     className="h-8"
-
-                                    src={logo}
+                                    src="./logo.png"
                                     alt="logo"
 
                                     />
@@ -160,7 +158,7 @@ const Navbar = () => {
                                 <span className="sr-only">Toggle sidebar</span>
                             </button> */}
                             <a href="/" className="flex mr-4">
-                                <img src={logo} className="mr-3 h-8" alt="logo" />        
+                                <img src="./logo.png" className="mr-3 h-8" alt="logo" />        
                             </a>
                             <form action="#" method="GET" className="hidden lg:block lg:pl-2">
                                 <label htmlFor="search" className="sr-only">Search</label>
