@@ -34,7 +34,7 @@ const Product = () => {
     const navigate = useNavigate();
 
     // checking if user is logged in 
-    const { session, setSession } = useContext(UserContext)
+    const { session, setSession } = useContext(UserContext);
 
     const { isLoggedIn, login } = useAuth(session, setSession);
 
