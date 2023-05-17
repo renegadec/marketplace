@@ -33,60 +33,60 @@ const preloadAllImages = (srcs) => Promise.all(srcs.map(preload));
 
 const Product = () => {
   const navigate = useNavigate();
-  // const [products, setProducts] = useState(null);
+  const [products, setProducts] = useState(null);
 
-  // interface Product {
-  //   id: number;
-  //   name: string;
-  //   minOrder : number;
-  //   additionalInformation : AdditionalInformation;
-  //   shortDescription : string;
-  //   category : string;
-  //   fullDescription : string;
-  //   price : number;
-  //   image: string;
-  //   images: {
-  //     image1: string;
-  //     image2: string;
-  //     image3: string;
-  //   };
-  // }
+  interface Product {
+    id: number;
+    name: string;
+    minOrder : number;
+    additionalInformation : AdditionalInformation;
+    shortDescription : string;
+    category : string;
+    fullDescription : string;
+    price : number;
+    image: string;
+    images: {
+      image1: string;
+      image2: string;
+      image3: string;
+    };
+  }
 
-  // interface AdditionalInformation {
-  //   price : number;
-  //   weight : number;
-  //   availability : string;
-  // };
+  interface AdditionalInformation {
+    price : number;
+    weight : number;
+    availability : string;
+  };
 
-  // const getAllProducts = async (): Promise<Product[]> => {
-  //   try {
-  //     const products = await marketplace_backend.getProducts();
+  const getAllProducts = async (): Promise<Product[]> => {
+    try {
+      const products = await marketplace_backend.getProducts();
   
-  //     const convertImage = (image: Uint8Array | number[]): string => {
-  //       const imageContent = new Uint8Array(image);
-  //       const blob = new Blob([imageContent.buffer], { type: "image/png" });
-  //       return URL.createObjectURL(blob);
-  //     };
+      const convertImage = (image: Uint8Array | number[]): string => {
+        const imageContent = new Uint8Array(image);
+        const blob = new Blob([imageContent.buffer], { type: "image/png" });
+        return URL.createObjectURL(blob);
+      };
   
-  //     const productsWithUrl = products.map((product) => ({
-  //       ...product,
-  //       image: convertImage(product.image),
-  //       images: {
-  //         image1: convertImage(product.images.image1),
-  //         image2: convertImage(product.images.image2),
-  //         image3: convertImage(product.images.image3),
-  //       },
-  //     }));
-  //     setProducts(productsWithUrl);
-  //     return productsWithUrl;
-  //   } catch (e) {
-  //     console.log(e, "Error");
-  //   }
-  // };
+      const productsWithUrl = products.map((product) => ({
+        ...product,
+        image: convertImage(product.image),
+        images: {
+          image1: convertImage(product.images.image1),
+          image2: convertImage(product.images.image2),
+          image3: convertImage(product.images.image3),
+        },
+      }));
+      setProducts(productsWithUrl);
+      return productsWithUrl;
+    } catch (e) {
+      console.log(e, "Error");
+    }
+  };
 
-  // useEffect(() => {
-  //   getAllProducts();
-  // }, []);
+  useEffect(() => {
+    getAllProducts();
+  }, []);
 
   // checking if user is logged in
   const { session, setSession } = useContext(UserContext);
