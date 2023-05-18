@@ -96,6 +96,9 @@ const Product = () => {
   useEffect(() => {
     getAllProducts();
   }, []);
+  useEffect(() => {
+    getAllProducts();
+  }, []);
 
   // checking if user is logged in
   const { session, setSession } = useContext(UserContext);
