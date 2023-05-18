@@ -7,7 +7,7 @@ actor Tswaanda {
     additionalInformation : AdditionalInformation;
     name : Text;
     shortDescription : Text;
-    images : SmallImages;
+    smallImages : SmallImages;
     category : Text;
     image : [Nat8];
     fullDescription : Text;
@@ -28,7 +28,7 @@ actor Tswaanda {
 
   public shared func getProducts() : async [ProductWithId] {
 
-    let productsInterface = actor ("yg4ya-nyaaa-aaaal-qb3eq-cai") : actor {
+    let productsInterface = actor ("vapn6-nyaaa-aaaak-aetgq-cai") : actor {
       getAllProducts : shared query () -> async [ProductWithId];
     };
 

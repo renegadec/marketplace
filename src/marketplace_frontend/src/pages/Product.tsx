@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { productsData } from "../constants";
+// import { productsData } from "../constants";
 import { Button, ProductCard, Loader } from "../components";
 import { Instagram, Facebook, Mail } from "../../assets/social/socials.js";
+import { marketplace_backend } from "../../../declarations/marketplace_backend/index";
 
 import { useAuth } from "../hooks";
 import { UserContext } from "../UserContext";
-import { marketplace_backend } from "../../../declarations/marketplace_backend/index";
 
 const initReviews = [
   {
@@ -29,64 +29,73 @@ const preload = (src) =>
     img.src = src;
   });
 
-const preloadAllImages = (srcs) => Promise.all(srcs.map(preload));
+const preloadAllImages = (srcs) => Promise.all(srcs?.map(preload));
 
 const Product = () => {
   const navigate = useNavigate();
-  // const [products, setProducts] = useState(null);
 
-  // interface Product {
-  //   id: number;
-  //   name: string;
-  //   minOrder : number;
-  //   additionalInformation : AdditionalInformation;
-  //   shortDescription : string;
-  //   category : string;
-  //   fullDescription : string;
-  //   price : number;
-  //   image: string;
-  //   images: {
-  //     image1: string;
-  //     image2: string;
-  //     image3: string;
-  //   };
-  // }
+  // Fetching from motoko backend
 
-  // interface AdditionalInformation {
-  //   price : number;
-  //   weight : number;
-  //   availability : string;
-  // };
+  const [products, setProducts] = useState(null);
+  const [productsLoading, setProdLoading] = useState(false);
+  const [images, setImages] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  // const getAllProducts = async (): Promise<Product[]> => {
-  //   try {
-  //     const products = await marketplace_backend.getProducts();
-  
-  //     const convertImage = (image: Uint8Array | number[]): string => {
-  //       const imageContent = new Uint8Array(image);
-  //       const blob = new Blob([imageContent.buffer], { type: "image/png" });
-  //       return URL.createObjectURL(blob);
-  //     };
-  
-  //     const productsWithUrl = products.map((product) => ({
-  //       ...product,
-  //       image: convertImage(product.image),
-  //       images: {
-  //         image1: convertImage(product.images.image1),
-  //         image2: convertImage(product.images.image2),
-  //         image3: convertImage(product.images.image3),
-  //       },
-  //     }));
-  //     setProducts(productsWithUrl);
-  //     return productsWithUrl;
-  //   } catch (e) {
-  //     console.log(e, "Error");
-  //   }
-  // };
+  interface Product {
+    id: number;
+    name: string;
+    minOrder: number;
+    additionalInformation: AdditionalInformation;
+    shortDescription: string;
+    category: string;
+    fullDescription: string;
+    price: number;
+    image: string;
+    smallImages: {
+      image1: string;
+      image2: string;
+      image3: string;
+    };
+  }
 
-  // useEffect(() => {
-  //   getAllProducts();
-  // }, []);
+  interface AdditionalInformation {
+    price: number;
+    weight: number;
+    availability: string;
+  }
+
+  const getAllProducts = async (): Promise<Product[]> => {
+    setProdLoading(true);
+    try {
+      const products = await marketplace_backend.getProducts();
+
+      const convertImage = (image: Uint8Array | number[]): string => {
+        const imageContent = new Uint8Array(image);
+        const blob = new Blob([imageContent.buffer], { type: "image/png" });
+        return URL.createObjectURL(blob);
+      };
+
+      const productsWithUrl = products.map((product) => ({
+        ...product,
+        image: convertImage(product.image),
+        smallImages: {
+          image1: convertImage(product.smallImages.image1),
+          image2: convertImage(product.smallImages.image2),
+          image3: convertImage(product.smallImages.image3),
+        },
+      }));
+      setProducts(productsWithUrl);
+      setProdLoading(false);
+      return productsWithUrl;
+    } catch (e) {
+      setProdLoading(false);
+      console.log(e, "Error");
+    }
+  };
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
 
   // checking if user is logged in
   const { session, setSession } = useContext(UserContext);
@@ -124,7 +133,8 @@ const Product = () => {
 
   const fieldRef = useRef<HTMLInputElement>(null);
 
-  let { id } = useParams();
+  const { id } = useParams();
+  const numericId = Number(id);
   const [activeImg, setActiveImg] = useState(0);
   const [qty, setQty] = useState(minOrder);
   const [activeInfo, setActiveInfo] = useState("Description");
@@ -139,11 +149,9 @@ const Product = () => {
     if (qty > minOrder) setQty(qty - 1);
   };
 
-  const images = productsData["product"][id]["images"];
-
   const preloaded = async () => {
     await preloadAllImages(images)
-      .then((result) => {
+      ?.then((result) => {
         console.log(result);
       })
       .finally(() =>
@@ -159,14 +167,14 @@ const Product = () => {
 
   const scrollImage = (isRight: boolean) => {
     if (isRight) {
-      if (activeImg === productsData["product"][id]["images"].length - 1) {
+      if (activeImg === images.length - 1) {
         setActiveImg(0);
       } else {
         setActiveImg(activeImg + 1);
       }
     } else {
       if (activeImg === 0) {
-        setActiveImg(productsData["product"][id]["images"].length - 1);
+        setActiveImg(images.length - 1);
       } else {
         setActiveImg(activeImg - 1);
       }
@@ -174,10 +182,27 @@ const Product = () => {
   };
 
   useEffect(() => {
-    preloaded();
-  }, [id]);
+    if (id && products) {
+      const product = products.find((product: Product) => product.id === numericId);
 
-  if (loading)
+      if (product) {
+        const mainImage = product.image;
+        const image1 = product.smallImages.image1;
+        const image2 = product.smallImages.image2;
+        const image3 = product.smallImages.image3;
+
+        const updatedImages = [mainImage, image1, image2, image3];
+        setImages(updatedImages);
+        setSelectedProduct(product);
+        preloaded();
+      } else {
+        console.log("Product with ID not found");
+        setLoading(false);
+      }
+    }
+  }, [id, products]);
+
+  if (productsLoading || loading)
     return (
       <div className="flex justify-center items-center px-7 lg:px-28 pt-8 pb-10 h-[70vh]">
         <Loader />
@@ -189,7 +214,7 @@ const Product = () => {
       <section ref={fieldRef} id={`top-${id}`}>
         <div className="grid grid-rows-1 md:flex flex-row mb-12">
           <div className="hidden lg:ml-20 md:w-1/12 justify-center lg:flex flex-col md:justify-start md:items-start">
-            {productsData["product"][id]["images"].map((imageSrc, index) => (
+            {images.map((imageSrc, index) => (
               <button
                 onClick={() => setActiveImg(index)}
                 key={index}
@@ -206,7 +231,7 @@ const Product = () => {
           <div className="flex flex-col justify-center object-cover md:px-8 md:py-2 md:w-5/12 mb-[10rem] md:mb-0">
             <img
               className=" border-primary border-2 rounded-[8px]"
-              src={`${productsData["product"][id]["images"][activeImg]}`}
+              src={`${images[activeImg]}`}
               alt="Product Image"
             />
             <div className="flex lg:hidden justify-between w-full px-6 mt-[-12rem]">
@@ -229,12 +254,12 @@ const Product = () => {
             </div>
           </div>
           <div className="flex flex-col py-2 md:w-5/12">
-            <h1 className="font-extrabold text-3xl">
-              {productsData["product"][id]["type"]}
-            </h1>
+            <h1 className="font-extrabold text-3xl">{selectedProduct.name}</h1>
             <div className="flex flex-row mt-4">
               <h3 className="font-semibold md:text-xl mr-6">Price/KG</h3>
-              <h3 className="font-medium md:text-xl text-[#A18A68]">$ 15,00</h3>
+              <h3 className="font-medium md:text-xl text-[#A18A68]">
+                $ {selectedProduct.price}
+              </h3>
             </div>
             <div className="flex flex-row mt-12">
               <div className="flex flex-row mr-4">
@@ -259,7 +284,7 @@ const Product = () => {
             </div>
             <div>
               <p className="font-semibold text-xl text-gray-600 mt-2">
-                {productsData["product"][id]["desc"]}
+                {selectedProduct.shortDescription}
               </p>
             </div>
             <div className="flex flex-row items-center mt-6">
@@ -317,9 +342,11 @@ const Product = () => {
               </div>
               <div className="flex flex-col">
                 <p className="font-semibold text-sm text-gray-600">
-                  {minOrder}
+                  {selectedProduct.minOrder}
                 </p>
-                <p className="font-semibold text-sm text-gray-600">Fruits</p>
+                <p className="font-semibold text-sm text-gray-600">
+                  {selectedProduct.category}
+                </p>
               </div>
             </div>
           </div>
@@ -347,23 +374,19 @@ const Product = () => {
       <div className="md:ml-24 mt-8">
         {activeInfo === infoItems[0] && (
           <p className=" text-gray-600 text-sm md:text-lg">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-            placerat, augue a volutpat hendrerit, sapien tortor faucibus augue,
-            a maximus elit ex vitae libero. Sed quis mauris eget arcu facilisis
-            consequat sed eu felis. Nunc sed porta augue. Morbi porta tempor
-            odio, in molestie diam bibendum sed.
+            {selectedProduct.fullDescription}
           </p>
         )}
         {activeInfo === infoItems[1] && (
           <>
             <p className="font-semibold text-sm md:text-md text-black mb-6">
-              Weight: <span className="text-gray-600 ml-2">500kg</span>
+              Weight: <span className="text-gray-600 ml-2">{selectedProduct.additionalInformation.weight}</span>
             </p>
             <p className="font-semibold text-sm md:text-md text-black mb-6">
-              Price: <span className="text-gray-600 ml-2">$15/Kg</span>
+              Price: <span className="text-gray-600 ml-2">{selectedProduct.additionalInformation.price}</span>
             </p>
             <p className="font-semibold text-sm md:text-md text-black mb-6">
-              Availability: <span className="text-gray-600 ml-2">2 weeks</span>
+              Availability: <span className="text-gray-600 ml-2">{selectedProduct.additionalInformation.availability}</span>
             </p>
           </>
         )}
@@ -371,7 +394,7 @@ const Product = () => {
           <div className="flex flex-row w-full">
             <div className="flex flex-col lg:w-1/2">
               <p className="font-semibold text-sm md:text-xl mb-10">
-                1 Review for {productsData["product"][id]["type"]}
+                1 Review for {selectedProduct.name}
               </p>
               {reviews.map((review, index) => (
                 <div key={index}>
@@ -436,12 +459,12 @@ const Product = () => {
       </div>
 
       <div className="flex flex-col justify-center md:flex-row ml-12 mt-16">
-        {productsData["product"].slice(0, 3).map((product) => (
+        {products.slice(0, 3).map((product) => (
           <ProductCard
             key={product.id}
-            id={String(product.id - 1)}
-            type={product.type}
-            desc={product.desc}
+            id={String(product.id)}
+            type={product.name}
+            desc={product.shortDescription}
             image={product.image}
           />
         ))}
