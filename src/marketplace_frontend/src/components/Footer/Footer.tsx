@@ -1,6 +1,3 @@
-import { 
-    whitelogo,
-} from "../../assets";
 import { socialLinks, menuLinks } from "../../constants";
 import { Button } from "../index";
 import { Link } from "react-router-dom"
@@ -13,7 +10,7 @@ const Footer = () => {
         <div className="lg:flex lg:justify-center lg:relative lg:space-x-64 md:flex md:justify-between">
             <div className="mb-6 md:mb-0">
                 <Link to="/" className="flex items-center">
-                    <img src={whitelogo} className="h-8 mr-3" alt="Tswaanda Logo" />
+                    <img src="./white_logo.png" className="h-8 mr-3" alt="Tswaanda Logo" />
                 </Link>
                 <div className="flex flex-row w-full justify-between">
                     {socialLinks.map((social) => (
