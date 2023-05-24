@@ -37,7 +37,7 @@ const ProductCard = ({
                 <div className="flex flex-row justify-center items-end p-0 px-6 lg:px-0 mt-9 box-border">
 
                     <Link 
-                        to={`../product/${Number(id)}`} 
+                        to={`../product/${String(id)}`} 
                         className="bg-primary hover:bg-gray-400 w-5/6 rounded-[12px] flex isolate justify-center items-start p-2  text-white text-xl box-border"
                     >
                         View Deal

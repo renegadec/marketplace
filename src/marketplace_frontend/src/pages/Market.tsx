@@ -3,7 +3,6 @@ import { useState } from "react";
 import SearchBar from "../components/Searchbar/Searchbar";
 import Button from "../components/Button/Button";
 import { Loader, ProductCard } from "../components";
-import { productsData } from "../constants";
 import { marketplace_backend } from "../../../declarations/marketplace_backend/index";
 
 const categories = ["All", "Fruits", "Nuts", "Legumes", "Spices", "Vegetables"];
@@ -17,7 +16,7 @@ const Market = () => {
   const [searchNotFound, setSearchNotFound] = useState(false);
 
   interface Product {
-    id: number;
+    id: string;
     name: string;
     minOrder: number;
     additionalInformation: AdditionalInformation;
@@ -26,7 +25,7 @@ const Market = () => {
     fullDescription: string;
     price: number;
     image: string;
-    smallImages: {
+    images: {
       image1: string;
       image2: string;
       image3: string;
@@ -53,10 +52,10 @@ const Market = () => {
       const productsWithUrl = products.map((product) => ({
         ...product,
         image: convertImage(product.image),
-        smallImages: {
-          image1: convertImage(product.smallImages.image1),
-          image2: convertImage(product.smallImages.image2),
-          image3: convertImage(product.smallImages.image3),
+        images: {
+          image1: convertImage(product.images.image1),
+          image2: convertImage(product.images.image2),
+          image3: convertImage(product.images.image3),
         },
       }));
       setProducts(productsWithUrl);

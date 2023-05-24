@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard/ProductCard";
 import { marketplace_backend } from "../../../declarations/marketplace_backend";
 import Loader from "./Loader";
-// import { productsData } from '../constants'
 
 const Features = (props) => {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState(null);
 
   interface Product {
-    id: number;
+    id: string;
     name: string;
     minOrder: number;
     additionalInformation: AdditionalInformation;
@@ -18,7 +17,7 @@ const Features = (props) => {
     fullDescription: string;
     price: number;
     image: string;
-    smallImages: {
+    images: {
       image1: string;
       image2: string;
       image3: string;
@@ -45,10 +44,10 @@ const Features = (props) => {
       const productsWithUrl = products.map((product) => ({
         ...product,
         image: convertImage(product.image),
-        smallImages: {
-          image1: convertImage(product.smallImages.image1),
-          image2: convertImage(product.smallImages.image2),
-          image3: convertImage(product.smallImages.image3),
+        images: {
+          image1: convertImage(product.images.image1),
+          image2: convertImage(product.images.image2),
+          image3: convertImage(product.images.image3),
         },
       }));
       setProducts(productsWithUrl);
@@ -84,7 +83,7 @@ const Features = (props) => {
               <div className="flex justify-center w-full lg:aspect-none lg:h-80">
                 <ProductCard
                   key={product.id}
-                  id={product.id}
+                  id={String(product.id)}
                   type={product.name}
                   desc={product.shortDescription}
                   image={product.image}

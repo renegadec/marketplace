@@ -1,17 +1,16 @@
 actor Tswaanda {
-  public type Id = Nat32;
 
-  public type ProductWithId = {
-    id : Id;
+  public type Product = {
+    id : Text;
     minOrder : Int32;
     additionalInformation : AdditionalInformation;
     name : Text;
     shortDescription : Text;
-    smallImages : SmallImages;
     category : Text;
     image : [Nat8];
     fullDescription : Text;
     price : Int32;
+    images : Images;
   };
 
   type AdditionalInformation = {
@@ -20,20 +19,20 @@ actor Tswaanda {
     availability : Text;
   };
 
-  type SmallImages = {
+  type Images = {
     image1 : [Nat8];
     image2 : [Nat8];
     image3 : [Nat8];
   };
 
-  public shared func getProducts() : async [ProductWithId] {
-
-    let productsInterface = actor ("vapn6-nyaaa-aaaak-aetgq-cai") : actor {
-      getAllProducts : shared query () -> async [ProductWithId];
+  public shared func getProducts() : async [Product] {
+// 56r5t-tqaaa-aaaal-qb4gq-cai
+// vapn6-nyaaa-aaaak-aetgq-cai
+    let productsInterface = actor ("56r5t-tqaaa-aaaal-qb4gq-cai") : actor {
+      getAllProducts : shared query () -> async [Product];
     };
 
     let products = await productsInterface.getAllProducts();
-
     return products;
   };
 

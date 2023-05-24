@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-// import { productsData } from "../constants";
 import { Button, ProductCard, Loader } from "../components";
 import { Instagram, Facebook, Mail } from "../../assets/social/socials.js";
 import { marketplace_backend } from "../../../declarations/marketplace_backend/index";
@@ -42,7 +41,7 @@ const Product = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   interface Product {
-    id: number;
+    id: string;
     name: string;
     minOrder: number;
     additionalInformation: AdditionalInformation;
@@ -51,7 +50,7 @@ const Product = () => {
     fullDescription: string;
     price: number;
     image: string;
-    smallImages: {
+    images: {
       image1: string;
       image2: string;
       image3: string;
@@ -78,10 +77,10 @@ const Product = () => {
       const productsWithUrl = products.map((product) => ({
         ...product,
         image: convertImage(product.image),
-        smallImages: {
-          image1: convertImage(product.smallImages.image1),
-          image2: convertImage(product.smallImages.image2),
-          image3: convertImage(product.smallImages.image3),
+        images: {
+          image1: convertImage(product.images.image1),
+          image2: convertImage(product.images.image2),
+          image3: convertImage(product.images.image3),
         },
       }));
       setProducts(productsWithUrl);
@@ -137,7 +136,6 @@ const Product = () => {
   const fieldRef = useRef<HTMLInputElement>(null);
 
   const { id } = useParams();
-  const numericId = Number(id);
   const [activeImg, setActiveImg] = useState(0);
   const [qty, setQty] = useState(minOrder);
   const [activeInfo, setActiveInfo] = useState("Description");
@@ -186,13 +184,13 @@ const Product = () => {
 
   useEffect(() => {
     if (id && products) {
-      const product = products.find((product: Product) => product.id === numericId);
+      const product = products.find((product: Product) => product.id === id);
 
       if (product) {
         const mainImage = product.image;
-        const image1 = product.smallImages.image1;
-        const image2 = product.smallImages.image2;
-        const image3 = product.smallImages.image3;
+        const image1 = product.images.image1;
+        const image2 = product.images.image2;
+        const image3 = product.images.image3;
 
         const updatedImages = [mainImage, image1, image2, image3];
         setImages(updatedImages);
