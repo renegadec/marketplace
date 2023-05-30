@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { initContract } from "../near-config/index";
 import Big from "big.js";
-import * as nearAPI from "near-api-js";
 
 const NEAR = () => {
-  const { utils } = nearAPI;
   const [user, setUser] = useState(null);
   const [configData, setConfig] = useState(null);
   const [wallet, setWallet] = useState(null);
@@ -60,20 +58,17 @@ const NEAR = () => {
   const gas = Big(3)
     .times(10 ** 13)
     .toFixed();
-  const oneYecto = Big(1)
-    .times(10 ** 24)
-    .toFixed();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     if (newAcc != "") {
       try {
-        const res = await contract.storage_deposit(
-          { account_id: user.accountId },
+        const result = await contract.storage_deposit(
+          { account_id: newAcc },
           gas,
-          "125"
+          "1250000000000000000000"
         );
-        console.log(res);
+        console.log(result);
       } catch (error) {
         console.log(error);
       }
@@ -92,7 +87,6 @@ const NEAR = () => {
           gas,
           1
         );
-        console.log(res);
       } catch (error) {
         console.log(error);
       }

@@ -23,40 +23,28 @@ const infoItems = [
 const Account = () => {
   const [activeInfo, setActiveInfo] = useState("Dashboard");
   const navigate = useNavigate();
-  // const [isMounted, setIsMounted] = useState(false);
   const [session, setSession] = useState(null);
   const { isLoggedIn } = useAuth(session, setSession);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  // useEffect(() => {
-  //   const setAuth = async () => {
-  //     if (await isLoggedIn()) {
-  //       setSession(true);
-  //     } else {
-  //       setSession(false);
-  //     }
-  //   };
-  //   setAuth();
-  // }, [isLoggedIn]);
+  useEffect(() => {
+    const setAuth = async () => {
+      if (await isLoggedIn()) {
+        setSession(true);
+      } else {
+        setSession(false);
+      }
+    };
+    setAuth();
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (session == false) return navigate("/");
   }, [session]);
 
-  console.log(session, "Session");
-
-  // const checkAuth = async () => {
-  //   let user = await isLoggedIn();
-  //   console.log(user, "User value here")
-  //   if (!user) return navigate("/");
-  //   if (user) setIsMounted(true);
-  // };
-
   const handleAddAddress = () => {
     setIsPopupOpen(true);
   };
-
-  // if (!isMounted) return null;
 
   return (
     <div className="flex flex-col md:items-center md:p-8 pt-12 min-h-screen w-full overflow-x-hidden">
