@@ -1,5 +1,0 @@
-export { default as Pepper } from "./pepper.png"
-export { default as Pepper1 } from "./1.png"
-export { default as Pepper2 } from "./2.png"
-export { default as Pepper3 } from "./3.png"
-export { default as Pepper4 } from "./4.png"

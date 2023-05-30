@@ -1,5 +1,0 @@
-export { default as Macadamia } from "./macadamia.png"
-export { default as Macadamia1 } from "./1.png"
-export { default as Macadamia2 } from "./2.png"
-export { default as Macadamia3 } from "./3.png"
-export { default as Macadamia4 } from "./4.png"

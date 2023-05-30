@@ -1,5 +1,0 @@
-export { default as Apples } from "./apples.png"
-export { default as Apple1 } from "./1.png"
-export { default as Apple2 } from "./2.png"
-export { default as Apple3 } from "./3.png"
-export { default as Apple4 } from "./4.png"

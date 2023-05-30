@@ -9,8 +9,6 @@
 
 # dfx temporary files
 .dfx/
-
-<<<<<<< HEAD
 # generated files
 src/declarations/
 
@@ -21,13 +19,6 @@ dist/
 # environment variables
 .env
 .env.local
-=======
-.dfx
 
 # enviroment variables
 .env
-
-# declarations folder
-
-src/declarations/
->>>>>>> main

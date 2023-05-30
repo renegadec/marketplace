@@ -1,5 +1,0 @@
-export { default as Roundnuts } from "./roundnuts.png"
-export { default as Roundnuts1 } from "./1.png"
-export { default as Roundnuts2 } from "./2.png"
-export { default as Roundnuts3 } from "./3.png"
-export { default as Roundnuts4 } from "./4.png"
