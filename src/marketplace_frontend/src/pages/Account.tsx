@@ -37,9 +37,9 @@ const Account = () => {
     setAuth();
   }, [isLoggedIn]);
 
-  // useEffect(() => {
-  //   if (session == false) return navigate("/");
-  // }, [session]);
+  useEffect(() => {
+    if (session == false) return navigate("/");
+  }, [session]);
 
   const handleAddAddress = () => {
     setIsPopupOpen(true);
