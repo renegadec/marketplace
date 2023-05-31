@@ -7,9 +7,8 @@ import Orders from "../components/Orders";
 import { Phone } from "react-telephone";
 import { useNavigate } from "react-router-dom";
 import styles from "../style";
-import { UserContext } from "../UserContext";
 import { useAuth } from "../hooks";
-import NEAR from "../near-componets/NEAR";
+import Wallet from "../near-componets/Wallet";
 
 const infoItems = [
   "Dashboard",
@@ -17,7 +16,7 @@ const infoItems = [
   "Downloads",
   "Addresses",
   "Account details",
-  "NEAR",
+  "Wallet",
 ];
 
 const Account = () => {
@@ -47,7 +46,7 @@ const Account = () => {
   };
 
   return (
-    <div className="flex flex-col md:items-center md:p-8 pt-12 min-h-screen w-full overflow-x-hidden">
+    <div className="flex flex-col items-center md:p-8 pt-12 min-h-screen w-full overflow-x-hidden">
       {session && (
         <>
           <h1 className="font-semibold text-4xl mb-8">My Account</h1>
@@ -181,7 +180,7 @@ const Account = () => {
                 </div>
               </div>
             )}
-            {activeInfo === "NEAR" && <NEAR />}
+            {activeInfo === "Wallet" && <Wallet />}
           </div>
         </>
       )}
