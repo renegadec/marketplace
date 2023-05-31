@@ -114,7 +114,7 @@ const Wallet = () => {
   const handleWithdrawToken = async (e) => {
     e.preventDefault();
     toast.success(
-      `${withdrawAmount} TSWT tokens have been successfully withdrawn into your bank account`,
+      `${withdrawAmount} USD has been successfully withdrawn into your bank account`,
       {
         autoClose: 5000,
         position: "top-center",
@@ -161,11 +161,11 @@ const Wallet = () => {
               <div className=" flex items-center">
                 <img
                   className="h-10 w-10 rounded-full"
-                  src="./tokenlogo.jpg"
+                  src="./tokenlogo.png"
                   alt="token logo"
                 />
                 <h3 className="font-semibold text-lg text-gray-600">
-                  Tswaanda Token
+                  TSWAANDA
                 </h3>
               </div>
             </div>
@@ -186,7 +186,7 @@ const Wallet = () => {
 
           <div className="border mt-5 rounded-lg p-2 bg-white">
             <div className="flex justify-between items-center ">
-              <h3 className="font-bold">Send tokens to someone</h3>
+              <h3 className="font-bold">Send</h3>
               <button
                 onClick={() => setTransfer(false)}
                 className={` ${
@@ -202,30 +202,50 @@ const Wallet = () => {
               onSubmit={handleTransfer}
             >
               <div className="flex flex-col">
-                <h3 className="font-semibold">Reciever</h3>
+                <h3 className="font-semibold">Receiver</h3>
                 <input
                   type="text"
-                  className="outline-none border py-5 px-2 my-2 border-primary rounded-lg"
-                  placeholder="Enter the wallet ID e.g john.testnet"
+                  className="block mt-2 w-full rounded-md border-0 py-3 pl-3 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-white"
+                  placeholder="Recipient's address"
                   value={transferAcc}
                   onChange={(e) => setTransferAcc(e.target.value)}
                 />
                 <h3 className="font-semibold">Amount</h3>
-                <input
-                  type="number"
-                  className="outline-none border py-5 px-2 my-2 border-primary rounded-lg"
-                  placeholder="Enter amount e.g 3.5"
-                  value={transferAmnt}
-                  onChange={(e) => setTranferAmnt(e.target.value)}
-                />
+                <div className="relative mt-2 rounded-md shadow-sm">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <span className="text-gray-500 sm:text-sm">$</span>
+                  </div>
+                  <input
+                    type="text"
+                    name="price"
+                    id="price"
+                    className="block w-full rounded-md border-0 py-3 pl-6 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
+                    placeholder="0.00"
+                    value={transferAmnt}
+                    onChange={(e) => setTranferAmnt(e.target.value)}
+                  />
+                  <div className="absolute inset-y-0 right-0 flex items-center">
+                    <label htmlFor="currency" className="sr-only">
+                      Currency
+                    </label>
+                    <select
+                      id="currency"
+                      name="currency"
+                      className="h-full rounded-md border-0 bg-transparent py-0 pl-2 text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                    >
+                      <option>USD</option>
+                      <option>TSWT</option>
+                      <option>NEAR</option>
+                    </select>
+                  </div>
+                </div>
                 <h3 className="font-semibold mt-3">
-                  Memo (Optional){" "}
-                  <span className="font-normal">What are the tokens for?</span>
+                  Memo (Optional)
                 </h3>
                 <input
                   type="text"
-                  className="outline-none border py-5 px-2 my-2 border-primary rounded-lg"
-                  placeholder="Enter the memo e.g Happy birthday Tapiwa"
+                  className="block w-full mt-2 rounded-md border-0 py-3 pl-3 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-white"
+                  placeholder="Gift"
                   value={memo}
                   onChange={(e) => setMemo(e.target.value)}
                 />
@@ -249,7 +269,7 @@ const Wallet = () => {
 
           <div className="bg-white mt-5 p-2 rounded-lg border">
             <div className="flex justify-between items-center ">
-              <h3 className="font-semibold">Withdraw tokens to your bank</h3>
+              <h3 className="font-semibold">Withdraw balance to your bank</h3>
               <button
                 onClick={() => setDraw(false)}
                 className={` ${
@@ -261,13 +281,33 @@ const Wallet = () => {
             </div>
             <form hidden={draw} onSubmit={handleWithdrawToken} className="py-2">
               <h3>Enter the amount of TSWT tokens you wish to withdraw</h3>
-              <input
-                type="number"
-                value={withdrawAmount}
-                className="outline-none border w-full py-5 px-2 my-2 border-primary rounded-lg"
-                placeholder="Amount e.g 2.5"
-                onChange={(e) => setWithdrawAmount(e.target.value)}
-              />
+                <div className="relative mt-2 rounded-md shadow-sm">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <span className="text-gray-500 sm:text-sm">$</span>
+                  </div>
+                  <input
+                    type="text"
+                    name="price"
+                    id="price"
+                    className="block w-full rounded-md border-0 py-3 pl-6 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
+                    placeholder="0.00"
+                    onChange={(e) => setWithdrawAmount(e.target.value)}
+                  />
+                  <div className="absolute inset-y-0 right-0 flex items-center">
+                    <label htmlFor="currency" className="sr-only">
+                      Currency
+                    </label>
+                    <select
+                      id="currency"
+                      name="currency"
+                      className="h-full rounded-md border-0 bg-transparent py-0 pl-2 text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                    >
+                      <option>USD</option>
+                      <option>TSWT</option>
+                      <option>NEAR</option>
+                    </select>
+                  </div>
+                </div>
               <div className="flex justify-center items-center gap-3 pt-3">
                 <h3
                   onClick={handleDrawCancel}
@@ -288,7 +328,7 @@ const Wallet = () => {
           <div className="bg-white mt-5 p-2 rounded-lg border">
             <div className="flex gap-5 justify-between items-center ">
               <div className="max-w-[600px]">
-                <h3 className="">
+                <h3 className="text-sm">
                   Want to send some Tswaanda tokens to someone who is not a
                   Tswaanda customer? Register them here at a small storage fee
                   of only 0.00125 NEAR, less than $0.01 USD.{" "}
@@ -311,12 +351,12 @@ const Wallet = () => {
             >
               <div className="flex flex-col">
                 <input
-                  className="outline-none border w-full py-5 px-2 my-2 border-primary rounded-lg"
-                  value={newAcc}
-                  onChange={(e) => setNewAcc(e.target.value)}
-                  type="text"
-                  placeholder="User account"
-                />
+                    type="text"
+                    className="block mt-2 w-full rounded-md border-0 py-3 pl-3 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-white"
+                    placeholder="Recipient's address"
+                    value={newAcc}
+                    onChange={(e) => setNewAcc(e.target.value)}
+                  />
                 <div className="flex justify-center items-center gap-3 pt-3">
                   <h3
                     onClick={handleCancelRegister}
