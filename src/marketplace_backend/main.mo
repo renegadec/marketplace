@@ -1,33 +1,25 @@
+import Type "types";
+import Text "mo:base/Text";
+import HashMap "mo:base/HashMap";
+import Result "mo:base/Result";
+import Iter "mo:base/Iter";
+import Principal "mo:base/Principal";
+
 actor Tswaanda {
 
-  public type Product = {
-    id : Text;
-    minOrder : Int32;
-    additionalInformation : AdditionalInformation;
-    name : Text;
-    shortDescription : Text;
-    category : Text;
-    image : [Nat8];
-    fullDescription : Text;
-    price : Int32;
-    images : Images;
-  };
+  type Product = Type.Product;
+  type ProductOrder = Type.Order;
+  type Customer = Type.Customer;
 
-  type AdditionalInformation = {
-    price : Int32;
-    weight : Int32;
-    availability : Text;
-  };
+  var mapOfOrders = HashMap.HashMap<Text, ProductOrder>(0, Text.equal, Text.hash);
+  var mapOfCustomers = HashMap.HashMap<Text, Customer>(0, Text.equal, Text.hash);
 
-  type Images = {
-    image1 : [Nat8];
-    image2 : [Nat8];
-    image3 : [Nat8];
-  };
+  private stable var ordersEntries : [(Text, ProductOrder)] = [];
+  private stable var customersEntries : [(Text, Customer)] = [];
 
   public shared func getProducts() : async [Product] {
-// 56r5t-tqaaa-aaaal-qb4gq-cai
-// vapn6-nyaaa-aaaak-aetgq-cai
+    // 56r5t-tqaaa-aaaal-qb4gq-cai
+    // vapn6-nyaaa-aaaak-aetgq-cai
     let productsInterface = actor ("56r5t-tqaaa-aaaal-qb4gq-cai") : actor {
       getAllProducts : shared query () -> async [Product];
     };
@@ -35,5 +27,50 @@ actor Tswaanda {
     let products = await productsInterface.getAllProducts();
     return products;
   };
+
+  public shared func createProduct(order : ProductOrder) : async Text {
+    let id = order.orderId;
+    mapOfOrders.put(id, order);
+    return id;
+  };
+
+  public shared func getOrders() : async [ProductOrder] {
+    let ordersArray = Iter.toArray(mapOfOrders.vals());
+    return ordersArray;
+  };
+
+  public shared func createKYCRequest(request : Customer) : async Text {
+    let id = request.id;
+    mapOfCustomers.put(id, request);
+    return id;
+  };
+
+  public shared func getKYCRequest(id : Text) : async Result.Result<Customer, Text> {
+    switch (mapOfCustomers.get(id)) {
+      case (null) { return #err("Customer with the provided id not found") };
+      case (?result) { return #ok(result) };
+    };
+  };
+
+  public shared func updateKYCRequest(id : Text, request : Customer) : async Bool {
+    switch (mapOfCustomers.get(id)) {
+      case (null) { return false };
+      case (?result) {
+        ignore mapOfCustomers.replace(id, request);
+        return true;
+      };
+    };
+  };
+
+  // Canister upgrade methods
+  system func preupgrade() {
+        ordersEntries := Iter.toArray(mapOfOrders.entries());
+        customersEntries := Iter.toArray(mapOfCustomers.entries());
+    };
+
+    system func postupgrade() {
+        mapOfOrders := HashMap.fromIter<Text, ProductOrder>(ordersEntries.vals(), 0, Text.equal, Text.hash);
+        mapOfCustomers := HashMap.fromIter<Text, Customer>(customersEntries.vals(), 0, Text.equal, Text.hash);
+    };
 
 };

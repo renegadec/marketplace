@@ -331,7 +331,7 @@ const Wallet = () => {
                 <h3 className="text-sm">
                   Want to send some Tswaanda tokens to someone who is not a
                   Tswaanda customer? Register them here at a small storage fee
-                  of only 0.00125 NEAR, less than $0.01 USD.{" "}
+                  of only 0.00125 NEAR, less than $0.01 USD and then send afterwards.{" "}
                   <span className="underline">Find out more</span>
                 </h3>
               </div>
