@@ -52,5 +52,6 @@ module {
         phoneNumber: Nat;
         photoId: Blob;
         status: Text;
+        dateCreated: Time.Time;
     }
 };
