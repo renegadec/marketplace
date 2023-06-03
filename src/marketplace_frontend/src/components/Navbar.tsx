@@ -21,8 +21,8 @@ const Navbar = () => {
     const { login, logout } = useAuth(session, setSession);
 
     useEffect(() => {
-
-    }, [])
+        if (session == false) return navigate("/")
+    }, [session])
 
     function toggleMenuItem(selection: 'Notifications' | 'Apps' | 'Profile') {
         
