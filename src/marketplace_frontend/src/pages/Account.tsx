@@ -46,7 +46,7 @@ const Account = () => {
   };
 
   return (
-    <div className="flex flex-col items-center md:p-8 pt-12 min-h-screen w-full overflow-x-hidden">
+    <div className="flex flex-col items-right md:p-8 pt-12 min-h-screen w-full overflow-x-hidden">
       {session && (
         <>
           <h1 className="font-semibold text-4xl mb-8">My Account</h1>
