@@ -1,6 +1,7 @@
 import * as Social from '../../assets/social/socials.js';
 import * as Team from '../../assets/team/team.js';
 
+
 const Facebook = Social.Facebook;
 const Github = Social.Github;
 const Instagram = Social.Instagram;
