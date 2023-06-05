@@ -1,6 +1,7 @@
 import * as Social from '../../assets/social/socials.js';
 import * as Team from '../../assets/team/team.js';
 
+
 const Facebook = Social.Facebook;
 const Github = Social.Github;
 const Instagram = Social.Instagram;
@@ -9,8 +10,7 @@ const Mail = Social.Mail;
 
 const Confidence = Team.Confidence;
 const Selestine = Team.Selestine;
-const Nigel = Team.Nigel;
-const Asif = Team.Asif;
+const Enoch = Team.Enoch;
 const Admin = Team.Admin;
 const Jane = Team.Jane;
 
@@ -20,7 +20,6 @@ export const navigation = [
   { name: "Marketplace", to: "/market" },
   { name: "Services", to: "/services" },
   { name: "Company", to: "/company" },
-  
 ];
 
 
@@ -138,7 +137,7 @@ export const menuLinks = {
 export const teamData = [
   {
     name: "Confidence Nyirenda",
-    position: "Co-Founder & CEO",
+    position: "Founder & CEO",
     desc: "Confidence drives the technical strategy of the Tswaanda ecosystem and brand.",
     image: Confidence,
     facebook: "https://www.facebook.com/africoiner",
@@ -155,24 +154,14 @@ export const teamData = [
     github: "#"
   },
   {
-    name: "Isheanesu N. Misi",
-    position: "Lead Developer",
-    desc: "Nigel is a seasoned full-stack developer with 5 years of experience in web development .",
-    image: Nigel,
-    facebook: "https://www.facebook.com/isheanesumisi",
-    twitter: "https://twitter.com/thisisisheanesu",
-    github: "https://github.com/thisisisheanesu"
+    name: "Enoch Chirima",
+    position: "Co-Founder & CTO",
+    desc: "Enoch is a well experienced software engineer with great passion of building efficient applications.",
+    image: Enoch,
+    facebook: "https://www.facebook.com/enochnc.chirima/",
+    twitter: "https://twitter.com/iamenochchirima",
+    github: "https://github.com/iamenochchirima"
   },
-  {
-    name: "Rakibul Hasan Asif",
-    position: "Web Developer",
-    desc: "Rakibul has vast experience in designing user interface and has 3 years experience working as developer",
-    image: Asif,
-    facebook: "https://www.facebook.com/",
-    twitter: "https://twitter.com/asifrakibul",
-    github: "https://github.com/asif2508"
-  },
-  
 ]
 
 export const notifications = [

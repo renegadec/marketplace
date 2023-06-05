@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { initContract } from "../near-config/index";
 import Big from "big.js";
 import { toast } from "react-toastify";
+import { PlusIcon } from '@heroicons/react/20/solid'
 import { transfer } from "near-api-js/lib/transaction";
 
 const Wallet = () => {
@@ -143,19 +144,25 @@ const Wallet = () => {
   return (
     <div>
       {!user && (
-        <div className="flex flex-col md:min-h-[200px] justify-center">
-          <button
-            className="inline-block rounded-lg bg-primary px-4 py-1.5 text-base font-semibold leading-7 text-white hover:text-primary shadow-sm ring-1 ring-primary hover:bg-white hover:ring-primary"
-            onClick={handleUser}
-          >
-            Connect NEAR Wallet
-          </button>
+        <div className="text-center">
+          <h3 className="mt-2 text-sm font-medium text-gray-900">No Connected Wallet</h3>
+          <p className="mt-1 text-sm text-gray-500">Get started by connecting your wallet.</p>
+          <div className="mt-6">
+            <button
+              type="button"
+              onClick={handleUser}
+              className="inline-flex items-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+              Connect NEAR Wallet
+            </button>
+          </div>
         </div>
       )}
 
       {user && (
         <div className="md:min-w-[600px]">
-          <div className="border rounded-lg p-2 bg-white">
+          <div className="rounded-lg p-2 bg-white">
             <div className="flex items-center justify-between">
               <h3 className="font-bold">@{user.accountId}</h3>
               <div className=" flex items-center">
@@ -269,7 +276,7 @@ const Wallet = () => {
 
           <div className="bg-white mt-5 p-2 rounded-lg border">
             <div className="flex justify-between items-center ">
-              <h3 className="font-semibold">Withdraw balance to your bank</h3>
+              <h3 className="font-semibold">Withdraw</h3>
               <button
                 onClick={() => setDraw(false)}
                 className={` ${
@@ -280,7 +287,7 @@ const Wallet = () => {
               </button>
             </div>
             <form hidden={draw} onSubmit={handleWithdrawToken} className="py-2">
-              <h3>Enter the amount of TSWT tokens you wish to withdraw</h3>
+              <h3>Amount</h3>
                 <div className="relative mt-2 rounded-md shadow-sm">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                     <span className="text-gray-500 sm:text-sm">$</span>
