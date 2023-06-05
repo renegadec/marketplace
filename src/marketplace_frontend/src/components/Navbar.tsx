@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { navigation, notifications } from '../constants';
+import { navigation } from '../constants';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import styles from '../style';
 import { UserContext } from '../UserContext';
