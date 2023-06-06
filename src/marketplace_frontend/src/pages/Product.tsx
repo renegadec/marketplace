@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Button, ProductCard, Loader } from "../components";
 import { Instagram, Facebook, Mail } from "../../assets/social/socials.js";
-import { marketplace_backend } from "../../../declarations/marketplace_backend/index";
 import { idlFactory } from "../../../declarations/marketplace_backend";
 import { Actor, HttpAgent } from "@dfinity/agent";
 
