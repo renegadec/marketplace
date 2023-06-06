@@ -3,7 +3,8 @@ import { useState } from "react";
 import SearchBar from "../components/Searchbar/Searchbar";
 import Button from "../components/Button/Button";
 import { Loader, ProductCard } from "../components";
-import { marketplace_backend } from "../../../declarations/marketplace_backend/index";
+import { idlFactory } from "../../../declarations/marketplace_backend";
+import { Actor, HttpAgent } from "@dfinity/agent";
 
 const categories = ["All", "Fruits", "Nuts", "Legumes", "Spices", "Vegetables"];
 
@@ -14,6 +15,16 @@ const Market = () => {
   const [filteredProducts, setFiltedProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchNotFound, setSearchNotFound] = useState(false);
+  const [loadedProducts, setLoaded] = useState(null);
+
+  const id = "55ger-liaaa-aaaal-qb33q-cai";
+  const host = "https://icp0.io";
+  const agent = new HttpAgent({ host: host });
+
+  const backendActor = Actor.createActor(idlFactory, {
+    agent,
+    canisterId: id,
+  });
 
   interface Product {
     id: string;
@@ -38,18 +49,26 @@ const Market = () => {
     availability: string;
   }
 
-  const getAllProducts = async (): Promise<Product[]> => {
+  const getAllProducts = async () => {
     setLoading(true);
     try {
-      const products = await marketplace_backend.getProducts();
+      const products = await backendActor.getProducts();
+      setLoaded(products);
+    } catch (e) {
+      setLoading(false);
+      console.log(e, "Error");
+    }
+  };
 
+  useEffect(() => {
+    if (loadedProducts) {
       const convertImage = (image: Uint8Array | number[]): string => {
         const imageContent = new Uint8Array(image);
         const blob = new Blob([imageContent.buffer], { type: "image/png" });
         return URL.createObjectURL(blob);
       };
 
-      const productsWithUrl = products.map((product) => ({
+      const productsWithUrl = loadedProducts.map((product) => ({
         ...product,
         image: convertImage(product.image),
         images: {
@@ -60,12 +79,8 @@ const Market = () => {
       }));
       setProducts(productsWithUrl);
       setLoading(false);
-      return productsWithUrl;
-    } catch (e) {
-      setLoading(false);
-      console.log(e, "Error");
     }
-  };
+  }, [loadedProducts]);
 
   useEffect(() => {
     getAllProducts();

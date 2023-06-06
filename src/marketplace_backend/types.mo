@@ -38,20 +38,26 @@ module {
         orderOwner: Principal;
         orderAmount: Nat;
         status: Text;
-        dateCreated: Time.Time;
+        dateCreated: Int;
     };
 
     // Types for the KYC methods
     public type Customer = {
         id: Text;
-        userId: Principal;
+        userName: Text;
         firstName: Text;
         lastName: Text;
-        displayName: Text;
+        about: Text;
         email: Text;
-        phoneNumber: Nat;
-        photoId: Blob;
+        country: Text;
+        streetAdrees: Text;
+        city: Text;
+        province: Text;
+        zipCode: Nat;
+        // phoneNumber: Nat;
+        profilePhoto: Blob;
+        coverPhoto: Blob;
         status: Text;
-        dateCreated: Time.Time;
+        dateCreated: Int;
     }
 };

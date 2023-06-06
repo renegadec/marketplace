@@ -25,8 +25,7 @@ import KYC from '../components/Account/KYC';
 const user = {
   name: 'Lisa Marie',
   email: 'lisamarie@foodlovers.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80',
+  imageUrl: "./user-profile.png"
 }
 const navigation = [
   { name: 'Dashboard', href: '#' },
