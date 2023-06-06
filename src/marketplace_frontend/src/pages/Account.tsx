@@ -86,8 +86,11 @@ export default function Account() {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    if (session == false) return navigate("/");
-  }, [session]);
+    if (session === false) {
+      setSession(false);
+      navigate("/");
+    }
+  }, [session, navigate]);
 
   return (
     <>
