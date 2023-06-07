@@ -82,7 +82,7 @@ const App = () => {
                         </div>
                       </div>
                     } 
-                  />
+                  />                  
                   <Route path="market" element={
                       <div className={`${styles.paddingX} ${styles.flexStart}`}>
                         <div className={`${styles.boxWidth}`}>

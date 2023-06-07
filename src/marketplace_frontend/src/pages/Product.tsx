@@ -12,9 +12,9 @@ import { UserContext } from "../UserContext";
 const initReviews = [
   {
     name: "Scarlet Johnson",
-    stars: 3,
-    date: "6 May, 2022",
-    text: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet.",
+    stars: 4,
+    date: "6 May, 2023",
+    text: "Best products, totally worthy it.",
   },
 ];
 
@@ -121,7 +121,7 @@ const Product = () => {
     isLoggedIn()
       .then((authenticated) => {
         if (authenticated) {
-          placeOrder();
+          navigate('/shopping-cart');
         } else {
           promptSignIn();
         }
