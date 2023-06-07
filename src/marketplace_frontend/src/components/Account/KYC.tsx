@@ -1,12 +1,12 @@
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  canisterId,
-  marketplace_backend,
+  canisterId, marketplace_backend,
 } from "../../../../declarations/marketplace_backend";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory } from "../../../../declarations/marketplace_backend";
 import { v4 as uuidv4 } from "uuid";
+import { AuthClient } from "@dfinity/auth-client";
 
 export default function KYC() {
   const [username, setUsername] = useState("");
@@ -17,21 +17,36 @@ export default function KYC() {
   const [country, setCountry] = useState("");
   const [streetAddress, setStreet] = useState("");
   const [city, setCity] = useState("");
+  const [organization, setOrg] = useState("")
   const [zipcode, setZip] = useState("");
   const [province, setProvince] = useState("");
-  // const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("");
   const [profilePhoto, setPP] = useState(null);
   const [coverPhoto, setCP] = useState(null);
+  const [userId, setUserId] = useState(null)
 
-  const localHost = "http://127.0.0.1:8080/";
   const host = "https://icp0.io";
-  const id = "55ger-liaaa-aaaal-qb33q-cai";
   const agent = new HttpAgent({ host: host });
   
   const backendActor = Actor.createActor(idlFactory, {
     agent,
-    canisterId: id,
+    canisterId: canisterId,
   });
+
+  const getPrincipalId = async () => {
+    const authClient = await AuthClient.create();
+
+    if (await authClient.isAuthenticated()) {
+      const identity = authClient.getIdentity();
+      const userPrincipal = identity.getPrincipal()
+      setUserId(userPrincipal)
+
+    }
+  }
+
+  useEffect(() => {
+    getPrincipalId()
+  }, [])
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -45,24 +60,26 @@ export default function KYC() {
 
     const kycRequest = {
       id: String(uuidv4()),
+      userId: userId,
       userName: username,
       firstName: firstName,
       lastName: lastName,
       about: about,
       email: email,
+      organization: organization,
       country: country,
       streetAdrees: streetAddress,
       city: city,
       province: province,
       zipCode: BigInt(zipcode),
-      // phoneNumber: Nat;
+      phoneNumber: BigInt(phone),
       profilePhoto: profilePhotoBytes,
       coverPhoto: coverPhotoBytes,
       status: "pending",
-      dateCreated: timestamp,
+      dateCreated: BigInt(timestamp),
     };
 
-    const res = await backendActor.createKYCRequest(kycRequest);
+    const res = await marketplace_backend.createKYCRequest(kycRequest);
     console.log(res);
   };
 
@@ -254,6 +271,45 @@ export default function KYC() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
+                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div className="sm:col-span-4">
+              <label
+                htmlFor="organization"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Organization name
+              </label>
+              <div className="mt-2">
+                <input
+                  id="organization"
+                  name="organization"
+                  type="text"
+                  value={organization}
+                  onChange={(e) => setOrg(e.target.value)}
+                  autoComplete="organization"
+                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div className="sm:col-span-4">
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Phone number
+              </label>
+              <div className="mt-2">
+                <input
+                  id="phone"
+                  name="phone"
+                  type="number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  autoComplete="phone"
                   className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>

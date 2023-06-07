@@ -11,15 +11,13 @@ actor Tswaanda {
   type ProductOrder = Type.Order;
   type Customer = Type.Customer;
 
-  var mapOfOrders = HashMap.HashMap<Text, ProductOrder>(0, Text.equal, Text.hash);
-  var mapOfCustomers = HashMap.HashMap<Text, Customer>(0, Text.equal, Text.hash);
+  var mapOfOrders = HashMap.HashMap<Principal, ProductOrder>(0, Principal.equal, Principal.hash);
+  var mapOfCustomers = HashMap.HashMap<Principal, Customer>(0, Principal.equal, Principal.hash);
 
-  private stable var ordersEntries : [(Text, ProductOrder)] = [];
-  private stable var customersEntries : [(Text, Customer)] = [];
+  private stable var ordersEntries : [(Principal, ProductOrder)] = [];
+  private stable var customersEntries : [(Principal, Customer)] = [];
 
   public shared func getProducts() : async [Product] {
-    // 56r5t-tqaaa-aaaal-qb4gq-cai
-    // vapn6-nyaaa-aaaak-aetgq-cai
     let productsInterface = actor ("56r5t-tqaaa-aaaal-qb4gq-cai") : actor {
       getAllProducts : shared query () -> async [Product];
     };
@@ -28,10 +26,10 @@ actor Tswaanda {
     return products;
   };
 
-  public shared func createProduct(order : ProductOrder) : async Text {
-    let id = order.orderId;
+  public shared func createProduct(order : ProductOrder) : async Bool {
+    let id = order.orderOwner;
     mapOfOrders.put(id, order);
-    return id;
+    return true;
   };
 
   public shared func getOrders() : async [ProductOrder] {
@@ -39,20 +37,20 @@ actor Tswaanda {
     return ordersArray;
   };
 
-  public shared func createKYCRequest(request : Customer) : async Text {
-    let id = request.id;
+  public shared func createKYCRequest(request : Customer) : async Bool {
+    let id = request.userId;
     mapOfCustomers.put(id, request);
-    return id;
+    return true;
   };
 
-  public shared func getKYCRequest(id : Text) : async Result.Result<Customer, Text> {
+  public shared func getKYCRequest(id : Principal) : async Result.Result<Customer, Text> {
     switch (mapOfCustomers.get(id)) {
       case (null) { return #err("Customer with the provided id not found") };
       case (?result) { return #ok(result) };
     };
   };
 
-  public shared func updateKYCRequest(id : Text, request : Customer) : async Bool {
+  public shared func updateKYCRequest(id : Principal, request : Customer) : async Bool {
     switch (mapOfCustomers.get(id)) {
       case (null) { return false };
       case (?result) {
@@ -69,8 +67,8 @@ actor Tswaanda {
     };
 
     system func postupgrade() {
-        mapOfOrders := HashMap.fromIter<Text, ProductOrder>(ordersEntries.vals(), 0, Text.equal, Text.hash);
-        mapOfCustomers := HashMap.fromIter<Text, Customer>(customersEntries.vals(), 0, Text.equal, Text.hash);
+        mapOfOrders := HashMap.fromIter<Principal, ProductOrder>(ordersEntries.vals(), 0, Principal.equal, Principal.hash);
+        mapOfCustomers := HashMap.fromIter<Principal, Customer>(customersEntries.vals(), 0, Principal.equal, Principal.hash);
     };
 
 };

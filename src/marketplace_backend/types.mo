@@ -44,17 +44,19 @@ module {
     // Types for the KYC methods
     public type Customer = {
         id: Text;
+        userId: Principal;
         userName: Text;
         firstName: Text;
         lastName: Text;
         about: Text;
         email: Text;
+        organization: Text;
         country: Text;
         streetAdrees: Text;
         city: Text;
         province: Text;
         zipCode: Nat;
-        // phoneNumber: Nat;
+        phoneNumber: Nat;
         profilePhoto: Blob;
         coverPhoto: Blob;
         status: Text;

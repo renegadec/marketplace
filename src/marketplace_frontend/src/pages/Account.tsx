@@ -17,17 +17,6 @@ import Wallet from "../near-componets/Wallet";
 import Billing from "../components/Account/Billing";
 import Notifications from "../components/Account/Notifications";
 import KYC from "../components/Account/KYC";
-
-const user = {
-  name: "Lisa Marie",
-  email: "lisamarie@foodlovers.com",
-  imageUrl: "./user-profile.png",
-};
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
 const subNavigation = [
   { name: "Profile", href: "#", icon: UserCircleIcon },
   { name: "Account", href: "#", icon: CogIcon },

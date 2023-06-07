@@ -31,7 +31,6 @@ const accNavigation = [
 const userNavigation = [
   { name: "Your Profile", href: "#" },
   { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
 ];
 
 function classNames(...classes) {
@@ -278,6 +277,22 @@ const Navbar = () => {
                               )}
                             </Menu.Item>
                           ))}
+                          <Menu.Item >
+                              {({ active }) => (
+                                <h1
+                                onClick={() => {
+                                  logout()
+                                  navigate("/")
+                                }}
+                                  className={classNames(
+                                    active ? "bg-gray-100" : "",
+                                    "block cursor-pointer py-2 px-4 text-sm text-gray-700"
+                                  )}
+                                >
+                                  Sign out
+                                </h1>
+                              )}
+                            </Menu.Item>
                         </Menu.Items>
                       </Transition>
                     </Menu>
