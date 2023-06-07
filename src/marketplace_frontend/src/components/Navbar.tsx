@@ -39,14 +39,17 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
+
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [session, setSession] = useState(null);
 
+
   const { login, logout, isLoggedIn } = useAuth(session, setSession);
 
   const location = useLocation();
+
 
   useEffect(() => {
     const setAuth = async () => {
