@@ -12,34 +12,10 @@ import { useAuth } from "../hooks";
 const Navbar = () => {
     const navigate = useNavigate();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false)
-    const [isAppsOpen, setIsAppsOpen] = useState(false)
-    const [isProfileOpen, setIsProfileOpen] = useState(false)
-
     const { session, setSession } = useContext(UserContext)
 
     const { login, logout } = useAuth(session, setSession);
 
-    function toggleMenuItem(selection: 'Notifications' | 'Apps' | 'Profile') {
-        
-        switch(selection) {
-            case 'Notifications':
-                setIsNotificationsOpen(!isNotificationsOpen)
-                setIsAppsOpen(false)
-                setIsProfileOpen(false)
-                break
-            case 'Apps':
-                setIsAppsOpen(!isAppsOpen)
-                setIsNotificationsOpen(false)
-                setIsProfileOpen(false)
-                break
-            case 'Profile':
-                setIsProfileOpen(!isProfileOpen)
-                setIsAppsOpen(false)
-                setIsNotificationsOpen(false)
-                break
-        }
-    }
 
     return (
         <nav className="bg-white pb-4">
