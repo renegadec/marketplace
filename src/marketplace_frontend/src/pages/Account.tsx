@@ -17,7 +17,7 @@ import {
 
 import {Logo} from "../../assets/assets.js";
 import Profile from '../components/Account/Profile';
-import Wallet from "../near-componets/Wallet";
+import Wallet from "../near-component/Wallet";
 import Billing from '../components/Account/Billing';
 import Notifications from "../components/Account/Notifications";
 import KYC from '../components/Account/KYC';
