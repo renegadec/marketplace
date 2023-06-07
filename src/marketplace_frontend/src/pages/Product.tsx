@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Button, ProductCard, Loader } from "../components";
 import { Instagram, Facebook, Mail } from "../../assets/social/socials.js";
-import { marketplace_backend } from "../../../declarations/marketplace_backend/index";
+import { idlFactory } from "../../../declarations/marketplace_backend";
+import { Actor, HttpAgent } from "@dfinity/agent";
 
 import { useAuth } from "../hooks";
 import { UserContext } from "../UserContext";
@@ -33,12 +34,24 @@ const preloadAllImages = (srcs) => Promise.all(srcs?.map(preload));
 const Product = () => {
   const navigate = useNavigate();
 
+  const can_id = "55ger-liaaa-aaaal-qb33q-cai";
+  const host = "https://icp0.io";
+  const agent = new HttpAgent({ host: host });
+
+  const backendActor = Actor.createActor(idlFactory, {
+    agent,
+    canisterId: can_id,
+  });
+
   // Fetching from motoko backend
 
   const [products, setProducts] = useState(null);
   const [productsLoading, setProdLoading] = useState(false);
   const [images, setImages] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [loadedProducts, setLoaded] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams();
 
   interface Product {
     id: string;
@@ -63,18 +76,25 @@ const Product = () => {
     availability: string;
   }
 
-  const getAllProducts = async (): Promise<Product[]> => {
+  const getAllProducts = async () => {
     setProdLoading(true);
     try {
-      const products = await marketplace_backend.getProducts();
-
+      const products = await backendActor.getProducts();
+      setLoaded(products);
+    } catch (e) {
+      setProdLoading(false);
+      console.log(e, "Error");
+    }
+  };
+  useEffect(() => {
+    if (loadedProducts != null) {
       const convertImage = (image: Uint8Array | number[]): string => {
         const imageContent = new Uint8Array(image);
         const blob = new Blob([imageContent.buffer], { type: "image/png" });
         return URL.createObjectURL(blob);
       };
 
-      const productsWithUrl = products.map((product) => ({
+      const productsWithUrl = loadedProducts.map((product) => ({
         ...product,
         image: convertImage(product.image),
         images: {
@@ -85,16 +105,9 @@ const Product = () => {
       }));
       setProducts(productsWithUrl);
       setProdLoading(false);
-      return productsWithUrl;
-    } catch (e) {
-      setProdLoading(false);
-      console.log(e, "Error");
     }
-  };
+  }, [loadedProducts]);
 
-  useEffect(() => {
-    getAllProducts();
-  }, []);
   useEffect(() => {
     getAllProducts();
   }, []);
@@ -134,13 +147,10 @@ const Product = () => {
   };
 
   const fieldRef = useRef<HTMLInputElement>(null);
-
-  const { id } = useParams();
   const [activeImg, setActiveImg] = useState(0);
   const [qty, setQty] = useState(minOrder);
   const [activeInfo, setActiveInfo] = useState("Description");
   const [reviews, setReviews] = useState(initReviews);
-  const [loading, setLoading] = useState(true);
 
   const changeQty = (increment: boolean) => {
     if (increment) {
@@ -150,21 +160,26 @@ const Product = () => {
     if (qty > minOrder) setQty(qty - 1);
   };
 
-  const preloaded = async () => {
-    await preloadAllImages(images)
-      ?.then((result) => {
-        console.log(result);
-      })
-      .finally(() =>
-        setTimeout(() => {
-          setLoading(false);
-          const element = document.getElementById(`top-${id}`);
-          if (element) {
-            element.scrollIntoView({ behavior: "smooth" });
-          }
-        }, 400)
-      );
-  };
+  useEffect(() => {
+    if (images) {
+      const preloaded = async () => {
+        await preloadAllImages(images)
+          ?.then((result) => {
+            console.log(result);
+          })
+          .finally(() =>
+            setTimeout(() => {
+              setLoading(false);
+              const element = document.getElementById(`top-${id}`);
+              if (element) {
+                element.scrollIntoView({ behavior: "smooth" });
+              }
+            }, 400)
+          );
+      };
+      preloaded();
+    }
+  }, [images]);
 
   const scrollImage = (isRight: boolean) => {
     if (isRight) {
@@ -195,7 +210,6 @@ const Product = () => {
         const updatedImages = [mainImage, image1, image2, image3];
         setImages(updatedImages);
         setSelectedProduct(product);
-        preloaded();
       } else {
         console.log("Product with ID not found");
         setLoading(false);
@@ -381,13 +395,22 @@ const Product = () => {
         {activeInfo === infoItems[1] && (
           <>
             <p className="font-semibold text-sm md:text-md text-black mb-6">
-              Weight: <span className="text-gray-600 ml-2">{selectedProduct.additionalInformation.weight}</span>
+              Weight:{" "}
+              <span className="text-gray-600 ml-2">
+                {selectedProduct.additionalInformation.weight}
+              </span>
             </p>
             <p className="font-semibold text-sm md:text-md text-black mb-6">
-              Price: <span className="text-gray-600 ml-2">{selectedProduct.additionalInformation.price}</span>
+              Price:{" "}
+              <span className="text-gray-600 ml-2">
+                {selectedProduct.additionalInformation.price}
+              </span>
             </p>
             <p className="font-semibold text-sm md:text-md text-black mb-6">
-              Availability: <span className="text-gray-600 ml-2">{selectedProduct.additionalInformation.availability}</span>
+              Availability:{" "}
+              <span className="text-gray-600 ml-2">
+                {selectedProduct.additionalInformation.availability}
+              </span>
             </p>
           </>
         )}

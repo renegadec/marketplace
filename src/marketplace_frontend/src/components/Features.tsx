@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard/ProductCard";
-import { marketplace_backend } from "../../../declarations/marketplace_backend";
+import { idlFactory } from "../../../declarations/marketplace_backend";
 import Loader from "./Loader";
+import { Actor, HttpAgent } from "@dfinity/agent";
 
 const Features = (props) => {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState(null);
+  const [loadedProducts, setLoaded] = useState(null);
+
+  const id = "55ger-liaaa-aaaal-qb33q-cai";
+  const host = "https://icp0.io";
+  const agent = new HttpAgent({ host: host });
+
+  const backendActor = Actor.createActor(idlFactory, {
+    agent,
+    canisterId: id,
+  });
 
   interface Product {
     id: string;
@@ -30,18 +41,26 @@ const Features = (props) => {
     availability: string;
   }
 
-  const getAllProducts = async (): Promise<Product[]> => {
+  const getAllProducts = async () => {
     setLoading(true);
     try {
-      const products = await marketplace_backend.getProducts();
+      const products = await backendActor.getProducts();
+      setLoaded(products);
+    } catch (e) {
+      setLoading(false);
+      console.log(e, "Error");
+    }
+  };
 
+  useEffect(() => {
+    if (loadedProducts) {
       const convertImage = (image: Uint8Array | number[]): string => {
         const imageContent = new Uint8Array(image);
         const blob = new Blob([imageContent.buffer], { type: "image/png" });
         return URL.createObjectURL(blob);
       };
 
-      const productsWithUrl = products.map((product) => ({
+      const productsWithUrl = loadedProducts.map((product) => ({
         ...product,
         image: convertImage(product.image),
         images: {
@@ -52,12 +71,8 @@ const Features = (props) => {
       }));
       setProducts(productsWithUrl);
       setLoading(false);
-      return productsWithUrl;
-    } catch (e) {
-      setLoading(false);
-      console.log(e, "Error");
     }
-  };
+  }, [loadedProducts]);
 
   useEffect(() => {
     getAllProducts();
