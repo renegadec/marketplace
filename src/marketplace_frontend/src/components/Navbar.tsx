@@ -29,8 +29,8 @@ const accNavigation = [
   ];
 
 const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
+  { name: "Your Profile", href: "/account" },
+  { name: "Settings", href: "/account" },
 ];
 
 function classNames(...classes) {
@@ -108,7 +108,7 @@ const Navbar = () => {
                 <button
                   onClick={() =>
                     login(
-                      () => navigate("/account"),
+                      () => navigate("/"),
                       () => console.log("Error")
                     )
                   }
@@ -164,8 +164,7 @@ const Navbar = () => {
                       <a
                         onClick={() =>
                           login(
-                            () => navigate("/account"),
-                            // () => console.log('Error'),
+                            () => navigate("/"),
                             () => setMobileMenuOpen(false)
                           )
                         }
@@ -188,11 +187,13 @@ const Navbar = () => {
                 <div className="relative flex h-16 justify-between">
                   <div className="relative z-10 flex px-2 lg:px-0">
                     <div className="flex flex-shrink-0 items-center">
+                      <Link to={"/"}>
                       <img
                         className="block h-8 w-auto"
                         src={Logo}
                         alt="Tswaanda"
                       />
+                      </Link>
                     </div>
                   </div>
                   <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
@@ -268,15 +269,15 @@ const Navbar = () => {
                           {userNavigation.map((item) => (
                             <Menu.Item key={item.name}>
                               {({ active }) => (
-                                <a
-                                  href={item.href}
+                                <Link
+                                  to={item.href}
                                   className={classNames(
                                     active ? "bg-gray-100" : "",
                                     "block py-2 px-4 text-sm text-gray-700"
                                   )}
                                 >
                                   {item.name}
-                                </a>
+                                </Link>
                               )}
                             </Menu.Item>
                           ))}

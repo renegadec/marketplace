@@ -37,7 +37,7 @@ const Profile = () => {
   const getCustomerInfo = async () => {
     setLoading(true);
     try {
-      const res = await marketplace_backend.getKYCRequest(userId);
+      const res = await backendActor.getKYCRequest(userId);
       setResult(res);
     } catch (error) {
       console.log(error, "error here");

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard/ProductCard";
-import { idlFactory } from "../../../declarations/marketplace_backend";
+import { canisterId, idlFactory } from "../../../declarations/marketplace_backend";
 import Loader from "./Loader";
 import { Actor, HttpAgent } from "@dfinity/agent";
 
@@ -9,13 +9,12 @@ const Features = (props) => {
   const [products, setProducts] = useState(null);
   const [loadedProducts, setLoaded] = useState(null);
 
-  const id = "55ger-liaaa-aaaal-qb33q-cai";
   const host = "https://icp0.io";
   const agent = new HttpAgent({ host: host });
 
   const backendActor = Actor.createActor(idlFactory, {
     agent,
-    canisterId: id,
+    canisterId: canisterId,
   });
 
   interface Product {

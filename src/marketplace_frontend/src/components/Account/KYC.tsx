@@ -1,7 +1,8 @@
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import {
-  canisterId, marketplace_backend,
+  canisterId,
+  marketplace_backend,
 } from "../../../../declarations/marketplace_backend";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory } from "../../../../declarations/marketplace_backend";
@@ -17,17 +18,17 @@ export default function KYC() {
   const [country, setCountry] = useState("");
   const [streetAddress, setStreet] = useState("");
   const [city, setCity] = useState("");
-  const [organization, setOrg] = useState("")
+  const [organization, setOrg] = useState("");
   const [zipcode, setZip] = useState("");
   const [province, setProvince] = useState("");
   const [phone, setPhone] = useState("");
   const [profilePhoto, setPP] = useState(null);
   const [coverPhoto, setCP] = useState(null);
-  const [userId, setUserId] = useState(null)
+  const [userId, setUserId] = useState(null);
 
   const host = "https://icp0.io";
   const agent = new HttpAgent({ host: host });
-  
+
   const backendActor = Actor.createActor(idlFactory, {
     agent,
     canisterId: canisterId,
@@ -38,15 +39,14 @@ export default function KYC() {
 
     if (await authClient.isAuthenticated()) {
       const identity = authClient.getIdentity();
-      const userPrincipal = identity.getPrincipal()
-      setUserId(userPrincipal)
-
+      const userPrincipal = identity.getPrincipal();
+      setUserId(userPrincipal);
     }
-  }
+  };
 
   useEffect(() => {
-    getPrincipalId()
-  }, [])
+    getPrincipalId();
+  }, []);
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -79,7 +79,7 @@ export default function KYC() {
       dateCreated: BigInt(timestamp),
     };
 
-    const res = await marketplace_backend.createKYCRequest(kycRequest);
+    const res = await backendActor.createKYCRequest(kycRequest);
     console.log(res);
   };
 
@@ -151,6 +151,7 @@ export default function KYC() {
               >
                 Photo
               </label>
+
               <div className="mt-2 flex items-center gap-x-3">
                 <UserCircleIcon
                   className="h-12 w-12 text-gray-300"
@@ -167,6 +168,11 @@ export default function KYC() {
                   />
                 </label>
               </div>
+              {profilePhoto && (
+                <>
+                  <span>File attached:</span> <span>{profilePhoto.name}</span>
+                </>
+              )}
             </div>
 
             <div className="col-span-full">
@@ -201,6 +207,11 @@ export default function KYC() {
                   <p className="text-xs leading-5 text-gray-600">
                     PNG, JPG, GIF up to 10MB
                   </p>
+                  {coverPhoto && (
+                <>
+                  <span>File attached:</span> <span>{coverPhoto.name}</span>
+                </>
+              )}
                 </div>
               </div>
             </div>

@@ -2,6 +2,8 @@ import Time "mo:base/Time";
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import Blob "mo:base/Blob";
+import List "mo:base/List";
+import Float "mo:base/Float";
 
 module {
 
@@ -34,11 +36,19 @@ module {
     // Types for Orders
     public type Order = {
         orderId : Text;
-        productId: Text;
+        orderProducts: [OrderProduct];
         orderOwner: Principal;
-        orderAmount: Nat;
+        totalPrice: Float;
+        shippingEstimate: Float;
+        taxEstimate: Float;
         status: Text;
         dateCreated: Int;
+    };
+
+    public type OrderProduct = {
+        productId: Text;
+        quantity: Nat;
+        price: Float;
     };
 
     // Types for the KYC methods
@@ -61,5 +71,13 @@ module {
         coverPhoto: Blob;
         status: Text;
         dateCreated: Int;
-    }
+    }; 
+
+    // Types for cart Items 
+    public type CartItem = {
+    id: Text;
+    quantity: Nat;
+    dateCreated : Int;
+  };
+
 };

@@ -3,7 +3,7 @@ import { useState } from "react";
 import SearchBar from "../components/Searchbar/Searchbar";
 import Button from "../components/Button/Button";
 import { Loader, ProductCard } from "../components";
-import { idlFactory } from "../../../declarations/marketplace_backend";
+import { canisterId, idlFactory } from "../../../declarations/marketplace_backend";
 import { Actor, HttpAgent } from "@dfinity/agent";
 
 const categories = ["All", "Fruits", "Nuts", "Legumes", "Spices", "Vegetables"];
@@ -17,37 +17,13 @@ const Market = () => {
   const [searchNotFound, setSearchNotFound] = useState(false);
   const [loadedProducts, setLoaded] = useState(null);
 
-  const id = "55ger-liaaa-aaaal-qb33q-cai";
   const host = "https://icp0.io";
   const agent = new HttpAgent({ host: host });
 
   const backendActor = Actor.createActor(idlFactory, {
     agent,
-    canisterId: id,
+    canisterId: canisterId,
   });
-
-  interface Product {
-    id: string;
-    name: string;
-    minOrder: number;
-    additionalInformation: AdditionalInformation;
-    shortDescription: string;
-    category: string;
-    fullDescription: string;
-    price: number;
-    image: string;
-    images: {
-      image1: string;
-      image2: string;
-      image3: string;
-    };
-  }
-
-  interface AdditionalInformation {
-    price: number;
-    weight: number;
-    availability: string;
-  }
 
   const getAllProducts = async () => {
     setLoading(true);
