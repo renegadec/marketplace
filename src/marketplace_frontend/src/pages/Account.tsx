@@ -11,8 +11,6 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 
-
-import {Logo} from "../../assets/assets.js";
 import Profile from '../components/Account/Profile';
 import Wallet from "../near-component/Wallet";
 import Billing from '../components/Account/Billing';
@@ -20,44 +18,15 @@ import Billing from '../components/Account/Billing';
 import Notifications from "../components/Account/Notifications";
 import KYC from "../components/Account/KYC";
 
-const user = {
-  name: "Lisa Marie",
-  email: "lisamarie@foodlovers.com",
-  imageUrl: "./user-profile.png",
-};
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
 const subNavigation = [
-  { name: "Profile", href: "#", icon: UserCircleIcon },
-  { name: "Account", href: "#", icon: CogIcon },
-  { name: "Security", href: "#", icon: KeyIcon },
-  { name: "Notifications", href: "#", icon: BellIcon },
-  { name: "Plan & Billing", href: "#", icon: CreditCardIcon },
-  { name: "Integrations", href: "#", icon: SquaresPlusIcon },
+  { name: "Profile", icon: UserCircleIcon },
+  { name: "Account", icon: CogIcon },
+  { name: "Security", icon: KeyIcon },
+  { name: "Notifications", icon: BellIcon },
+  { name: "Plan & Billing", icon: CreditCardIcon },
+  { name: "Integrations", icon: SquaresPlusIcon },
 ];
-const plans = [
-  {
-    name: "Startup",
-    priceMonthly: 29,
-    priceYearly: 290,
-    limit: "Up to 5 active orders postings",
-  },
-  {
-    name: "Business",
-    priceMonthly: 99,
-    priceYearly: 990,
-    limit: "Up to 25 active orders postings",
-  },
-  {
-    name: "Enterprise",
-    priceMonthly: 249,
-    priceYearly: 2490,
-    limit: "Unlimited active orders postings",
-  },
-];
+
 const payments = [
   {
     id: 1,
@@ -110,7 +79,6 @@ export default function Account() {
                     <a
                       key={item.name}
                       onClick={() => setActiveInfo(item.name)}
-                      href={item.href}
                       className={classNames(
                         item.name === activeInfo
                           ? "bg-gray-50 text-primary hover:bg-white"
@@ -151,7 +119,6 @@ export default function Account() {
               )}
 
               {/* Security */}
-
               {activeInfo === "Security" && (
                 <div className="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
                   <h3 className="flex justify-center items-center">
@@ -161,7 +128,6 @@ export default function Account() {
               )}
 
               {/* Notifications */}
-
               {activeInfo === "Notifications" && (
                 <div className="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
                   <Notifications />
