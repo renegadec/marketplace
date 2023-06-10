@@ -10,7 +10,6 @@ import {
 
 // Components
 import { Navbar, Footer } from "./components";
-import ProductTest from "./pages/Product"
 
 // Pages
 const Home = lazy(() => import('./pages/Home'));
@@ -23,8 +22,9 @@ const Services = lazy(() => import('./pages/Services'));
 
 import { UserContext } from "./UserContext";
 import { useAuth } from "./hooks";
-import ShoppingCart from "./pages/ShoppingCart";
 import ProductOld from "./pages/ProductOld";
+import ShoppingCart from "./pages/ShoppingCart";
+import Orders from "./pages/Orders";
 
 
 const App = () => {
@@ -94,7 +94,26 @@ const App = () => {
                         </div>
                       </div>
                     } 
-                  />                  
+                  />
+
+                  <Route path="orders" element={
+                      <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                        <div className={`${styles.boxWidth}`}>
+                          <Orders />
+                        </div>
+                      </div>
+                    } 
+                  />
+
+                  <Route path="shopping-cart" element={
+                      <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                        <div className={`${styles.boxWidth}`}>
+                          <ShoppingCart />
+                        </div>
+                      </div>
+                    } 
+                  />
+                          
                   <Route path="market" element={
                       <div className={`${styles.paddingX} ${styles.flexStart}`}>
                         <div className={`${styles.boxWidth}`}>
