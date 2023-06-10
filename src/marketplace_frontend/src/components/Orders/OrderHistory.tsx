@@ -105,8 +105,8 @@ const orders = [
                           <td className="hidden py-6 pr-8 sm:table-cell">{product.price}</td>
                           <td className="hidden py-6 pr-8 sm:table-cell">{product.status}</td>
                           <td className="whitespace-nowrap py-6 text-right font-medium">
-                            <a href={product.href} className="text-indigo-600">
-                              View<span className="hidden lg:inline">Product</span>
+                            <a href={product.href} className="text-primary">
+                              View {' '}<span className="hidden lg:inline">Product</span>
                               <span className="sr-only">, {product.name}</span>
                             </a>
                           </td>

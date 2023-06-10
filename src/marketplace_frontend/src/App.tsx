@@ -22,7 +22,7 @@ const Services = lazy(() => import('./pages/Services'));
 
 import { UserContext } from "./UserContext";
 import { useAuth } from "./hooks";
-import ProductOld from "./pages/ProductOld";
+
 
 import ShoppingCart from "./pages/ShoppingCart";
 
@@ -87,15 +87,6 @@ const App = () => {
                       </div>
                     } 
                   />
-                  
-                  <Route path="product/" element={
-                      <div className={`${styles.paddingX} ${styles.flexStart}`}>
-                        <div className={`${styles.boxWidth}`}>
-                          <ProductOld />
-                        </div>
-                      </div>
-                    } 
-                  /> 
 
                   <Route path="shopping-cart" element={
                       <div className={`${styles.paddingX} ${styles.flexStart}`}>
