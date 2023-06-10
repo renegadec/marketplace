@@ -22,10 +22,10 @@ const user = {
 };
 
 const accNavigation = [
-    { name: "Dashboard", href: "#" },
+    { name: "Dashboard", href: "/account" },
     { name: "Orders", href: "/orders" },
-    { name: "Transactions", href: "#" },
-    { name: "Company", href: "#" },
+    { name: "Market", href: "/market" },
+    { name: "Support", href: "#" },
   ];
 
 const userNavigation = [
@@ -44,10 +44,14 @@ const Navbar = () => {
 
   const [session, setSession] = useState(null);
 
-
   const { login, logout, isLoggedIn } = useAuth(session, setSession);
 
   const location = useLocation();
+
+  const commonClassName =
+  "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-gray-900 hover:bg-gray-50 hover:text-gray-900";
+
+  const activeClassName = "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-green-500";
 
 
   useEffect(() => {
@@ -64,7 +68,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white pb-4">
-      {session == false || mobileMenuOpen ? (
+      {session === false || mobileMenuOpen ? (
         <div className="px-6 pt-6 lg:px-8">
           <div>
             <nav
@@ -302,16 +306,15 @@ const Navbar = () => {
                     </Menu>
                   </div>
                 </div>
-                {location.pathname === "/account" && (
-                  <nav
-                    className="hidden lg:flex lg:space-x-8 lg:py-2"
-                    aria-label="Global"
-                  >
+                {["/account", "/orders", "/market"].includes(location.pathname) && (
+                  <nav className="hidden lg:flex lg:space-x-8 lg:py-2" aria-label="Global">
                     {accNavigation.map((item) => (
                       <a
                         key={item.name}
                         href={item.href}
-                        className="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-gray-900 hover:bg-gray-50 hover:text-gray-900"
+                        className={`${commonClassName} ${
+                          location.pathname === item.href ? activeClassName : ""
+                        }`}
                       >
                         {item.name}
                       </a>
