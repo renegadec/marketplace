@@ -15,12 +15,12 @@ actor Tswaanda {
   type Customer = Type.Customer;
   type CartItem = Type.CartItem;
 
-  var mapOfOrders = HashMap.HashMap<Principal, List.List<ProductOrder>>(0, Principal.equal, Principal.hash);
+  var mapOfOrders = HashMap.HashMap<Text, ProductOrder>(0, Text.equal, Text.hash);
   var mapOfCustomers = HashMap.HashMap<Principal, Customer>(0, Principal.equal, Principal.hash);
   var customerCartItems = HashMap.HashMap<Principal, List.List<CartItem>>(0, Principal.equal, Principal.hash);
   var customerFavouriteItems = HashMap.HashMap<Principal, List.List<Text>>(0, Principal.equal, Principal.hash);
 
-  private stable var ordersEntries : [(Principal, List.List<ProductOrder>)] = [];
+  private stable var ordersEntries : [(Text, ProductOrder)] = [];
   private stable var customersEntries : [(Principal, Customer)] = [];
   private stable var cartItemsEntries : [(Principal, List.List<CartItem>)] = [];
   private stable var favouriteItemsEntries : [(Principal, List.List<Text>)] = [];
@@ -37,27 +37,24 @@ actor Tswaanda {
     return products;
   };
 
+  // Orders methods
+
   public shared func createOrder(order : ProductOrder) : async Bool {
-    let userId = order.orderOwner;
-    var orders : List.List<ProductOrder> = switch (mapOfOrders.get(userId)) {
-      case (?value) { value };
-      case (null) { List.nil<ProductOrder>() };
-    };
-    orders := List.push(order, orders);
-    mapOfOrders.put(userId, orders);
+    let id = order.orderId;
+    mapOfOrders.put(id, order);
     return true;
   };
 
-  public shared func getOrders(userId: Principal) : async [ProductOrder] {
-    var orders : List.List<ProductOrder> = switch (mapOfOrders.get(userId)) {
-      case (?value) { value };
-      case (null) { List.nil<ProductOrder>() };
-    };
-    let ordersArray = List.toArray(orders);
+  public shared func getAllOrders() : async [ProductOrder] {
+    let ordersArray = Iter.toArray(mapOfOrders.vals());
     return ordersArray;
   };
 
-  // public shared func 
+  public shared query func getMyOrders(userId : Principal): async [ProductOrder] {
+    let ordersArray = Iter.toArray(mapOfOrders.vals());
+    let myOrders = Array.filter<ProductOrder>(ordersArray, func order = order.orderOwner == userId);
+    return myOrders;
+  };
 
   public shared func createKYCRequest(request : Customer) : async Bool {
     let id = request.userId;
@@ -158,7 +155,7 @@ actor Tswaanda {
     userCartItems := List.filter(
       userCartItems,
       func(cartItem : CartItem) : Bool {
-        cartItem != item;
+        cartItem.id != item.id;
       },
     );
   };
@@ -213,7 +210,7 @@ actor Tswaanda {
   };
 
   system func postupgrade() {
-    mapOfOrders := HashMap.fromIter<Principal, List.List<ProductOrder>>(ordersEntries.vals(), 0, Principal.equal, Principal.hash);
+    mapOfOrders := HashMap.fromIter<Text, ProductOrder>(ordersEntries.vals(), 0, Text.equal, Text.hash);
     mapOfCustomers := HashMap.fromIter<Principal, Customer>(customersEntries.vals(), 0, Principal.equal, Principal.hash);
     customerCartItems := HashMap.fromIter<Principal, List.List<CartItem>>(cartItemsEntries.vals(), 0, Principal.equal, Principal.hash);
     customerFavouriteItems := HashMap.fromIter<Principal, List.List<Text>>(favouriteItemsEntries.vals(), 0, Principal.equal, Principal.hash);

@@ -183,8 +183,6 @@ export default function Product() {
     navigate("/shopping-cart");
   };
 
-  console.log(cartItems, "cartItems here")
-
   return (
     <div className="bg-white">
       {!loading && (

@@ -23,7 +23,7 @@ const user = {
 
 const accNavigation = [
     { name: "Dashboard", href: "#" },
-    { name: "Orders", href: "#" },
+    { name: "Orders", href: "/orders" },
     { name: "Transactions", href: "#" },
     { name: "Company", href: "#" },
   ];

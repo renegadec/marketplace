@@ -36,17 +36,23 @@ module {
     // Types for Orders
     public type Order = {
         orderId : Text;
+        orderNumber: Text;
         orderProducts: [OrderProduct];
         orderOwner: Principal;
+        subtotal: Float;
         totalPrice: Float;
         shippingEstimate: Float;
         taxEstimate: Float;
         status: Text;
+        step: Nat;
         dateCreated: Int;
     };
 
     public type OrderProduct = {
-        productId: Text;
+        id: Text;
+        name: Text;
+        description: Text;
+        image: Blob;
         quantity: Nat;
         price: Float;
     };

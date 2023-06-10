@@ -11,12 +11,12 @@ import { Beans, Brocoli, GroundNuts } from "../../assets/assets";
 import {
   canisterId,
   idlFactory,
-  marketplace_backend,
 } from "../../../declarations/marketplace_backend";
 import { AuthClient } from "@dfinity/auth-client";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
 
 const navigation = {
   categories: [
@@ -314,31 +314,61 @@ export default function ShoppingCart() {
   const createMyOrder = async () => {
     const date = new Date();
     const timestamp = date.getTime();
+    const lastDigits = timestamp.toString().slice(-8)
+    const randomLetters = generateRandomLetters(3)
 
-    const orderProducts = cartItems.map((cartItem) => {
-      const product = products.find((p) => p.id === cartItem.id);
+    const orderProducts = cartItems?.map((cartItem) => {
+      const product = cartRawProducts?.find((p) => p.id === cartItem.id);
   
       return {
-        productId: cartItem.id,
+        id: cartItem.id,
+        name: product.name,
+        description: product.fullDescription,
+        image: product.image,
         quantity: BigInt(cartItem.quantity),
         price: parseFloat(product?.price),
       };
     });
 
+    const convertedCartItems = cartItems?.map((cartItem) => {
+      return {
+        id: cartItem.id,
+        quantity: BigInt(cartItem.quantity),
+        dateCreated: cartItem.dateCreated,
+      };
+    });
+
     const order = {
       orderId: String(uuidv4()),
+      orderNumber: `TSWA-${lastDigits}${randomLetters}`,
       orderProducts,
       orderOwner: userId,
+      subtotal: parseFloat(subtotal),
       totalPrice: parseFloat(orderTotal),
       shippingEstimate: parseFloat(shippingEstimate),
       taxEstimate: parseFloat(taxEstimate),
       status: "pending",
+      step: BigInt(0),
       dateCreated: BigInt(timestamp),
     };
-    console.log(order)
     const res = await backendActor.createOrder(order)
-    console.log(res, "response for order here")
+    const result = await backendActor.removeBatchCartItems(userId , convertedCartItems )
+    toast.success("Order have been successfully placed", {
+      autoClose: 5000,
+      position: "top-center",
+      hideProgressBar: true,
+    });
   };
+
+  function generateRandomLetters(length) {
+    let result = "";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 
   return (
     <div className="bg-white">
@@ -713,7 +743,7 @@ export default function ShoppingCart() {
               onClick={createMyOrder}
                 className="w-full rounded-md border border-transparent bg-primary py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-50"
               >
-                Checkout
+                Place Order
               </button>
             </div>
           </section>

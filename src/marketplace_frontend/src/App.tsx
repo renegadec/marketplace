@@ -25,6 +25,7 @@ import { UserContext } from "./UserContext";
 import { useAuth } from "./hooks";
 import ShoppingCart from "./pages/ShoppingCart";
 import ProductOld from "./pages/ProductOld";
+import Orders from "./pages/Orders";
 
 
 const App = () => {
@@ -73,6 +74,14 @@ const App = () => {
                       <div className={`${styles.paddingX} ${styles.flexStart}`}>
                         <div className={`${styles.boxWidth}`}>
                           <Company />
+                        </div>
+                      </div>
+                    } 
+                  />
+                  <Route path="orders" element={
+                      <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                        <div className={`${styles.boxWidth}`}>
+                          <Orders />
                         </div>
                       </div>
                     } 
