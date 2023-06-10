@@ -1,19 +1,19 @@
 const orders = [
     {
-      number: 'WU88191111',
-      date: 'January 22, 2021',
-      datetime: '2021-01-22',
+      number: 'TSWA-76550785RT8',
+      date: 'January 22, 2023',
+      datetime: '2023-01-22',
       invoiceHref: '#',
       total: '$238.00',
       products: [
         {
           id: 1,
-          name: 'Machined Pen and Pencil Set',
+          name: 'Brocoli',
           href: '#',
           price: '$70.00',
-          status: 'Delivered Jan 25, 2021',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/order-history-page-02-product-01.jpg',
-          imageAlt: 'Detail of mechanical pencil tip with machined black steel shaft and chrome lead tip.',
+          status: 'Delivered Jan 25, 2023',
+          imageSrc: './brocoli.png',
+          imageAlt: 'Brocoli',
         },
         // More products...
       ],
