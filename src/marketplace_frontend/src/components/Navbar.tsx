@@ -22,8 +22,8 @@ const user = {
 };
 
 const accNavigation = [
-    { name: "Dashboard", href: "#" },
-    { name: "Orders", href: "#" },
+    { name: "Dashboard", href: "/account" },
+    { name: "Orders", href: "/orders" },
     { name: "Transactions", href: "#" },
     { name: "Company", href: "#" },
   ];
@@ -40,10 +40,10 @@ function classNames(...classes) {
 const Navbar = () => {
 
   const navigate = useNavigate();
+  const [activeInfo, setActiveInfo] = useState("Dashboard");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [session, setSession] = useState(null);
-
 
   const { login, logout, isLoggedIn } = useAuth(session, setSession);
 
@@ -64,7 +64,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white pb-4">
-      {session == false || mobileMenuOpen ? (
+      {session === false || mobileMenuOpen ? (
         <div className="px-6 pt-6 lg:px-8">
           <div>
             <nav
@@ -311,7 +311,34 @@ const Navbar = () => {
                       <a
                         key={item.name}
                         href={item.href}
-                        className="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-gray-900 hover:bg-gray-50 hover:text-gray-900"
+                        className={classNames(
+                          item.name === activeInfo
+                            ? "bg-primary text-white"
+                            : "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-gray-900 hover:bg-gray-50 hover:text-gray-900"
+                            )}
+                            aria-current={item.name === activeInfo ? 'page' : undefined}
+                      >
+                        {item.name}
+                      </a>
+                    ))}
+                  </nav>
+                )}
+
+                {location.pathname === "/orders" && (
+                  <nav
+                    className="hidden lg:flex lg:space-x-8 lg:py-2"
+                    aria-label="Global"
+                  >
+                    {accNavigation.map((item) => (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        className={classNames(
+                          item.name === activeInfo
+                            ? "bg-primary text-white"
+                            : "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-gray-900 hover:bg-gray-50 hover:text-gray-900"
+                            )}
+                            aria-current={item.name === activeInfo ? 'page' : undefined}
                       >
                         {item.name}
                       </a>
