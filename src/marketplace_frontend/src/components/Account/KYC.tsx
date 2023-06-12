@@ -1,5 +1,5 @@
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   canisterId,
   marketplace_backend,
@@ -8,6 +8,9 @@ import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory } from "../../../../declarations/marketplace_backend";
 import { v4 as uuidv4 } from "uuid";
 import { AuthClient } from "@dfinity/auth-client";
+import { Transition } from "@headlessui/react";
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/20/solid";
 
 export default function KYC() {
   const [username, setUsername] = useState("");
@@ -25,6 +28,8 @@ export default function KYC() {
   const [profilePhoto, setPP] = useState(null);
   const [coverPhoto, setCP] = useState(null);
   const [userId, setUserId] = useState(null);
+
+  const [show, setShow] = useState(false)
 
   const host = "https://icp0.io";
   const agent = new HttpAgent({ host: host });
@@ -80,7 +85,13 @@ export default function KYC() {
     };
 
     const res = await backendActor.createKYCRequest(kycRequest);
-    console.log(res);
+
+    if (res === true) {
+      setShow(true)
+    }
+    else {
+      setShow(false)
+    }
   };
 
   return (
@@ -116,7 +127,7 @@ export default function KYC() {
                     onChange={(e) => setUsername(e.target.value)}
                     autoComplete="username"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                    placeholder="janesmith"
+                    placeholder="foodlovers"
                   />
                 </div>
               </div>
@@ -140,7 +151,7 @@ export default function KYC() {
                 />
               </div>
               <p className="mt-3 text-sm leading-6 text-gray-600">
-                Write a few sentences about yourself.
+                Write a few sentences about company.
               </p>
             </div>
 
@@ -149,7 +160,7 @@ export default function KYC() {
                 htmlFor="photo"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Photo
+                Profile Photo
               </label>
 
               <div className="mt-2 flex items-center gap-x-3">
@@ -180,7 +191,7 @@ export default function KYC() {
                 htmlFor="cover-photo"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Cover photo
+                KYC Documents <span className="text-xs leading-5 text-gray-600">(ID & Proof of Address)</span>
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div className="text-center">
@@ -191,7 +202,7 @@ export default function KYC() {
                   <div className="mt-4 flex text-sm leading-6 text-gray-600">
                     <label
                       htmlFor="file-upload"
-                      className="relative cursor-pointer rounded-md font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                      className="relative cursor-pointer rounded-md font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-secondary"
                     >
                       <span>Upload a file</span>
                       <input
@@ -205,7 +216,7 @@ export default function KYC() {
                     <p className="pl-1">or drag and drop</p>
                   </div>
                   <p className="text-xs leading-5 text-gray-600">
-                    PNG, JPG, GIF up to 10MB
+                    PNG, JPG, PDF up to 10MB
                   </p>
                   {coverPhoto && (
                 <>
@@ -242,7 +253,7 @@ export default function KYC() {
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   autoComplete="given-name"
-                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -262,7 +273,7 @@ export default function KYC() {
                   value={lastName}
                   onChange={(e) => setLastname(e.target.value)}
                   autoComplete="family-name"
-                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -282,7 +293,7 @@ export default function KYC() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
-                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -301,7 +312,7 @@ export default function KYC() {
                   value={organization}
                   onChange={(e) => setOrg(e.target.value)}
                   autoComplete="organization"
-                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -321,7 +332,7 @@ export default function KYC() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   autoComplete="phone"
-                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -340,7 +351,7 @@ export default function KYC() {
                   autoComplete="country-name"
                   value={country}
                   onChange={(e) => setCountry(e.target.value)}
-                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option>United States</option>
                   <option>Canada</option>
@@ -364,7 +375,7 @@ export default function KYC() {
                   value={streetAddress}
                   onChange={(e) => setStreet(e.target.value)}
                   autoComplete="street-address"
-                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -384,7 +395,7 @@ export default function KYC() {
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   autoComplete="address-level2"
-                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -404,7 +415,7 @@ export default function KYC() {
                   value={province}
                   onChange={(e) => setProvince(e.target.value)}
                   autoComplete="address-level1"
-                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -424,7 +435,7 @@ export default function KYC() {
                   value={zipcode}
                   onChange={(e) => setZip(e.target.value)}
                   autoComplete="postal-code"
-                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -452,7 +463,7 @@ export default function KYC() {
                       id="comments"
                       name="comments"
                       type="checkbox"
-                      className="h-4 w-4 bg-white rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                     />
                   </div>
                   <div className="text-sm leading-6">
@@ -473,7 +484,7 @@ export default function KYC() {
                       id="candidates"
                       name="candidates"
                       type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                     />
                   </div>
                   <div className="text-sm leading-6">
@@ -494,7 +505,7 @@ export default function KYC() {
                       id="offers"
                       name="offers"
                       type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                     />
                   </div>
                   <div className="text-sm leading-6">
@@ -524,7 +535,7 @@ export default function KYC() {
                     id="push-everything"
                     name="push-notifications"
                     type="radio"
-                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                    className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
                   />
                   <label
                     htmlFor="push-everything"
@@ -538,7 +549,7 @@ export default function KYC() {
                     id="push-email"
                     name="push-notifications"
                     type="radio"
-                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                    className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
                   />
                   <label
                     htmlFor="push-email"
@@ -552,7 +563,7 @@ export default function KYC() {
                     id="push-nothing"
                     name="push-notifications"
                     type="radio"
-                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                    className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
                   />
                   <label
                     htmlFor="push-nothing"
@@ -576,11 +587,58 @@ export default function KYC() {
         </button>
         <button
           type="submit"
-          className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           Save
         </button>
       </div>
+
+      <>
+        <div
+          aria-live="assertive"
+          className="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6"
+        >
+          <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
+            {/* Notification panel, dynamically insert this into the live region when it needs to be displayed */}
+            <Transition
+              show={show}
+              as={Fragment}
+              enter="transform ease-out duration-300 transition"
+              enterFrom="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+              enterTo="translate-y-0 opacity-100 sm:translate-x-0"
+              leave="transition ease-in duration-100"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+                <div className="p-4">
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0">
+                      <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
+                    </div>
+                    <div className="ml-3 w-0 flex-1 pt-0.5">
+                      <p className="text-sm font-medium text-gray-900">Successfully saved!</p>
+                      <p className="mt-1 text-sm text-gray-500">If you wish to update, use profile tab</p>
+                    </div>
+                    <div className="ml-4 flex flex-shrink-0">
+                      <button
+                        type="button"
+                        className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        onClick={() => {
+                          setShow(false)
+                        }}
+                      >
+                        <span className="sr-only">Close</span>
+                        <XMarkIcon className="h-5 w-5" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Transition>
+          </div>
+        </div>
+      </>
     </form>
   );
 }

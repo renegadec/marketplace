@@ -21,7 +21,7 @@ const Profile = () => {
 
   const backendActor = Actor.createActor(idlFactory, {
     agent,
-    canisterId: canisterId,
+    canisterId: '55ger-liaaa-aaaal-qb33q-cai',
   });
 
   const getPrincipalId = async () => {
@@ -88,7 +88,7 @@ const Profile = () => {
                   <span className="ml-4 flex-shrink-0">
                     <button
                       type="button"
-                      className="rounded-md font-medium text-primary hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
                       Update
                     </button>
@@ -104,7 +104,7 @@ const Profile = () => {
                   <span className="ml-4 flex-shrink-0">
                     <button
                       type="button"
-                      className="rounded-md font-medium text-primary hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
                       Update
                     </button>
@@ -120,7 +120,7 @@ const Profile = () => {
                   <span className="ml-4 flex-shrink-0">
                     <button
                       type="button"
-                      className="rounded-md  font-medium text-primary hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="rounded-md  font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
                       Update
                     </button>
@@ -136,7 +136,7 @@ const Profile = () => {
                   <span className="ml-4 flex-shrink-0">
                     <button
                       type="button"
-                      className="rounded-md  font-medium text-primary hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="rounded-md  font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
                       Update
                     </button>
@@ -150,7 +150,7 @@ const Profile = () => {
                   <span className="ml-4 flex-shrink-0">
                     <button
                       type="button"
-                      className="rounded-md font-medium text-primary hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
                       Update
                     </button>
@@ -179,7 +179,7 @@ const Profile = () => {
                       <div className="ml-4 flex flex-shrink-0 space-x-4">
                         <button
                           type="button"
-                          className="rounded-md font-medium text-primary hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                          className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         >
                           Update
                         </button>
@@ -188,7 +188,7 @@ const Profile = () => {
                         </span>
                         <button
                           type="button"
-                          className="rounded-md font-medium text-primary hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                          className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         >
                           Remove
                         </button>
@@ -207,7 +207,7 @@ const Profile = () => {
                       <div className="ml-4 flex flex-shrink-0 space-x-4">
                         <button
                           type="button"
-                          className="rounded-md font-medium text-primary hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                          className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         >
                           Update
                         </button>
@@ -216,7 +216,7 @@ const Profile = () => {
                         </span>
                         <button
                           type="button"
-                          className="rounded-md font-medium text-primary hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                          className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         >
                           Remove
                         </button>
