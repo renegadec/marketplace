@@ -251,7 +251,7 @@ const Navbar = () => {
                     {/* Profile dropdown */}
                     <Menu as="div" className="relative ml-4 flex-shrink-0">
                       <div>
-                        <Menu.Button className="flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
+                        <Menu.Button className="flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                           <span className="sr-only">Open user menu</span>
                           <img
                             className="h-8 w-8 rounded-full"
