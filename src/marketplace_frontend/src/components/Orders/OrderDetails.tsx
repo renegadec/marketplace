@@ -18,7 +18,7 @@ export default function OrderDetails({orders}) {
                 </h1>
                 <a
                   href="#"
-                  className="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:block"
+                  className="hidden text-sm font-medium text-primary hover:text-indigo-500 sm:block"
                 >
                   View invoice
                   <span aria-hidden="true"> &rarr;</span>
@@ -35,7 +35,7 @@ export default function OrderDetails({orders}) {
               </p>
               <a
                 href="#"
-                className="text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:hidden"
+                className="text-sm font-medium text-primary hover:text-indigo-500 sm:hidden"
               >
                 View invoice
                 <span aria-hidden="true"> &rarr;</span>
@@ -88,7 +88,7 @@ export default function OrderDetails({orders}) {
                               <p>{product.phone}</p>
                               <button
                                 type="button"
-                                className="font-medium text-indigo-600 hover:text-indigo-500"
+                                className="font-medium text-primary hover:text-indigo-500"
                               >
                                 Edit
                               </button>
@@ -107,17 +107,17 @@ export default function OrderDetails({orders}) {
                       <div className="mt-6" aria-hidden="true">
                         <div className="overflow-hidden rounded-full bg-gray-200">
                           <div
-                            className="h-2 rounded-full bg-indigo-600"
+                            className="h-2 rounded-full bg-primary"
                             style={{
                               width: `calc((1 * 2 + 1) / 8 * 100%)`,
                             }}
                           />
                         </div>
                         <div className="mt-6 hidden grid-cols-4 text-sm font-medium text-gray-600 sm:grid">
-                          <div className="text-indigo-600">Order placed</div>
+                          <div className="text-primary">Order placed</div>
                           <div
                             className={classNames(
-                              1 > 0 ? "text-indigo-600" : "",
+                              product.step > 0 ? "text-yellow-500" : "text-primary",
                               "text-center"
                             )}
                           >
@@ -125,7 +125,7 @@ export default function OrderDetails({orders}) {
                           </div>
                           <div
                             className={classNames(
-                              1 > 1 ? "text-indigo-600" : "",
+                              product.step > 1 ? "text-yellow-500" : "text-primary",
                               "text-center"
                             )}
                           >
@@ -133,7 +133,7 @@ export default function OrderDetails({orders}) {
                           </div>
                           <div
                             className={classNames(
-                              1 > 2 ? "text-indigo-600" : "",
+                              product.step > 2 ? "text-yellow-500" : "text-primary",
                               "text-right"
                             )}
                           >
