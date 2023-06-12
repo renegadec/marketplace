@@ -71,6 +71,7 @@ const Orders = () => {
 
         return {
           ...order,
+          step: Number(order.step),
           dateCreated: formattedDate,
           orderProducts: orderProducts,
         };

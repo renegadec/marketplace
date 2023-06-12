@@ -9,7 +9,7 @@ export default function OrderDetails({orders}) {
   return (
     <>
       {orders?.map((order) => (
-        <div key={order.id} className="bg-gray-50">
+        <div key={order.orderId} className="bg-gray-50">
           <div className="mx-auto max-w-2xl pt-16 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="space-y-2 px-4 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 sm:px-0">
               <div className="flex sm:items-baseline sm:space-x-4">
