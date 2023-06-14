@@ -8,11 +8,11 @@ import {
   marketplace_backend,
 } from "../../../../declarations/marketplace_backend";
 import Loader from "../Loader";
+import { toast } from "react-toastify";
 
-const Profile = () => {
+const Profile = ({ activate }) => {
   const [userId, setUserId] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
-  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [noUser, setNoUser] = useState(false);
 
@@ -21,7 +21,7 @@ const Profile = () => {
 
   const backendActor = Actor.createActor(idlFactory, {
     agent,
-    canisterId: '55ger-liaaa-aaaal-qb33q-cai',
+    canisterId: "55ger-liaaa-aaaal-qb33q-cai",
   });
 
   const getPrincipalId = async () => {
@@ -34,26 +34,26 @@ const Profile = () => {
     }
   };
 
+  interface Response {
+    err?: any;
+    ok?: any;
+  }
+
   const getCustomerInfo = async () => {
     setLoading(true);
     try {
-      const res = await backendActor.getKYCRequest(userId);
-      setResult(res);
+      const res: Response = await backendActor.getKYCRequest(userId);
+      if (res.ok) {
+        setUserInfo(res.ok);
+      } else if (res.err) {
+        setNoUser(true);
+        setLoading(false);
+      }
     } catch (error) {
       console.log(error, "error here");
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (result) {
-      setUserInfo(result.ok);
-      if (result.err) {
-        setNoUser(true);
-      }
-      setLoading(false);
-    }
-  }, [result]);
 
   useEffect(() => {
     getPrincipalId();
@@ -245,8 +245,14 @@ const Profile = () => {
         </div>
       )}
       {noUser && (
-        <div className="">
-            You do not have an account, please create an account
+        <div className="text-gray-600">
+          You do not have a Tswaanda profile yet, please fill out and save the KYC form. Click{" "}
+          <button
+            className="underline text-gray-800"
+            onClick={() => activate("Account")}
+          >
+            here
+          </button>
         </div>
       )}
     </>

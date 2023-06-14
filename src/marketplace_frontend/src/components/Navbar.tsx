@@ -3,14 +3,8 @@ import { Dialog } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { navigation } from "../constants";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
-import {
-  Disclosure,
-  Menu,
-  Transition,
-} from "@headlessui/react";
-import {
-  MagnifyingGlassIcon,
-} from "@heroicons/react/20/solid";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Logo } from "../../assets/assets.js";
 import { useAuth } from "../hooks";
 import { AuthClient } from "@dfinity/auth-client";
@@ -22,11 +16,11 @@ const user = {
 };
 
 const accNavigation = [
-    { name: "Dashboard", href: "/account" },
-    { name: "Orders", href: "/orders" },
-    { name: "Market", href: "/market" },
-    { name: "Support", href: "#" },
-  ];
+  { name: "Dashboard", href: "/account" },
+  { name: "Orders", href: "/orders" },
+  { name: "Market", href: "/market" },
+  { name: "Support", href: "#" },
+];
 
 const userNavigation = [
   { name: "Your Profile", href: "/account" },
@@ -38,7 +32,6 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
-
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -49,10 +42,10 @@ const Navbar = () => {
   const location = useLocation();
 
   const commonClassName =
-  "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-gray-900 hover:bg-gray-50 hover:text-gray-900";
+    "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-gray-900 hover:bg-gray-50 hover:text-gray-900";
 
-  const activeClassName = "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-green-500";
-
+  const activeClassName =
+    "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-green-500";
 
   useEffect(() => {
     const setAuth = async () => {
@@ -110,12 +103,14 @@ const Navbar = () => {
               </div>
               <div className="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-end">
                 <button
-                  onClick={() =>
+                  onClick={() => {
                     login(
-                      () => navigate("/"),
+                      () => {
+                        navigate("/");
+                      },
                       () => console.log("Error")
-                    )
-                  }
+                    );
+                  }}
                   className="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-primary hover:ring-gray-900/20"
                 >
                   Log in
@@ -165,17 +160,19 @@ const Navbar = () => {
                       </a>
                     </div>
                     <div className="py-6">
-                      <a
-                        onClick={() =>
+                      <button
+                        onClick={() => {
                           login(
-                            () => navigate("/"),
+                            () => {
+                              navigate("/");
+                            },
                             () => setMobileMenuOpen(false)
-                          )
-                        }
+                          );
+                        }}
                         className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-6 text-gray-900 hover:bg-gray-400/10 cursor-pointer"
                       >
                         Log in
-                      </a>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -192,11 +189,11 @@ const Navbar = () => {
                   <div className="relative z-10 flex px-2 lg:px-0">
                     <div className="flex flex-shrink-0 items-center">
                       <Link to={"/"}>
-                      <img
-                        className="block h-8 w-auto"
-                        src={Logo}
-                        alt="Tswaanda"
-                      />
+                        <img
+                          className="block h-8 w-auto"
+                          src={Logo}
+                          alt="Tswaanda"
+                        />
                       </Link>
                     </div>
                   </div>
@@ -289,27 +286,29 @@ const Navbar = () => {
                               )}
                             </Menu.Item>
                           ))}
-                          <Menu.Item >
-                              {({ active }) => (
-                                <h1
+                          <Menu.Item>
+                            {({ active }) => (
+                              <h1
                                 onClick={() => {
-                                  logout()
-                                  navigate("/")
+                                  logout();
+                                  navigate("/");
+                                  window.location.reload();
                                 }}
-                                  className={classNames(
-                                    active ? "bg-gray-100" : "",
-                                    "block cursor-pointer py-2 px-4 text-sm text-gray-700"
-                                  )}
-                                >
-                                  Sign out
-                                </h1>
-                              )}
-                            </Menu.Item>
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block cursor-pointer py-2 px-4 text-sm text-gray-700"
+                                )}
+                              >
+                                Sign out
+                              </h1>
+                            )}
+                          </Menu.Item>
                         </Menu.Items>
                       </Transition>
                     </Menu>
                   </div>
                 </div>
+
                 {["/","/account", "/orders", "/market"].includes(location.pathname) && (
                   <nav className="hidden lg:flex lg:space-x-8 lg:py-2" aria-label="Global">
                     {accNavigation.map((item) => (

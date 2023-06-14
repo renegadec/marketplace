@@ -76,7 +76,7 @@ export default function Account() {
               <aside className="py-6 px-2 sm:px-6 lg:col-span-3 lg:py-0 lg:px-0">
                 <nav className="space-y-1">
                   {subNavigation.map((item) => (
-                    <a
+                    <button
                       key={item.name}
                       onClick={() => setActiveInfo(item.name)}
                       className={classNames(
@@ -99,7 +99,7 @@ export default function Account() {
                         aria-hidden="true"
                       />
                       <span className="truncate">{item.name}</span>
-                    </a>
+                    </button>
                   ))}
                 </nav>
               </aside>
@@ -107,7 +107,7 @@ export default function Account() {
               {/* Profile */}
               {activeInfo === "Profile" && (
                 <div className="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
-                  <Profile />
+                  <Profile activate={setActiveInfo} />
                 </div>
               )}
 
