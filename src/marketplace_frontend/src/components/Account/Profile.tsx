@@ -183,7 +183,7 @@ const Profile = ({ activate }) => {
                           aria-hidden="true"
                         />
                         <span className="ml-2 w-0 flex-1 truncate">
-                          jane-dhoro-identity.pdf
+                          {userInfo.firstName} -identiy.pdf
                         </span>
                       </div>
                       <div className="ml-4 flex flex-shrink-0 space-x-4">
@@ -246,12 +246,12 @@ const Profile = ({ activate }) => {
       )}
       {noUser && (
         <div className="text-gray-600">
-          You do not have a Tswaanda profile yet, please fill out and save the KYC form. Click{" "}
+          Nothing to see yet! Lets get to know you... Complete your {" "}
           <button
-            className="underline text-gray-800"
+            className="font-bold text-primary"
             onClick={() => activate("Account")}
           >
-            here
+            account details.
           </button>
         </div>
       )}
