@@ -200,7 +200,8 @@ const Navbar = () => {
                       </Link>
                     </div>
                   </div>
-                  <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
+                  {window.innerWidth > 768 ? (
+                    <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
                     <div className="w-full max-w-xs">
                       <label htmlFor="search" className="sr-only">
                         Search
@@ -222,6 +223,9 @@ const Navbar = () => {
                       </div>
                     </div>
                   </div>
+                  ) : null
+                  }
+                  
                   <div className="relative z-10 flex items-center lg:hidden">
                     {/* Mobile menu button */}
                     <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-900">
@@ -306,7 +310,7 @@ const Navbar = () => {
                     </Menu>
                   </div>
                 </div>
-                {["/account", "/orders", "/market"].includes(location.pathname) && (
+                {["/","/account", "/orders", "/market"].includes(location.pathname) && (
                   <nav className="hidden lg:flex lg:space-x-8 lg:py-2" aria-label="Global">
                     {accNavigation.map((item) => (
                       <a
