@@ -197,7 +197,8 @@ const Navbar = () => {
                       </Link>
                     </div>
                   </div>
-                  <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
+                  {window.innerWidth > 768 ? (
+                    <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
                     <div className="w-full max-w-xs">
                       <label htmlFor="search" className="sr-only">
                         Search
@@ -219,6 +220,9 @@ const Navbar = () => {
                       </div>
                     </div>
                   </div>
+                  ) : null
+                  }
+                  
                   <div className="relative z-10 flex items-center lg:hidden">
                     {/* Mobile menu button */}
                     <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-900">
@@ -248,7 +252,7 @@ const Navbar = () => {
                     {/* Profile dropdown */}
                     <Menu as="div" className="relative ml-4 flex-shrink-0">
                       <div>
-                        <Menu.Button className="flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
+                        <Menu.Button className="flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                           <span className="sr-only">Open user menu</span>
                           <img
                             className="h-8 w-8 rounded-full"
@@ -304,13 +308,9 @@ const Navbar = () => {
                     </Menu>
                   </div>
                 </div>
-                {["/account", "/orders", "/market"].includes(
-                  location.pathname
-                ) && (
-                  <nav
-                    className="hidden lg:flex lg:space-x-8 lg:py-2"
-                    aria-label="Global"
-                  >
+
+                {["/","/account", "/orders", "/market"].includes(location.pathname) && (
+                  <nav className="hidden lg:flex lg:space-x-8 lg:py-2" aria-label="Global">
                     {accNavigation.map((item) => (
                       <a
                         key={item.name}
