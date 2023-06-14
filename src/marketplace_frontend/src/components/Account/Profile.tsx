@@ -236,7 +236,7 @@ const Profile = ({ activate }) => {
       )}
       {noUser && (
         <div className="text-gray-600">
-          You do not have a Tswaanda profile yet, please fill out and save the KYC form. Click{" "}
+          You do not have a Tswaanda profile yet, please fill out and save the KYC form at the Account tab. Click{" "}
           <button
             className="underline text-gray-800"
             onClick={() => activate("Account")}
