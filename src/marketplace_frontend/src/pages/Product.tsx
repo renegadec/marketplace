@@ -37,7 +37,7 @@ export default function Product() {
   const [inCart, setInCart] = useState(false);
   const [checking, setChecking] = useState(false);
 
-  const Id = "56r5t-tqaaa-aaaal-qb4gq-cai";
+  const Id = canisterId;
   const host = "https://icp0.io";
   const agent = new HttpAgent({ host: host });
 
@@ -48,7 +48,7 @@ export default function Product() {
 
   const marketActor = Actor.createActor(marketIdl, {
     agent,
-    canisterId: canisterId,
+    canisterId: "55ger-liaaa-aaaal-qb33q-cai",
   });
 
   const getPrincipalId = async () => {

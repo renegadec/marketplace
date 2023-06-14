@@ -69,13 +69,23 @@ const Profile = ({ activate }) => {
     <>
       {userInfo && (
         <div>
-          <div>
-            <h3 className="text-lg font-medium leading-6 text-gray-900">
-              Account Information
-            </h3>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">
-              Personal details and application.
-            </p>
+          <div className="flex justify-between">
+            <div>
+              <h3 className="text-lg font-medium leading-6 text-gray-900">
+                Account Information
+              </h3>
+              <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                Personal details and application.
+              </p>
+            </div>
+            <div>
+              <span className="inline-flex items-center rounded-md bg-green-200 px-2.5 py-0.5 text-sm font-medium text-primary">
+                <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-primary" fill="currentColor" viewBox="0 0 8 8">
+                  <circle cx={4} cy={4} r={3} />
+                </svg>
+                Verified
+              </span>
+            </div>
           </div>
           <div className="mt-5 border-t border-gray-200">
             <dl className="divide-y divide-gray-200">
