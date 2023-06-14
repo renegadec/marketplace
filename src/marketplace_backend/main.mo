@@ -45,16 +45,48 @@ actor Tswaanda {
     return true;
   };
 
-  public shared func getAllOrders() : async [ProductOrder] {
+  public shared query func getAllOrders() : async [ProductOrder] {
     let ordersArray = Iter.toArray(mapOfOrders.vals());
     return ordersArray;
   };
 
-  public shared query func getMyOrders(userId : Principal): async [ProductOrder] {
+  public shared func deleteOrder(id : Text) : async Bool {
+    mapOfOrders.delete(id);
+    return true;
+  };
+
+  public shared query func getMyOrders(userId : Principal) : async [ProductOrder] {
     let ordersArray = Iter.toArray(mapOfOrders.vals());
     let myOrders = Array.filter<ProductOrder>(ordersArray, func order = order.orderOwner == userId);
     return myOrders;
   };
+
+  public shared query func getPendingOrders() : async [ProductOrder] {
+    let ordersArray = Iter.toArray(mapOfOrders.vals());
+    let pending = Array.filter<ProductOrder>(ordersArray, func order = order.status == "pending");
+    return pending;
+  };
+  public shared query func getPendingOrdersSize() : async Nat {
+    let ordersArray = Iter.toArray(mapOfOrders.vals());
+    let pending = Array.filter<ProductOrder>(ordersArray, func order = order.status == "pending");
+    let size = Array.size(pending);
+    return size;
+  };
+
+  public shared func updatePOrder(id : Text, order : ProductOrder) : async Bool {
+    switch (mapOfOrders.get(id)) {
+      case (null) {
+        return false;
+      };
+      case (?result) {
+        let updateOrder : ProductOrder = order;
+        ignore mapOfOrders.replace(id, updateOrder);
+        return true;
+      };
+    };
+  };
+
+  // KYC methods
 
   public shared func createKYCRequest(request : Customer) : async Bool {
     let id = request.userId;
@@ -79,6 +111,25 @@ actor Tswaanda {
     };
   };
 
+  // To be called from admin methods
+
+  public shared query func getAllKYC() : async [Customer] {
+    let customersArray = Iter.toArray(mapOfCustomers.vals());
+    return customersArray;
+  };
+
+  public shared query func getPendingKYCReaquest() : async [Customer] {
+    let customersArray = Iter.toArray(mapOfCustomers.vals());
+    let pending = Array.filter<Customer>(customersArray, func customer = customer.status == "pending");
+    return pending;
+  };
+  public shared query func getPendingKYCReaquestSize() : async Nat {
+    let customersArray = Iter.toArray(mapOfCustomers.vals());
+    let pending = Array.filter<Customer>(customersArray, func customer = customer.status == "pending");
+    let size = Array.size(pending);
+    return size;
+  };
+
   public shared func addToCart(userId : Principal, cartItem : CartItem) : async Bool {
     var cartItems : List.List<CartItem> = switch (customerCartItems.get(userId)) {
       case (?value) { value };
@@ -95,9 +146,9 @@ actor Tswaanda {
       case (?value) { value };
       case (null) { List.nil<CartItem>() };
     };
-    var itemsIds: List.List<Text> = List.nil<Text>();
+    var itemsIds : List.List<Text> = List.nil<Text>();
     let items = List.toArray(cartItems);
-    for(item in items.vals()) {
+    for (item in items.vals()) {
       itemsIds := List.push(item.id, itemsIds);
     };
     let products = await productsInterface.filterProducts(List.toArray(itemsIds));
@@ -146,24 +197,23 @@ actor Tswaanda {
   };
 
   public shared func removeBatchCartItems(userid : Principal, cartItems : [CartItem]) : async Bool {
-  var userCartItems : List.List<CartItem> = switch (customerCartItems.get(userid)) {
-    case (?value) { value };
-    case (null) { List.nil<CartItem>() };
+    var userCartItems : List.List<CartItem> = switch (customerCartItems.get(userid)) {
+      case (?value) { value };
+      case (null) { List.nil<CartItem>() };
+    };
+
+    for (item in cartItems.vals()) {
+      userCartItems := List.filter(
+        userCartItems,
+        func(cartItem : CartItem) : Bool {
+          cartItem.id != item.id;
+        },
+      );
+    };
+
+    customerCartItems.put(userid, userCartItems);
+    return true;
   };
-
-  for (item in cartItems.vals()) {
-    userCartItems := List.filter(
-      userCartItems,
-      func(cartItem : CartItem) : Bool {
-        cartItem.id != item.id;
-      },
-    );
-  };
-
-  customerCartItems.put(userid, userCartItems);
-  return true;
-};
-
 
   public shared func addToFavourites(userId : Principal, productId : Text) : async Bool {
     var favouriteItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {

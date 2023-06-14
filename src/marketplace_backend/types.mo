@@ -37,6 +37,7 @@ module {
     public type Order = {
         orderId : Text;
         orderNumber: Text;
+        userEmail: Text;
         orderProducts: [OrderProduct];
         orderOwner: Principal;
         subtotal: Float;
