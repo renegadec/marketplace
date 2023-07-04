@@ -42,7 +42,7 @@ dfx start --clean --background
 dfx deploy
 ```
 
-#### Step 5: Run the front-end in a new terminal
+#### Step 6: Run the front-end
 
 ```bash
 npm start
