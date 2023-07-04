@@ -6,7 +6,7 @@ Tswaanda Marketplace is a decentralised & global agricultural marketplace that c
 
 ## Prerequisites
 
-- [X] DFX(Version 14)
+- [X] DFX(Version 0.14.1)
 - [X] NodeJS(Version 16 or higher)
 - [X] Tswaanda Backend (https://github.com/renegadec/tswaanda-backend)
 
@@ -33,7 +33,7 @@ npm install
 #### Step 4: Start DFX locally by running the following command
 
 ```bash
-dfx start
+dfx start --clean --background
 ```
 
 #### Step 5: Deploy the canister by running the following command
