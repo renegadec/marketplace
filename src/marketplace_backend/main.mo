@@ -63,12 +63,27 @@ actor Tswaanda {
 
   public shared query func getPendingOrders() : async [ProductOrder] {
     let ordersArray = Iter.toArray(mapOfOrders.vals());
-    let pending = Array.filter<ProductOrder>(ordersArray, func order = order.status == "pending");
+    let pending = Array.filter<ProductOrder>(ordersArray, func order = order.status == "Pending Approval");
+    return pending;
+  };
+  public shared query func getApprovedOrders() : async [ProductOrder] {
+    let ordersArray = Iter.toArray(mapOfOrders.vals());
+    let pending = Array.filter<ProductOrder>(ordersArray, func order = order.status == "Approved");
+    return pending;
+  };
+  public shared query func getShippedOrders() : async [ProductOrder] {
+    let ordersArray = Iter.toArray(mapOfOrders.vals());
+    let pending = Array.filter<ProductOrder>(ordersArray, func order = order.status == "Shipped");
+    return pending;
+  };
+  public shared query func getDeliveredOrders() : async [ProductOrder] {
+    let ordersArray = Iter.toArray(mapOfOrders.vals());
+    let pending = Array.filter<ProductOrder>(ordersArray, func order = order.status == "Delivered");
     return pending;
   };
   public shared query func getPendingOrdersSize() : async Nat {
     let ordersArray = Iter.toArray(mapOfOrders.vals());
-    let pending = Array.filter<ProductOrder>(ordersArray, func order = order.status == "pending");
+    let pending = Array.filter<ProductOrder>(ordersArray, func order = order.status == "Pending Approval");
     let size = Array.size(pending);
     return size;
   };
@@ -116,6 +131,16 @@ actor Tswaanda {
   public shared query func getAllKYC() : async [Customer] {
     let customersArray = Iter.toArray(mapOfCustomers.vals());
     return customersArray;
+  };
+  
+  public shared query func getAllKYCKeys() : async [Principal] {
+    let customersArray = Iter.toArray(mapOfCustomers.keys());
+    return customersArray;
+  };
+
+  public shared func deleteKYC(userId : Principal) : async Bool {
+    mapOfCustomers.delete(userId);
+    return true;
   };
 
   public shared query func getPendingKYCReaquest() : async [Customer] {

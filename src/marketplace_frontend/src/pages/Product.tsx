@@ -157,7 +157,7 @@ export default function Product() {
   }, [cartItems]);
 
   const handleAddToCart = async () => {
-    if (userId && id && !checking) {
+    if (userId && id && !checking && !inCart) {
       setAddingToCart(true);
       const date = new Date();
       const timestamp = date.getTime();
@@ -178,6 +178,8 @@ export default function Product() {
       console.log("Checking");
     }
   };
+
+  console.log("Adding to cart", addingtocart)
 
   const handleGoToCart = () => {
     navigate("/shopping-cart");
@@ -281,7 +283,7 @@ export default function Product() {
               <div className="mt-6">
                 <div className="sm:flex-col1 mt-10 flex">
                   <button
-                    onClick={!inCart ? handleAddToCart : null}
+                    onClick={!inCart && !checking ? handleAddToCart : null}
                     disabled={addingtocart}
                     className="flex max-w-xs gap-3 flex-1 items-center justify-center rounded-md border border-transparent bg-primary py-3 px-8 text-base font-medium text-white hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
                   >

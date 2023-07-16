@@ -229,7 +229,7 @@ export default function ShoppingCart() {
 
       const orderProducts = cartItems?.map((cartItem) => {
         const product = cartRawProducts?.find((p) => p.id === cartItem.id);
-
+        console.log("product here", product);
         return {
           id: cartItem.id,
           name: product.name,
@@ -258,7 +258,7 @@ export default function ShoppingCart() {
         totalPrice: parseFloat(orderTotal),
         shippingEstimate: parseFloat(shippingEstimate),
         taxEstimate: parseFloat(taxEstimate),
-        status: "pending",
+        status: "Pending Approval",
         step: BigInt(0),
         dateCreated: BigInt(timestamp),
       };
