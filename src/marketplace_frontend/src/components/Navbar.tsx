@@ -19,7 +19,7 @@ const accNavigation = [
   { name: "Dashboard", href: "/account" },
   { name: "Orders", href: "/orders" },
   { name: "Market", href: "/market" },
-  { name: "Support", href: "#" },
+  { name: "Support", href: "/support" },
 ];
 
 const userNavigation = [
@@ -309,7 +309,7 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                {["/","/account", "/orders", "/market"].includes(location.pathname) && (
+                {["/","/account", "/orders", "/market", "/support"].includes(location.pathname) && (
                   <nav className="hidden lg:flex lg:space-x-8 lg:py-2" aria-label="Global">
                     {accNavigation.map((item) => (
                       <a
