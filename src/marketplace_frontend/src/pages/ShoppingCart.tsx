@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import { XMarkIcon as XMarkIconOutline } from "@heroicons/react/24/outline";
 import {
@@ -61,6 +61,7 @@ export default function ShoppingCart() {
   });
 
   // Checks if the user is authenticated and then obtain the principal id
+  
   const getPrincipalId = async () => {
     const authClient = await AuthClient.create();
 
@@ -129,6 +130,8 @@ export default function ShoppingCart() {
       getUserDetails();
     }
   }, [userId]);
+
+  // Removing a product from the cartItems array and from the backend as well
 
   const handleRemove = async (id: String) => {
     const item = cartItems.find((item) => item.id === id);
@@ -207,6 +210,10 @@ export default function ShoppingCart() {
     return cartItem ? Number(cartItem.quantity) : 0;
   }
 
+  // ----------------------------------------Creating Order----------------------------------------------------------
+
+  const iFrameRef = useRef(null);
+
   const createMyOrder = async () => {
     setCreatingOrder(true);
     if (noAcc) {
@@ -229,14 +236,13 @@ export default function ShoppingCart() {
 
       const orderProducts = cartItems?.map((cartItem) => {
         const product = cartRawProducts?.find((p) => p.id === cartItem.id);
-        console.log("product here", product);
         return {
           id: cartItem.id,
           name: product.name,
           description: product.fullDescription,
           image: product.image,
-          quantity: BigInt(cartItem.quantity),
-          price: parseFloat(product?.price),
+          // quantity: BigInt(cartItem.quantity),
+          // price: parseFloat(product?.price),
         };
       });
 
@@ -262,17 +268,36 @@ export default function ShoppingCart() {
         step: BigInt(0),
         dateCreated: BigInt(timestamp),
       };
-      const res = await backendActor.createOrder(order);
-      const result = await backendActor.removeBatchCartItems(
-        userId,
-        convertedCartItems
-      );
-      toast.success("Order have been successfully placed", {
-        autoClose: 5000,
-        position: "top-center",
-        hideProgressBar: true,
-      });
-      setCreatingOrder(false);
+
+      // Sending order and user information to the checkout page
+
+      const orderWithStrings = {
+        ...order,
+        subtotal: order.subtotal.toString(),
+        totalPrice: order.totalPrice.toString(),
+        shippingEstimate: order.shippingEstimate.toString(),
+        taxEstimate: order.taxEstimate.toString(),
+        step: order.step.toString(),
+        dateCreated: order.dateCreated.toString(),
+      };
+
+      const authClient = await AuthClient.create();
+      const identity = authClient.getIdentity();
+      const body = {
+        order: orderWithStrings,
+        identity,
+      };
+      if (iFrameRef.current) {
+        sendMessageToChild(body);
+      } else {
+        console.log("There iframe is not set");
+      }
+
+      // const res = await backendActor.createOrder(order);
+      // const result = await backendActor.removeBatchCartItems(
+      //   userId,
+      //   convertedCartItems
+      // );
     }
   };
 
@@ -285,6 +310,48 @@ export default function ShoppingCart() {
     }
     return result;
   }
+
+  // ------------------------------------------Checkout functionality------------------------------------------------
+
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [recievedId, setRecieved] = useState(null);
+  const [processing, setProcessing] = useState(false)
+
+  useEffect(() => {
+    if (recievedId && userInfo && checkoutOpen && processing) {
+      createMyOrder();
+    }
+  }, [recievedId, userInfo, checkoutOpen, processing]);
+
+  const sendMessageToChild = async (body) => {
+    if (!iFrameRef.current) return;
+    iFrameRef.current.contentWindow.postMessage(JSON.stringify(body), "*");
+    toast.success("Order have been successfully placed", {
+      autoClose: 5000,
+      position: "top-center",
+      hideProgressBar: true,
+    });
+    setCreatingOrder(false);
+    setProcessing(false)
+  };
+
+  useEffect(() => {
+    window.addEventListener("message", function (e) {
+      // if (e.origin !== "http://127.0.0.1:3000") return;
+      // console.log("Got this message from child: " + e.data);
+      console.log("Principal id from child", e.data);
+      setRecieved(e.data);
+    });
+  }, []);
+
+  const handlePlaceOrder = () => {
+    setCheckoutOpen(true);
+    setProcessing(true)
+  };
+
+  const handleClose = () => {
+    setCheckoutOpen(false);
+  };
 
   return (
     <div className="bg-white">
@@ -568,12 +635,61 @@ export default function ShoppingCart() {
             </dl>
 
             <div className="mt-6">
-              <button
+              {/* <button
                 onClick={createMyOrder}
                 className="w-full rounded-md border border-transparent bg-primary py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-50"
               >
                 {creatingOrder ? "Creating order..." : "Place Order"}
+              </button> */}
+              <button
+                onClick={handlePlaceOrder}
+                className="w-full rounded-md border border-transparent bg-primary py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-50"
+              >
+                Checkout
               </button>
+              {/* iFrame div  */}
+
+              {checkoutOpen && (
+                <div className="fixed z-50 inset-0 overflow-y-auto bg-black bg-opacity-50">
+                  <div className=" flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+                    <div
+                      className={`w-full bg-white  px-6 py-2 rounded-2xl max-w-[800px] space-y-8`}
+                    >
+                      <div className="flex justify-end">
+                        <button
+                          className="justify-end text-gray-800"
+                          onClick={handleClose}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 20 20"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-6 h-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+
+                      <iframe
+                        ref={iFrameRef}
+                        src="http://127.0.0.1:3000"
+                        width="100%"
+                        height="100%"
+                        title="Child iframe"
+                      ></iframe>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* iFrame div end */}
             </div>
           </section>
         </div>
