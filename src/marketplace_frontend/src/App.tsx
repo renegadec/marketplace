@@ -27,6 +27,7 @@ import { useAuth } from "./hooks";
 import ShoppingCart from "./pages/ShoppingCart";
 
 import Orders from "./pages/Orders";
+import Support from "./pages/Support";
 
 
 const App = () => {
@@ -83,6 +84,15 @@ const App = () => {
                       <div className={`${styles.paddingX} ${styles.flexStart}`}>
                         <div className={`${styles.boxWidth}`}>
                           <Orders />
+                        </div>
+                      </div>
+                    } 
+                  />
+
+                  <Route path="support" element={
+                      <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                        <div className={`${styles.boxWidth}`}>
+                          <Support />
                         </div>
                       </div>
                     } 
