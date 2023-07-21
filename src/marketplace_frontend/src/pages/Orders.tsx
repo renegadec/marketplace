@@ -71,7 +71,7 @@ const Orders = () => {
 
         return {
           ...order,
-          step: Number(order.step),
+          step: parseInt(order.step),
           dateCreated: formattedDate,
           orderProducts: orderProducts,
         };
