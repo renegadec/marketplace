@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { initContract } from "../near-config/index";
 import Big from "big.js";
 import { toast } from "react-toastify";
 import { PlusIcon } from '@heroicons/react/20/solid'
-import { transfer } from "near-api-js/lib/transaction";
 
 const Wallet = () => {
   const [user, setUser] = useState(null);
@@ -56,17 +54,6 @@ const Wallet = () => {
       loadUserInfo();
     }
   }, [user]);
-
-  useEffect(() => {
-    async function fetchData() {
-      const contractData = await initContract();
-      setUser(contractData.currentUser);
-      setConfig(contractData.nearConfig);
-      setWallet(contractData.walletConnection);
-      setContract(contractData.contract);
-    }
-    fetchData();
-  }, []);
 
   const gas = Big(3)
     .times(10 ** 13)
@@ -150,7 +137,7 @@ const Wallet = () => {
           <div className="mt-6">
             <button
               type="button"
-              onClick={handleUser}
+              // onClick={handleUser}
               className="inline-flex items-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />

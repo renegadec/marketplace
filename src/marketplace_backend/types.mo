@@ -11,26 +11,15 @@ module {
     public type Product = {
         id : Text;
         minOrder : Int32;
-        additionalInformation : AdditionalInformation;
         name : Text;
         shortDescription : Text;
         category : Text;
         image : [Nat8];
         fullDescription : Text;
         price : Int32;
-        images : Images;
-    };
-
-    type AdditionalInformation = {
-        price : Int32;
         weight : Int32;
         availability : Text;
-    };
-
-    type Images = {
-        image1 : [Nat8];
-        image2 : [Nat8];
-        image3 : [Nat8];
+        images : [Text]
     };
 
     // Types for Orders

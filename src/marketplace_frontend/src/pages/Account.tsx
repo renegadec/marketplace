@@ -12,7 +12,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 import Profile from '../components/Account/Profile';
-import Wallet from "../near-component/Wallet";
+import Wallet from "../components/Wallet";
 import Billing from '../components/Account/Billing';
 
 import Notifications from "../components/Account/Notifications";
