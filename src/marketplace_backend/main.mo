@@ -18,11 +18,12 @@ actor Tswaanda {
   var mapOfOrders = HashMap.HashMap<Text, ProductOrder>(0, Text.equal, Text.hash);
   var mapOfCustomers = HashMap.HashMap<Principal, Customer>(0, Principal.equal, Principal.hash);
   var customerCartItems = HashMap.HashMap<Principal, List.List<CartItem>>(0, Principal.equal, Principal.hash);
+  var customerFavouriteItems = HashMap.HashMap<Principal, List.List<Text>>(0, Principal.equal, Principal.hash);
  
-
   private stable var ordersEntries : [(Text, ProductOrder)] = [];
   private stable var customersEntries : [(Principal, Customer)] = [];
   private stable var cartItemsEntries : [(Principal, List.List<CartItem>)] = [];
+  private stable var favouriteItemsEntries : [(Principal, List.List<Text>)] = [];
 
 
   //-----------------------------Product methods------------------------------------------------------
@@ -243,108 +244,57 @@ actor Tswaanda {
     return true;
   };
 
+  // -------------------------------------------Favourites items methods---------------------------------------------------
 
+  public shared func addToFavourites(userId : Principal, productId : Text) : async Bool {
+    var favouriteItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {
+      case (?value) { value };
+      case (null) { List.nil<Text>() };
+    };
+    favouriteItems := List.push(productId, favouriteItems);
+    customerFavouriteItems.put(userId, favouriteItems);
+    return true;
+  };
 
-  // Canister upgrade methods
+  public shared func getMyFavItems(userId : Principal) : async [Product] {
+
+    var favItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {
+      case (?value) { value };
+      case (null) { List.nil<Text>() };
+    };
+    let items = List.toArray(favItems);
+    let products = await productsInterface.filterProducts(items);
+    return products;
+  };
+
+  public shared func removeFromFavourites(userId : Principal, productId : Text) : async Bool {
+    var favItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {
+      case (?value) { value };
+      case (null) { List.nil<Text>() };
+    };
+    favItems := List.filter(
+      favItems,
+      func(item : Text) : Bool {
+        item != productId;
+      },
+    );
+    customerFavouriteItems.put(userId, favItems);
+    return true;
+  };
+
+  // -----------------------------------------Canister upgrade methods---------------------------------------------------
   system func preupgrade() {
     ordersEntries := Iter.toArray(mapOfOrders.entries());
     customersEntries := Iter.toArray(mapOfCustomers.entries());
     cartItemsEntries := Iter.toArray(customerCartItems.entries());
+    favouriteItemsEntries := Iter.toArray(customerFavouriteItems.entries());
   };
 
   system func postupgrade() {
     mapOfOrders := HashMap.fromIter<Text, ProductOrder>(ordersEntries.vals(), 0, Text.equal, Text.hash);
     mapOfCustomers := HashMap.fromIter<Principal, Customer>(customersEntries.vals(), 0, Principal.equal, Principal.hash);
     customerCartItems := HashMap.fromIter<Principal, List.List<CartItem>>(cartItemsEntries.vals(), 0, Principal.equal, Principal.hash);
+    customerFavouriteItems := HashMap.fromIter<Principal, List.List<Text>>(favouriteItemsEntries.vals(), 0, Principal.equal, Principal.hash)
   };
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//  var customerFavouriteItems = HashMap.HashMap<Principal, List.List<Text>>(0, Principal.equal, Principal.hash);
-
-  // private stable var favouriteItemsEntries : [(Principal, List.List<Text>)] = [];
-
-    // -------------------------------------------Favourites items methods---------------------------------------------------
-
-  // public shared func addToFavourites(userId : Principal, productId : Text) : async Bool {
-  //   var favouriteItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {
-  //     case (?value) { value };
-  //     case (null) { List.nil<Text>() };
-  //   };
-  //   favouriteItems := List.push(productId, favouriteItems);
-  //   customerFavouriteItems.put(userId, favouriteItems);
-  //   return true;
-  // };
-
-  // public shared func getMyFavItems(userId : Principal) : async [Product] {
-
-  //   var favItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {
-  //     case (?value) { value };
-  //     case (null) { List.nil<Text>() };
-  //   };
-  //   let items = List.toArray(favItems);
-  //   let products = await productsInterface.filterProducts(items);
-  //   return products;
-  // };
-
-  // public shared func removeFromFavourites(userId : Principal, productId : Text) : async Bool {
-  //   var favItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {
-  //     case (?value) { value };
-  //     case (null) { List.nil<Text>() };
-  //   };
-  //   favItems := List.filter(
-  //     favItems,
-  //     func(item : Text) : Bool {
-  //       item != productId;
-  //     },
-  //   );
-  //   customerFavouriteItems.put(userId, favItems);
-  //   return true;
-  // };
-
-    // favouriteItemsEntries := Iter.toArray(customerFavouriteItems.entries());
-
-    // customerFavouriteItems := HashMap.fromIter<Principal, List.List<Text>>(favouriteItemsEntries.vals(), 0, Principal.equal, Principal.hash);
-

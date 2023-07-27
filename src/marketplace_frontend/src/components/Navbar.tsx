@@ -13,11 +13,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Logo } from "../../assets/assets.js";
 import { useAuth } from "../hooks";
 import { AuthClient } from "@dfinity/auth-client";
-import { Actor, HttpAgent } from "@dfinity/agent";
-import {
-  canisterId,
-  idlFactory,
-} from "../../../declarations/marketplace_backend";
+import { backendActor } from "../hooks/config";
 
 const user = {
   name: "Lisa Marie",
@@ -42,13 +38,6 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
-  const host = "https://icp0.io";
-  const agent = new HttpAgent({ host: host });
-
-  const backendActor = Actor.createActor(idlFactory, {
-    agent,
-    canisterId: canisterId,
-  });
 
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

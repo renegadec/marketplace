@@ -3,8 +3,7 @@ import { useState } from "react";
 import SearchBar from "../components/Searchbar/Searchbar";
 import Button from "../components/Button/Button";
 import { Loader, ProductCard } from "../components";
-import { canisterId, idlFactory } from "../../../declarations/marketplace_backend";
-import { Actor, HttpAgent } from "@dfinity/agent";
+import { adminBackendActor } from "../hooks/config";
 
 const categories = ["All", "Fruits", "Nuts", "Legumes", "Spices", "Vegetables"];
 
@@ -15,48 +14,18 @@ const Market = () => {
   const [filteredProducts, setFiltedProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchNotFound, setSearchNotFound] = useState(false);
-  const [loadedProducts, setLoaded] = useState(null);
-
-  const host = "https://icp0.io";
-  const agent = new HttpAgent({ host: host });
-
-  const backendActor = Actor.createActor(idlFactory, {
-    agent,
-    canisterId: canisterId,
-  });
 
   const getAllProducts = async () => {
     setLoading(true);
     try {
-      const products = await backendActor.getProducts();
-      setLoaded(products);
+      const products = await adminBackendActor.getAllProducts();
+      setProducts(products);
+      setLoading(false)
     } catch (e) {
       setLoading(false);
       console.log(e, "Error");
     }
   };
-
-  useEffect(() => {
-    if (loadedProducts) {
-      const convertImage = (image: Uint8Array | number[]): string => {
-        const imageContent = new Uint8Array(image);
-        const blob = new Blob([imageContent.buffer], { type: "image/png" });
-        return URL.createObjectURL(blob);
-      };
-
-      const productsWithUrl = loadedProducts.map((product) => ({
-        ...product,
-        image: convertImage(product.image),
-        images: {
-          image1: convertImage(product.images.image1),
-          image2: convertImage(product.images.image2),
-          image3: convertImage(product.images.image3),
-        },
-      }));
-      setProducts(productsWithUrl);
-      setLoading(false);
-    }
-  }, [loadedProducts]);
 
   useEffect(() => {
     getAllProducts();
@@ -121,7 +90,7 @@ const Market = () => {
                 id={product.id}
                 type={product.name}
                 desc={product.shortDescription}
-                image={product.image}
+                image={product.images[0]}
               />
             ))
         ) : (
@@ -133,7 +102,7 @@ const Market = () => {
                 id={product.id}
                 type={product.name}
                 desc={product.shortDescription}
-                image={product.image}
+                image={product.images[0]}
               />
             ))
         )}
@@ -162,7 +131,7 @@ const Market = () => {
                   id={product.id}
                   type={product.name}
                   desc={product.shortDescription}
-                  image={product.image}
+                  image={product.images[0]}
                 />
               ))
           : products
@@ -173,7 +142,7 @@ const Market = () => {
                   id={product.id}
                   type={product.name}
                   desc={product.shortDescription}
-                  image={product.image}
+                  image={product.images[0]}
                 />
               ))}
       </div>

@@ -8,15 +8,11 @@ import {
   XMarkIcon as XMarkIconMini,
 } from "@heroicons/react/20/solid";
 import { Beans, Brocoli, GroundNuts } from "../../assets/assets";
-import {
-  canisterId,
-  idlFactory,
-} from "../../../declarations/marketplace_backend";
 import { AuthClient } from "@dfinity/auth-client";
-import { Actor, HttpAgent } from "@dfinity/agent";
 import { Link, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
+import { backendActor } from "../hooks/config";
 
 const navigation = {
   pages: [
@@ -52,14 +48,6 @@ export default function ShoppingCart() {
   const [products, setProducts] = useState(null);
   const [cartItems, setCartItems] = useState(null);
 
-  const host = "https://icp0.io";
-  const agent = new HttpAgent({ host: host });
-
-  const backendActor = Actor.createActor(idlFactory, {
-    agent,
-    canisterId: canisterId,
-  });
-
   // Checks if the user is authenticated and then obtain the principal id
   
   const getPrincipalId = async () => {
@@ -84,22 +72,7 @@ export default function ShoppingCart() {
   // Converting the images bytes to data to blobs
   useEffect(() => {
     if (cartRawProducts) {
-      const convertImage = (image: Uint8Array | number[]): string => {
-        const imageContent = new Uint8Array(image);
-        const blob = new Blob([imageContent.buffer], { type: "image/png" });
-        return URL.createObjectURL(blob);
-      };
-
-      const productsWithUrl = cartRawProducts.map((product) => ({
-        ...product,
-        image: convertImage(product.image),
-        images: {
-          image1: convertImage(product.images.image1),
-          image2: convertImage(product.images.image2),
-          image3: convertImage(product.images.image3),
-        },
-      }));
-      setProducts(productsWithUrl);
+      setProducts(cartRawProducts);
     }
   }, [cartRawProducts]);
 
@@ -150,7 +123,7 @@ export default function ShoppingCart() {
     const res = backendActor.removeFromCart(userId, itemToRemove);
   };
 
-  // Order summary calculations
+  //----------------------------------Order summary calculations-------------------------------------------------------
   const handleQuantityChange = async (e, id: String) => {
     const newQty = e.target.value;
 
@@ -164,7 +137,6 @@ export default function ShoppingCart() {
       return item;
     });
     setCartItems(updatedCartItems);
-    // const res = await backendActor.updateCartItem(userId, )
   };
 
   const [subtotal, setSubtotal] = useState(null);
@@ -468,7 +440,7 @@ export default function ShoppingCart() {
                   <Link to={`../product/${product.id}`}>
                     <div className="flex-shrink-0">
                       <img
-                        src={product.image}
+                        src={product.images[0]}
                         alt="Product image"
                         className="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48"
                       />

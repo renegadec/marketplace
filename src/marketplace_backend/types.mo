@@ -14,7 +14,6 @@ module {
         name : Text;
         shortDescription : Text;
         category : Text;
-        image : [Nat8];
         fullDescription : Text;
         price : Int32;
         weight : Int32;
@@ -42,7 +41,7 @@ module {
         id: Text;
         name: Text;
         description: Text;
-        image: Blob;
+        image: Text;
         quantity: Nat;
         price: Float;
     };
@@ -63,8 +62,8 @@ module {
         province: Text;
         zipCode: Nat;
         phoneNumber: Nat;
-        profilePhoto: Blob;
-        coverPhoto: Blob;
+        profilePhoto: Text;
+        kycDocs: Text;
         status: Text;
         dateCreated: Int;
     }; 

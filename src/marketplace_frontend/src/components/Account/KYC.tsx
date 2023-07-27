@@ -1,18 +1,18 @@
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { Fragment, useEffect, useState } from "react";
-import {
-  canisterId,
-  marketplace_backend,
-} from "../../../../declarations/marketplace_backend";
-import { Actor, HttpAgent } from "@dfinity/agent";
-import { idlFactory } from "../../../../declarations/marketplace_backend";
 import { v4 as uuidv4 } from "uuid";
 import { AuthClient } from "@dfinity/auth-client";
 import { Transition } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+import { backendActor } from "../../hooks/config";
+import { useSelector } from "react-redux";
+import { RootState } from "../../state/store";
+import { uploadFile } from "../../storage-config/functions";
 
 export default function KYC() {
+  const { storageInitiated } = useSelector((state: RootState) => state.global);
+
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastname] = useState("");
@@ -29,15 +29,7 @@ export default function KYC() {
   const [coverPhoto, setCP] = useState(null);
   const [userId, setUserId] = useState(null);
 
-  const [show, setShow] = useState(false)
-
-  const host = "https://icp0.io";
-  const agent = new HttpAgent({ host: host });
-
-  const backendActor = Actor.createActor(idlFactory, {
-    agent,
-    canisterId: canisterId,
-  });
+  const [show, setShow] = useState(false);
 
   const getPrincipalId = async () => {
     const authClient = await AuthClient.create();
@@ -55,13 +47,14 @@ export default function KYC() {
 
   const handleSave = async (e) => {
     e.preventDefault();
-
-    const profilePhotoBytes = [
-      ...new Uint8Array(await profilePhoto.arrayBuffer()),
-    ];
-    const coverPhotoBytes = [...new Uint8Array(await coverPhoto.arrayBuffer())];
     const date = new Date();
     const timestamp = date.getTime();
+
+    const profilePhotoUrl = await uploadAsset(profilePhoto)
+    console.log("profilePhoto saved", profilePhotoUrl)
+
+    const coverPhotoUrl = await uploadAsset(coverPhoto)
+    console.log("Cover photo saved", coverPhotoUrl)
 
     const kycRequest = {
       id: String(uuidv4()),
@@ -78,8 +71,8 @@ export default function KYC() {
       province: province,
       zipCode: BigInt(zipcode),
       phoneNumber: BigInt(phone),
-      profilePhoto: profilePhotoBytes,
-      coverPhoto: coverPhotoBytes,
+      profilePhoto: profilePhotoUrl,
+      kycDocs: coverPhotoUrl,
       status: "pending",
       dateCreated: BigInt(timestamp),
     };
@@ -87,10 +80,22 @@ export default function KYC() {
     const res = await backendActor.createKYCRequest(kycRequest);
 
     if (res === true) {
-      setShow(true)
+      setShow(true);
+    } else {
+      setShow(false);
     }
-    else {
-      setShow(false)
+  };
+
+  const uploadAsset = async (file) => {
+    if (storageInitiated) {
+      const file_path = location.pathname;
+      try {
+        const assetUrl = await uploadFile(file, file_path);
+        console.log("This file was successfully uploaded:", file.name);
+        return assetUrl;
+      } catch (error) {
+        console.error("Error uploading file:", file.name, error);
+      }
     }
   };
 
@@ -191,7 +196,10 @@ export default function KYC() {
                 htmlFor="cover-photo"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                KYC Documents <span className="text-xs leading-5 text-gray-600">(ID & Proof of Address)</span>
+                KYC Documents{" "}
+                <span className="text-xs leading-5 text-gray-600">
+                  (ID & Proof of Address)
+                </span>
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div className="text-center">
@@ -219,10 +227,10 @@ export default function KYC() {
                     PNG, JPG, PDF up to 10MB
                   </p>
                   {coverPhoto && (
-                <>
-                  <span>File attached:</span> <span>{coverPhoto.name}</span>
-                </>
-              )}
+                    <>
+                      <span>File attached:</span> <span>{coverPhoto.name}</span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -614,18 +622,25 @@ export default function KYC() {
                 <div className="p-4">
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
+                      <CheckCircleIcon
+                        className="h-6 w-6 text-green-400"
+                        aria-hidden="true"
+                      />
                     </div>
                     <div className="ml-3 w-0 flex-1 pt-0.5">
-                      <p className="text-sm font-medium text-gray-900">Successfully saved!</p>
-                      <p className="mt-1 text-sm text-gray-500">If you wish to update, use profile tab</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        Successfully saved!
+                      </p>
+                      <p className="mt-1 text-sm text-gray-500">
+                        If you wish to update, use profile tab
+                      </p>
                     </div>
                     <div className="ml-4 flex flex-shrink-0">
                       <button
                         type="button"
                         className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         onClick={() => {
-                          setShow(false)
+                          setShow(false);
                         }}
                       >
                         <span className="sr-only">Close</span>

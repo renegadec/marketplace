@@ -8,16 +8,11 @@ import {
   PlusIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
-import { idlFactory } from "../../../declarations/tswaanda_backend";
-import { Actor, HttpAgent } from "@dfinity/agent";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import {
-  canisterId,
-  idlFactory as marketIdl,
-} from "../../../declarations/marketplace_backend";
 import { AuthClient } from "@dfinity/auth-client";
 import { toast } from "react-toastify";
+import { adminBackendActor, backendActor } from "../hooks/config";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -25,9 +20,7 @@ function classNames(...classes) {
 
 export default function Product() {
   const navigate = useNavigate();
-  const [productItem, setProductItem] = useState(null);
   const [product, setProduct] = useState(null);
-  const [result, setRes] = useState(null);
   const [images, setImages] = useState(null);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
@@ -36,20 +29,6 @@ export default function Product() {
   const [cartItems, setCartItems] = useState(null);
   const [inCart, setInCart] = useState(false);
   const [checking, setChecking] = useState(false);
-
-  const host = "https://icp0.io";
-  const agent = new HttpAgent({ host: host });
-  const dashId = "56r5t-tqaaa-aaaal-qb4gq-cai"
-
-  const dashboardActor = Actor.createActor(idlFactory, {
-    agent,
-    canisterId: dashId,
-  });
-
-  const marketActor = Actor.createActor(marketIdl, {
-    agent,
-    canisterId: canisterId,
-  });
 
   const getPrincipalId = async () => {
     const authClient = await AuthClient.create();
@@ -69,7 +48,7 @@ export default function Product() {
     {
       name: "Weighting",
       items: [
-        `Total Weight: ${product?.additionalInformation.weight} KG, Unit Weight: 20KG`,
+        `Total Weight: ${product?.weight} KG, Unit Weight: 20KG`,
       ],
     },
     {
@@ -85,57 +64,30 @@ export default function Product() {
     },
   ];
 
+  interface Response {
+    err?: any;
+    ok?: any;
+  }
+
   useEffect(() => {
     if (id) {
       setChecking(true);
       setLoading(true);
       const getProduct = async () => {
-        const result = await dashboardActor.getProductById(id);
-        setRes(result);
+        const result: Response = await adminBackendActor.getProductById(id);
+        if (result.ok) {
+          setProduct(result.ok);
+          setLoading(false);
+        } else {
+          console.log(result.err);
+        }
       };
       getProduct();
     }
   }, [id]);
 
-  useEffect(() => {
-    if (result) {
-      setProductItem(result.ok);
-    }
-  }, [result]);
-
-  useEffect(() => {
-    if (productItem) {
-      const convertImage = (image: Uint8Array | number[]): string => {
-        const imageContent = new Uint8Array(image);
-        const blob = new Blob([imageContent.buffer], { type: "image/png" });
-        return URL.createObjectURL(blob);
-      };
-
-      const productWithUrl = {
-        ...productItem,
-        image: convertImage(productItem.image),
-        images: {
-          image1: convertImage(productItem.images.image1),
-          image2: convertImage(productItem.images.image2),
-          image3: convertImage(productItem.images.image3),
-        },
-      };
-      if (productWithUrl) {
-        const mainImage = productWithUrl.image;
-        const image1 = productWithUrl.images.image1;
-        const image2 = productWithUrl.images.image2;
-        const image3 = productWithUrl.images.image3;
-
-        const updatedImages = [mainImage, image1, image2, image3];
-        setImages(updatedImages);
-      }
-      setProduct(productWithUrl);
-      setLoading(false);
-    }
-  }, [productItem]);
-
   const getCartItems = async () => {
-    const res = await marketActor.getMyCartItems(userId);
+    const res = await backendActor.getMyCartItems(userId);
     setCartItems(res);
     setAddingToCart(false);
   };
@@ -166,7 +118,7 @@ export default function Product() {
         quantity: 1,
         dateCreated: timestamp,
       };
-      const res = await marketActor.addToCart(userId, cartItem);
+      const res = await backendActor.addToCart(userId, cartItem);
       getCartItems();
     } else if (userId === null) {
       toast.warning("You are not logged in", {
@@ -178,8 +130,6 @@ export default function Product() {
       console.log("Checking");
     }
   };
-
-  console.log("Adding to cart", addingtocart)
 
   const handleGoToCart = () => {
     navigate("/shopping-cart");
@@ -195,7 +145,7 @@ export default function Product() {
               {/* Image selector */}
               <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
                 <Tab.List className="grid grid-cols-4 gap-6">
-                  {images?.map((image, index) => (
+                  {product?.images.map((image, index) => (
                     <Tab
                       key={index}
                       className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
@@ -224,7 +174,7 @@ export default function Product() {
               </div>
 
               <Tab.Panels className="aspect-w-1 aspect-h-1 w-full">
-                {images?.map((image, index) => (
+                {product?.images.map((image, index) => (
                   <Tab.Panel key={index}>
                     <img
                       src={image}
