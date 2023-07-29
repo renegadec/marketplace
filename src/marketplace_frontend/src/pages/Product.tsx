@@ -26,9 +26,9 @@ export default function Product() {
   const { id } = useParams();
   const [userId, setUserId] = useState(null);
   const [addingtocart, setAddingToCart] = useState(false);
-  const [cartItems, setCartItems] = useState(null);
+  const [cartItem, setCartItem] = useState(null);
   const [inCart, setInCart] = useState(false);
-  const [checking, setChecking] = useState(false);
+  const [checking, setChecking] = useState(true);
 
   const getPrincipalId = async () => {
     const authClient = await AuthClient.create();
@@ -37,19 +37,15 @@ export default function Product() {
       const identity = authClient.getIdentity();
       const userPrincipal = identity.getPrincipal();
       setUserId(userPrincipal);
+    } else {
+      setChecking(false);
     }
   };
-
-  useEffect(() => {
-    getPrincipalId();
-  }, []);
 
   const details = [
     {
       name: "Weighting",
-      items: [
-        `Total Weight: ${product?.weight} KG, Unit Weight: 20KG`,
-      ],
+      items: [`Total Weight: ${product?.weight} KG, Unit Weight: 20KG`],
     },
     {
       name: "Reviews",
@@ -71,7 +67,7 @@ export default function Product() {
 
   useEffect(() => {
     if (id) {
-      setChecking(true);
+      getPrincipalId();
       setLoading(true);
       const getProduct = async () => {
         const result: Response = await adminBackendActor.getProductById(id);
@@ -87,8 +83,12 @@ export default function Product() {
   }, [id]);
 
   const getCartItems = async () => {
-    const res = await backendActor.getMyCartItems(userId);
-    setCartItems(res);
+    const res: Response = await backendActor.getMyCartItem(userId);
+    if (res.ok) {
+      setCartItem(res.ok)
+    } else {
+      setChecking(false)
+    };
     setAddingToCart(false);
   };
 
@@ -99,16 +99,22 @@ export default function Product() {
   }, [userId]);
 
   useEffect(() => {
-    if (cartItems) {
-      const item = cartItems.find((item) => item.id === id);
-      if (item) {
+    if (cartItem) {
+      if (cartItem.id === id) {
         setInCart(true);
       }
       setChecking(false);
     }
-  }, [cartItems]);
+  }, [cartItem]);
 
   const handleAddToCart = async () => {
+   if (cartItem && !checking) {
+    toast.warning("Sorry, you can only have one product in the cart at a time", {
+      autoClose: 5000,
+      position: "top-center",
+      hideProgressBar: true,
+    });
+   } else {
     if (userId && id && !checking && !inCart) {
       setAddingToCart(true);
       const date = new Date();
@@ -129,6 +135,7 @@ export default function Product() {
     } else {
       console.log("Checking");
     }
+   }
   };
 
   const handleGoToCart = () => {

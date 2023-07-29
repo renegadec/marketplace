@@ -30,6 +30,7 @@ export default function KYC() {
   const [userId, setUserId] = useState(null);
 
   const [show, setShow] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const getPrincipalId = async () => {
     const authClient = await AuthClient.create();
@@ -47,44 +48,52 @@ export default function KYC() {
 
   const handleSave = async (e) => {
     e.preventDefault();
-    const date = new Date();
-    const timestamp = date.getTime();
-
-    const profilePhotoUrl = await uploadAsset(profilePhoto)
-    console.log("profilePhoto saved", profilePhotoUrl)
-
-    const coverPhotoUrl = await uploadAsset(coverPhoto)
-    console.log("Cover photo saved", coverPhotoUrl)
-
-    const kycRequest = {
-      id: String(uuidv4()),
-      userId: userId,
-      userName: username,
-      firstName: firstName,
-      lastName: lastName,
-      about: about,
-      email: email,
-      organization: organization,
-      country: country,
-      streetAdrees: streetAddress,
-      city: city,
-      province: province,
-      zipCode: BigInt(zipcode),
-      phoneNumber: BigInt(phone),
-      profilePhoto: profilePhotoUrl,
-      kycDocs: coverPhotoUrl,
-      status: "pending",
-      dateCreated: BigInt(timestamp),
-    };
-
-    const res = await backendActor.createKYCRequest(kycRequest);
-
-    if (res === true) {
-      setShow(true);
+    if (saving) {
+      console.log("Very busy for now");
     } else {
-      setShow(false);
+      setSaving(true);
+      const date = new Date();
+      const timestamp = date.getTime();
+
+      const profilePhotoUrl = await uploadAsset(profilePhoto);
+      console.log("profilePhoto saved", profilePhotoUrl);
+
+      const coverPhotoUrl = await uploadAsset(coverPhoto);
+      console.log("Cover photo saved", coverPhotoUrl);
+
+      const kycRequest = {
+        id: String(uuidv4()),
+        userId: userId,
+        userName: username,
+        firstName: firstName,
+        lastName: lastName,
+        about: about,
+        email: email,
+        organization: organization,
+        country: country,
+        streetAdrees: streetAddress,
+        city: city,
+        province: province,
+        zipCode: BigInt(zipcode),
+        phoneNumber: BigInt(phone),
+        profilePhoto: profilePhotoUrl,
+        kycDocs: coverPhotoUrl,
+        status: "pending",
+        dateCreated: BigInt(timestamp),
+      };
+
+      const res = await backendActor.createKYCRequest(kycRequest);
+
+      if (res === true) {
+        setShow(true);
+      } else {
+        setShow(false);
+      }
+      setSaving(false);
     }
   };
+
+  console.log(saving)
 
   const uploadAsset = async (file) => {
     if (storageInitiated) {

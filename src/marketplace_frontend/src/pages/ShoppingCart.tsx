@@ -12,7 +12,7 @@ import { AuthClient } from "@dfinity/auth-client";
 import { Link, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
-import { backendActor } from "../hooks/config";
+import { adminBackendActor, backendActor } from "../hooks/config";
 
 const navigation = {
   pages: [
@@ -44,12 +44,15 @@ export default function ShoppingCart() {
   const [userId, setUserId] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [noAcc, setNoAcc] = useState(false);
-  const [cartRawProducts, setRawProducts] = useState(null);
-  const [products, setProducts] = useState(null);
-  const [cartItems, setCartItems] = useState(null);
+  // const [cartRawProducts, setRawProducts] = useState(null);
+  // const [products, setProducts] = useState(null);
+  // const [cartItems, setCartItems] = useState(null);
+  const [cartRawProduct, setRawProduct] = useState(null);
+  const [product, setProduct] = useState(null);
+  const [cartItem, setCartItem] = useState(null);
 
   // Checks if the user is authenticated and then obtain the principal id
-  
+
   const getPrincipalId = async () => {
     const authClient = await AuthClient.create();
 
@@ -64,28 +67,217 @@ export default function ShoppingCart() {
     getPrincipalId();
   }, []);
 
-  const getCartProducts = async () => {
-    const res = await backendActor.getMyCartItemsProducts(userId);
-    setRawProducts(res);
-  };
+  // --------------------------------------FOR MULTIPLE PRODUCTS----------------------------------------------------
+
+  // const getCartProducts = async () => {
+  //   const res = await backendActor.getMyCartItemsProducts(userId);
+  //   setRawProducts(res);
+  // };
 
   // Converting the images bytes to data to blobs
-  useEffect(() => {
-    if (cartRawProducts) {
-      setProducts(cartRawProducts);
-    }
-  }, [cartRawProducts]);
+  // useEffect(() => {
+  //   if (cartRawProducts) {
+  //     setProducts(cartRawProducts);
+  //   }
+  // }, [cartRawProducts]);
+
+  // useEffect(() => {
+  //   if (userId) {
+  //     getCartProducts();
+  //     getCartItems();
+  //     getUserDetails();
+  //   }
+  // }, [userId]);
+
+  // const handleRemove = async (id: String) => {
+  //   const item = cartItems.find((item) => item.id === id);
+
+  //   const updatedCartItems = cartItems.filter((item) => item.id !== id);
+  //   setCartItems(updatedCartItems);
+
+  //   const updatedProducts = products.filter((product) => product.id !== id);
+  //   setProducts(updatedProducts);
+
+  //   const itemToRemove = {
+  //     id: item.id,
+  //     dateCreated: item.dateCreated,
+  //     quantity: BigInt(item.quantity),
+  //   };
+  //   const res = backendActor.removeFromCart(userId, itemToRemove);
+  // };
+
+  // //----------------------------------Order summary calculations-------------------------------------------------------
+  // const handleQuantityChange = async (e, id: String) => {
+  //   const newQty = e.target.value;
+
+  //   const updatedCartItems = cartItems.map((item) => {
+  //     if (item.id === id) {
+  //       return {
+  //         ...item,
+  //         quantity: newQty,
+  //       };
+  //     }
+  //     return item;
+  //   });
+  //   setCartItems(updatedCartItems);
+  // };
+
+  // const [subtotal, setSubtotal] = useState(null);
+  // const [shippingEstimate, setShipEstimate] = useState(null);
+  // const [taxEstimate, setTax] = useState(null);
+  // const [orderTotal, setOrderTotal] = useState(null);
+  // const [calculating, setCalculating] = useState(false);
+  // const [creatingOrder, setCreatingOrder] = useState(false);
+
+  // const shippingPercentage = 0.05;
+  // const taxPercentage = 0.1;
+
+  // useEffect(() => {
+  //   if (products && cartItems) {
+  //     setCalculating(true);
+  //     let subtotal = 0;
+
+  //     cartItems.forEach((cartItem) => {
+  //       const product = products.find((product) => product.id === cartItem.id);
+  //       if (product) {
+  //         subtotal += Number(product.price) * Number(cartItem.quantity);
+  //       }
+  //     });
+  //     setSubtotal(subtotal);
+  //   }
+  // }, [products, cartItems]);
+
+  // useEffect(() => {
+  //   if (subtotal) {
+  //     const shipping = subtotal * shippingPercentage;
+  //     const tax = subtotal * taxPercentage;
+  //     const total = subtotal + shipping + tax;
+
+  //     setShipEstimate(shipping.toFixed(2));
+  //     setTax(tax.toFixed(2));
+  //     setOrderTotal(total.toFixed(2));
+  //     setCalculating(false);
+  //   }
+  // }, [subtotal]);
+
+  // function getCartItemQuantity(productId) {
+  //   const cartItem = cartItems?.find((item) => item.id === productId);
+  //   return cartItem ? Number(cartItem.quantity) : 0;
+  // }
+
+  // // ----------------------------------------Creating Order----------------------------------------------------------
+
+  // const iFrameRef = useRef(null);
+
+  // const createMyOrder = async () => {
+  //   setCreatingOrder(true);
+  //   if (noAcc) {
+  //     toast.warning(
+  //       "Please create a Tswaanda profile to proceed with your order",
+  //       {
+  //         autoClose: 10000,
+  //         position: "top-center",
+  //         hideProgressBar: true,
+  //       }
+  //     );
+
+  //     navigate("/account");
+  //     setCreatingOrder(false);
+  //   } else {
+  //     const date = new Date();
+  //     const timestamp = date.getTime();
+  //     const lastDigits = timestamp.toString().slice(-8);
+  //     const randomLetters = generateRandomLetters(3);
+
+  //     const orderProducts = cartItems?.map((cartItem) => {
+  //       const product = cartRawProducts?.find((p) => p.id === cartItem.id);
+  //       return {
+  //         id: cartItem.id,
+  //         name: product.name,
+  //         description: product.fullDescription,
+  //         image: product.images[0],
+  //       };
+  //     });
+
+  //     const convertedCartItems = cartItems?.map((cartItem) => {
+  //       return {
+  //         id: cartItem.id,
+  //         quantity: BigInt(cartItem.quantity),
+  //         dateCreated: cartItem.dateCreated,
+  //       };
+  //     });
+
+  //     const order = {
+  //       orderId: String(uuidv4()),
+  //       orderNumber: `TSWA-${lastDigits}${randomLetters}`,
+  //       orderProducts,
+  //       userEmail: userInfo.email,
+  //       orderOwner: userId,
+  //       subtotal: parseFloat(subtotal),
+  //       totalPrice: parseFloat(orderTotal),
+  //       shippingEstimate: parseFloat(shippingEstimate),
+  //       taxEstimate: parseFloat(taxEstimate),
+  //       status: "Pending Approval",
+  //       step: BigInt(0),
+  //       dateCreated: BigInt(timestamp),
+  //     };
+
+  //     // Sending order and user information to the checkout page
+
+  //     const orderWithStrings = {
+  //       ...order,
+  //       subtotal: order.subtotal.toString(),
+  //       totalPrice: order.totalPrice.toString(),
+  //       shippingEstimate: order.shippingEstimate.toString(),
+  //       taxEstimate: order.taxEstimate.toString(),
+  //       step: order.step.toString(),
+  //       dateCreated: order.dateCreated.toString(),
+  //     };
+
+  //     const authClient = await AuthClient.create();
+  //     const identity = authClient.getIdentity();
+  //     const body = {
+  //       order: orderWithStrings,
+  //       identity,
+  //     };
+  //     if (iFrameRef.current) {
+  //       sendMessageToChild(body);
+  //     } else {
+  //       console.log("There iframe is not set");
+  //     }
+
+  //     // const res = await backendActor.createOrder(order);
+  //     // const result = await backendActor.removeBatchCartItems(
+  //     //   userId,
+  //     //   convertedCartItems
+  //     // );
+  //   }
+  // };
+
+  // function generateRandomLetters(length) {
+  //   let result = "";
+  //   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+  //   const charactersLength = characters.length;
+  //   for (let i = 0; i < length; i++) {
+  //     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  //   }
+  //   return result;
+  // }
 
   // Get the cart items only, not products
-  const getCartItems = async () => {
-    const res = await backendActor.getMyCartItems(userId);
-    setCartItems(res);
-  };
 
   interface Response {
     err?: any;
     ok?: any;
   }
+  const getCartItems = async () => {
+    const res: Response = await backendActor.getMyCartItem(userId);
+    if (res.ok) {
+      setCartItem(res.ok);
+    } else {
+      console.log(res.err);
+    }
+  };
 
   const getUserDetails = async () => {
     const res: Response = await backendActor.getKYCRequest(userId);
@@ -98,45 +290,44 @@ export default function ShoppingCart() {
 
   useEffect(() => {
     if (userId) {
-      getCartProducts();
       getCartItems();
       getUserDetails();
     }
   }, [userId]);
 
+  useEffect(() => {
+    if (cartItem) {
+      const getProduct = async (id) => {
+        const res : Response = await adminBackendActor.getProductById(id)
+        if (res.ok) {
+          setProduct(res.ok)
+        } else {
+          console.log(res.err)
+        }
+      }
+      getProduct(cartItem.id)
+    }
+  }, [cartItem])
+
   // Removing a product from the cartItems array and from the backend as well
 
-  const handleRemove = async (id: String) => {
-    const item = cartItems.find((item) => item.id === id);
-
-    const updatedCartItems = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCartItems);
-
-    const updatedProducts = products.filter((product) => product.id !== id);
-    setProducts(updatedProducts);
-
-    const itemToRemove = {
-      id: item.id,
-      dateCreated: item.dateCreated,
-      quantity: BigInt(item.quantity),
-    };
-    const res = backendActor.removeFromCart(userId, itemToRemove);
+  const handleRemove = async () => {
+    setCartItem(null);
+    setProduct(null)
+    await backendActor.removeFromCart(userId);
   };
 
   //----------------------------------Order summary calculations-------------------------------------------------------
-  const handleQuantityChange = async (e, id: String) => {
+  const handleQuantityChange = (e, id: String) => {
     const newQty = e.target.value;
 
-    const updatedCartItems = cartItems.map((item) => {
-      if (item.id === id) {
-        return {
-          ...item,
-          quantity: newQty,
-        };
-      }
-      return item;
-    });
-    setCartItems(updatedCartItems);
+    if (cartItem.id === id) {
+      const updatedCartItem = {
+        ...cartItem,
+        quantity: newQty,
+      };
+      setCartItem(updatedCartItem);
+    }
   };
 
   const [subtotal, setSubtotal] = useState(null);
@@ -150,19 +341,12 @@ export default function ShoppingCart() {
   const taxPercentage = 0.1;
 
   useEffect(() => {
-    if (products && cartItems) {
+    if (product && cartItem) {
       setCalculating(true);
-      let subtotal = 0;
-
-      cartItems.forEach((cartItem) => {
-        const product = products.find((product) => product.id === cartItem.id);
-        if (product) {
-          subtotal += Number(product.price) * Number(cartItem.quantity);
-        }
-      });
+      const subtotal = Number(product.price) * Number(cartItem.quantity);
       setSubtotal(subtotal);
     }
-  }, [products, cartItems]);
+  }, [product, cartItem]);
 
   useEffect(() => {
     if (subtotal) {
@@ -178,7 +362,6 @@ export default function ShoppingCart() {
   }, [subtotal]);
 
   function getCartItemQuantity(productId) {
-    const cartItem = cartItems?.find((item) => item.id === productId);
     return cartItem ? Number(cartItem.quantity) : 0;
   }
 
@@ -206,30 +389,23 @@ export default function ShoppingCart() {
       const lastDigits = timestamp.toString().slice(-8);
       const randomLetters = generateRandomLetters(3);
 
-      const orderProducts = cartItems?.map((cartItem) => {
-        const product = cartRawProducts?.find((p) => p.id === cartItem.id);
-        return {
-          id: cartItem.id,
-          name: product.name,
-          description: product.fullDescription,
-          image: product.image,
-          // quantity: BigInt(cartItem.quantity),
-          // price: parseFloat(product?.price),
-        };
-      });
+      const orderProduct = {
+        id: cartItem.id,
+        name: product.name,
+        description: product.fullDescription,
+        image: product.images[0],
+      };
 
-      const convertedCartItems = cartItems?.map((cartItem) => {
-        return {
-          id: cartItem.id,
-          quantity: BigInt(cartItem.quantity),
-          dateCreated: cartItem.dateCreated,
-        };
-      });
+      const convertedCartItem = {
+        id: cartItem.id,
+        quantity: BigInt(cartItem.quantity),
+        dateCreated: cartItem.dateCreated,
+      };
 
       const order = {
         orderId: String(uuidv4()),
         orderNumber: `TSWA-${lastDigits}${randomLetters}`,
-        orderProducts,
+        orderProduct,
         userEmail: userInfo.email,
         orderOwner: userId,
         subtotal: parseFloat(subtotal),
@@ -287,7 +463,7 @@ export default function ShoppingCart() {
 
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [recievedId, setRecieved] = useState(null);
-  const [processing, setProcessing] = useState(false)
+  const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
     if (recievedId && userInfo && checkoutOpen && processing) {
@@ -304,7 +480,7 @@ export default function ShoppingCart() {
       hideProgressBar: true,
     });
     setCreatingOrder(false);
-    setProcessing(false)
+    setProcessing(false);
   };
 
   useEffect(() => {
@@ -318,7 +494,7 @@ export default function ShoppingCart() {
 
   const handlePlaceOrder = () => {
     setCheckoutOpen(true);
-    setProcessing(true)
+    setProcessing(true);
   };
 
   const handleClose = () => {
@@ -426,113 +602,125 @@ export default function ShoppingCart() {
               Items in your shopping cart
             </h2>
 
-            {products?.length === 0 && (
+            {product && (
               <div className="">
                 <h1>Your cart is empty</h1>
               </div>
             )}
+            {/* {products?.length === 0 && (
+              <div className="">
+                <h1>Your cart is empty</h1>
+              </div>
+            )} */}
             <ul
               role="list"
               className="divide-y divide-gray-200 border-t border-b border-gray-200"
             >
-              {products?.map((product, productIdx) => (
-                <li key={product.id} className="flex py-6 sm:py-10">
-                  <Link to={`../product/${product.id}`}>
-                    <div className="flex-shrink-0">
-                      <img
-                        src={product.images[0]}
-                        alt="Product image"
-                        className="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48"
-                      />
-                    </div>
-                  </Link>
-                  <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-                    <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-                      <div>
-                        <div className="flex justify-between">
-                          <h3 className="text-sm">
-                            <Link
-                              to={`../product/${product.id}`}
-                              className="font-medium text-gray-700 hover:text-gray-800"
-                            >
-                              {product.name}
-                            </Link>
-                          </h3>
-                        </div>
-                        <div className="mt-1 flex text-sm">
-                          {product.size ? (
-                            <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">
-                              {product.size}
-                            </p>
-                          ) : null}
-                        </div>
-                        <p className="mt-1 text-sm font-medium text-gray-900">
-                          $ {product.price}
-                        </p>
+              {/* {products?.map((product, product.id) => ( */}
+              <>
+                {product && (
+                  <li key={product.id} className="flex py-6 sm:py-10">
+                    <Link to={`../product/${product.id}`}>
+                      <div className="flex-shrink-0">
+                        <img
+                          src={product.images[0]}
+                          alt="Product image"
+                          className="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48"
+                        />
                       </div>
+                    </Link>
+                    <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
+                      <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+                        <div>
+                          <div className="flex justify-between">
+                            <h3 className="text-sm">
+                              <Link
+                                to={`../product/${product.id}`}
+                                className="font-medium text-gray-700 hover:text-gray-800"
+                              >
+                                {product.name}
+                              </Link>
+                            </h3>
+                          </div>
+                          <div className="mt-1 flex text-sm">
+                            {product.size ? (
+                              <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">
+                                {product.size}
+                              </p>
+                            ) : null}
+                          </div>
+                          <p className="mt-1 text-sm font-medium text-gray-900">
+                            $ {product.price}
+                          </p>
+                        </div>
 
-                      <div className="mt-4 sm:mt-0 sm:pr-9">
-                        <label
-                          htmlFor={`quantity-${productIdx}`}
-                          className="sr-only"
-                        >
-                          Quantity, {product.name}
-                        </label>
-                        <select
-                          id={`quantity-${productIdx}`}
-                          name={`quantity-${productIdx}`}
-                          value={getCartItemQuantity(product.id)}
-                          onChange={(e) => handleQuantityChange(e, product.id)}
-                          className="max-w-full bg-white rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                        >
-                          <option value={1}>1</option>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                          <option value={5}>5</option>
-                          <option value={6}>6</option>
-                          <option value={7}>7</option>
-                          <option value={8}>8</option>
-                        </select>
-
-                        <div className="absolute top-0 right-0">
-                          <button
-                            type="button"
-                            onClick={() => handleRemove(product.id)}
-                            className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
+                        <div className="mt-4 sm:mt-0 sm:pr-9">
+                          <label
+                            htmlFor={`quantity-${product.id}`}
+                            className="sr-only"
                           >
-                            <span className="sr-only">Remove</span>
-                            <XMarkIconMini
-                              className="h-5 w-5"
-                              aria-hidden="true"
-                            />
-                          </button>
+                            Quantity, {product.name}
+                          </label>
+                          <select
+                            id={`quantity-${product.id}`}
+                            name={`quantity-${product.id}`}
+                            value={getCartItemQuantity(product.id)}
+                            onChange={(e) =>
+                              handleQuantityChange(e, product.id)
+                            }
+                            className="max-w-full bg-white rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                          >
+                            <option value={1}>1</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5</option>
+                            <option value={6}>6</option>
+                            <option value={7}>7</option>
+                            <option value={8}>8</option>
+                          </select>
+
+                          <div className="absolute top-0 right-0">
+                            <button
+                              type="button"
+                              // onClick={() => handleRemove(product.id)}
+                              onClick={handleRemove}
+                              className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
+                            >
+                              <span className="sr-only">Remove</span>
+                              <XMarkIconMini
+                                className="h-5 w-5"
+                                aria-hidden="true"
+                              />
+                            </button>
+                          </div>
                         </div>
                       </div>
+
+                      <p className="mt-4 flex space-x-2 text-sm text-gray-700">
+                        {product?.inStock ? (
+                          <CheckIcon
+                            className="h-5 w-5 flex-shrink-0 text-green-500"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <ClockIcon
+                            className="h-5 w-5 flex-shrink-0 text-gray-300"
+                            aria-hidden="true"
+                          />
+                        )}
+
+                        <span>
+                          {product?.inStock
+                            ? "In stock"
+                            : `Ships in ${product.leadTime}`}
+                        </span>
+                      </p>
                     </div>
-
-                    <p className="mt-4 flex space-x-2 text-sm text-gray-700">
-                      {product?.inStock ? (
-                        <CheckIcon
-                          className="h-5 w-5 flex-shrink-0 text-green-500"
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <ClockIcon
-                          className="h-5 w-5 flex-shrink-0 text-gray-300"
-                          aria-hidden="true"
-                        />
-                      )}
-
-                      <span>
-                        {product?.inStock
-                          ? "In stock"
-                          : `Ships in ${product.leadTime}`}
-                      </span>
-                    </p>
-                  </div>
-                </li>
-              ))}
+                  </li>
+                )}
+              </>
+              {/* ))} */}
             </ul>
           </section>
 

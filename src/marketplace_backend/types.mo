@@ -26,7 +26,7 @@ module {
         orderId : Text;
         orderNumber: Text;
         userEmail: Text;
-        orderProducts: [OrderProduct];
+        orderProducts: OrderProduct;
         orderOwner: Principal;
         subtotal: Float;
         totalPrice: Float;
@@ -36,6 +36,22 @@ module {
         step: Nat;
         dateCreated: Int;
     };
+
+    // -----------------------ORDER TYPES FOR MULTIPLE PRODUCTS PER ORDER-----------------------------------------
+    // public type Order = {
+    //     orderId : Text;
+    //     orderNumber: Text;
+    //     userEmail: Text;
+    //     orderProducts: [OrderProduct];
+    //     orderOwner: Principal;
+    //     subtotal: Float;
+    //     totalPrice: Float;
+    //     shippingEstimate: Float;
+    //     taxEstimate: Float;
+    //     status: Text;
+    //     step: Nat;
+    //     dateCreated: Int;
+    // };
 
     public type OrderProduct = {
         id: Text;
