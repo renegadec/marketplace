@@ -60,10 +60,10 @@ const Transactions = () => {
       <div className="collapse bg-base-200">
   <input type="radio" name="my-accordion-1" checked={true} /> 
   <div className="collapse-title text-l font-bold">
-    Click to open your transaction
+  <p>Date:10/05/2023</p>
   </div>
   <div className="collapse-content font-semibold"> 
-    <p>Date:10/05/2023</p>
+   
     <p>Amount:$1500</p>
     <p>Status:Completed</p>
     <p>Payment Method:Paypal</p>
@@ -76,10 +76,9 @@ const Transactions = () => {
 <div className="collapse bg-base-200">
   <input type="radio" name="my-accordion-1" /> 
   <div className="collapse-title text-l font-bold">
-    Click to open your transaction
+  <p>Date:4/08/2022</p>
   </div>
   <div className="collapse-content font-semibold"> 
-    <p>Date:4/08/2022</p>
     <p>Amount:$2800</p>
     <p>Status:Pending</p>
     <p>Payment Method:GooglePay</p>
@@ -92,10 +91,9 @@ const Transactions = () => {
 <div className="collapse bg-base-200">
   <input type="radio" name="my-accordion-1" /> 
   <div className="collapse-title text-l font-bold">
-    Click to open your transaction
+  <p>Date:8/01/2021</p>
   </div>
   <div className="collapse-content font-semibold"> 
-    <p>Date:8/01/2021</p>
     <p>Amount:$4800</p>
     <p>Status:Completed</p>
     <p>Payment Method:Paypal</p>
