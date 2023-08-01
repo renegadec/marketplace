@@ -17,15 +17,17 @@ actor Tswaanda {
 
   var mapOfOrders = HashMap.HashMap<Text, ProductOrder>(0, Text.equal, Text.hash);
   var mapOfCustomers = HashMap.HashMap<Principal, Customer>(0, Principal.equal, Principal.hash);
-  var customerCartItems = HashMap.HashMap<Principal, List.List<CartItem>>(0, Principal.equal, Principal.hash);
+  // var customerCartItems = HashMap.HashMap<Principal, List.List<CartItem>>(0, Principal.equal, Principal.hash);
+  var customerCartItems = HashMap.HashMap<Principal, CartItem>(0, Principal.equal, Principal.hash);
   var customerFavouriteItems = HashMap.HashMap<Principal, List.List<Text>>(0, Principal.equal, Principal.hash);
 
   private stable var ordersEntries : [(Text, ProductOrder)] = [];
   private stable var customersEntries : [(Principal, Customer)] = [];
-  private stable var cartItemsEntries : [(Principal, List.List<CartItem>)] = [];
+  private stable var cartItemsEntries : [(Principal, CartItem)] = [];
+  // private stable var cartItemsEntries : [(Principal, List.List<CartItem>)] = [];
   private stable var favouriteItemsEntries : [(Principal, List.List<Text>)] = [];
 
-  // Product methods
+  //-----------------------------Product methods------------------------------------------------------
 
   let productsInterface = actor ("56r5t-tqaaa-aaaal-qb4gq-cai") : actor {
     getAllProducts : shared query () -> async [Product];
@@ -37,7 +39,7 @@ actor Tswaanda {
     return products;
   };
 
-  // Orders methods
+  //-------------------------------- Orders methods-----------------------------------------------------------
 
   public shared func createOrder(order : ProductOrder) : async Bool {
     let id = order.orderId;
@@ -101,7 +103,7 @@ actor Tswaanda {
     };
   };
 
-  // KYC methods
+  //---------------------------------- KYC methods----------------------------------------------------------------
 
   public shared func createKYCRequest(request : Customer) : async Bool {
     let id = request.userId;
@@ -126,13 +128,13 @@ actor Tswaanda {
     };
   };
 
-  // To be called from admin methods
+  //----------------------------------KYC methods to be called from admin-------------------------------------------------
 
   public shared query func getAllKYC() : async [Customer] {
     let customersArray = Iter.toArray(mapOfCustomers.vals());
     return customersArray;
   };
-  
+
   public shared query func getAllKYCKeys() : async [Principal] {
     let customersArray = Iter.toArray(mapOfCustomers.keys());
     return customersArray;
@@ -155,90 +157,113 @@ actor Tswaanda {
     return size;
   };
 
+  // --------------------------------------Cart items methods----------------------------------------------------------------
+
   public shared func addToCart(userId : Principal, cartItem : CartItem) : async Bool {
-    var cartItems : List.List<CartItem> = switch (customerCartItems.get(userId)) {
-      case (?value) { value };
-      case (null) { List.nil<CartItem>() };
-    };
-    cartItems := List.push(cartItem, cartItems);
-    customerCartItems.put(userId, cartItems);
+    customerCartItems.put(userId, cartItem);
     return true;
   };
 
-  public shared func getMyCartItemsProducts(userId : Principal) : async [Product] {
-
-    var cartItems : List.List<CartItem> = switch (customerCartItems.get(userId)) {
-      case (?value) { value };
-      case (null) { List.nil<CartItem>() };
+  public shared query func getMyCartItem(userId : Principal) : async Result.Result<CartItem, Text> {
+    switch (customerCartItems.get(userId)) {
+      case (?item) { return #ok(item) };
+      case (null) { return #err("No cart item found with the id") };
     };
-    var itemsIds : List.List<Text> = List.nil<Text>();
-    let items = List.toArray(cartItems);
-    for (item in items.vals()) {
-      itemsIds := List.push(item.id, itemsIds);
-    };
-    let products = await productsInterface.filterProducts(List.toArray(itemsIds));
-    return products;
   };
 
-  public shared func getMyCartItems(userId : Principal) : async [CartItem] {
-
-    var favItems : List.List<CartItem> = switch (customerCartItems.get(userId)) {
-      case (?value) { value };
-      case (null) { List.nil<CartItem>() };
-    };
-    let items = List.toArray(favItems);
-    return items;
-  };
-
-  public shared func removeFromCart(userId : Principal, cartItem : CartItem) : async Bool {
-    var cartItems : List.List<CartItem> = switch (customerCartItems.get(userId)) {
-      case (?value) { value };
-      case (null) { List.nil<CartItem>() };
-    };
-    cartItems := List.filter(
-      cartItems,
-      func(item : CartItem) : Bool {
-        item != cartItem;
-      },
-    );
-    customerCartItems.put(userId, cartItems);
+  public shared func removeFromCart(userId : Principal) : async Bool {
+    customerCartItems.delete(userId);
     return true;
   };
 
-  public shared func updateCartItem(userId : Principal, cartItem : CartItem) : async Bool {
-    var cartItems : List.List<CartItem> = switch (customerCartItems.get(userId)) {
-      case (?value) { value };
-      case (null) { List.nil<CartItem>() };
-    };
-    cartItems := List.filter(
-      cartItems,
-      func(item : CartItem) : Bool {
-        item.id != cartItem.id;
-      },
-    );
-    cartItems := List.push(cartItem, cartItems);
-    customerCartItems.put(userId, cartItems);
-    return true;
-  };
+  // --------------------------------------MULTIPLE CART ITEMS METHODS----------------------------------------------------
 
-  public shared func removeBatchCartItems(userid : Principal, cartItems : [CartItem]) : async Bool {
-    var userCartItems : List.List<CartItem> = switch (customerCartItems.get(userid)) {
-      case (?value) { value };
-      case (null) { List.nil<CartItem>() };
-    };
+  // public shared func addToCart(userId : Principal, cartItem : CartItem) : async Bool {
+  //   var cartItems : List.List<CartItem> = switch (customerCartItems.get(userId)) {
+  //     case (?value) { value };
+  //     case (null) { List.nil<CartItem>() };
+  //   };
+  //   cartItems := List.push(cartItem, cartItems);
+  //   customerCartItems.put(userId, cartItems);
+  //   return true;
+  // };
 
-    for (item in cartItems.vals()) {
-      userCartItems := List.filter(
-        userCartItems,
-        func(cartItem : CartItem) : Bool {
-          cartItem.id != item.id;
-        },
-      );
-    };
+  // public shared func getMyCartItemsProducts(userId : Principal) : async [Product] {
 
-    customerCartItems.put(userid, userCartItems);
-    return true;
-  };
+  //   var cartItems : List.List<CartItem> = switch (customerCartItems.get(userId)) {
+  //     case (?value) { value };
+  //     case (null) { List.nil<CartItem>() };
+  //   };
+  //   var itemsIds : List.List<Text> = List.nil<Text>();
+  //   let items = List.toArray(cartItems);
+  //   for (item in items.vals()) {
+  //     itemsIds := List.push(item.id, itemsIds);
+  //   };
+  //   let products = await productsInterface.filterProducts(List.toArray(itemsIds));
+  //   return products;
+  // };
+
+  // public shared func getMyCartItems(userId : Principal) : async [CartItem] {
+
+  //   var favItems : List.List<CartItem> = switch (customerCartItems.get(userId)) {
+  //     case (?value) { value };
+  //     case (null) { List.nil<CartItem>() };
+  //   };
+  //   let items = List.toArray(favItems);
+  //   return items;
+  // };
+
+  // public shared func removeFromCart(userId : Principal, cartItem : CartItem) : async Bool {
+  //   var cartItems : List.List<CartItem> = switch (customerCartItems.get(userId)) {
+  //     case (?value) { value };
+  //     case (null) { List.nil<CartItem>() };
+  //   };
+  //   cartItems := List.filter(
+  //     cartItems,
+  //     func(item : CartItem) : Bool {
+  //       item != cartItem;
+  //     },
+  //   );
+  //   customerCartItems.put(userId, cartItems);
+  //   return true;
+  // };
+
+  // public shared func updateCartItem(userId : Principal, cartItem : CartItem) : async Bool {
+  //   var cartItems : List.List<CartItem> = switch (customerCartItems.get(userId)) {
+  //     case (?value) { value };
+  //     case (null) { List.nil<CartItem>() };
+  //   };
+  //   cartItems := List.filter(
+  //     cartItems,
+  //     func(item : CartItem) : Bool {
+  //       item.id != cartItem.id;
+  //     },
+  //   );
+  //   cartItems := List.push(cartItem, cartItems);
+  //   customerCartItems.put(userId, cartItems);
+  //   return true;
+  // };
+
+  // public shared func removeBatchCartItems(userid : Principal, cartItems : [CartItem]) : async Bool {
+  //   var userCartItems : List.List<CartItem> = switch (customerCartItems.get(userid)) {
+  //     case (?value) { value };
+  //     case (null) { List.nil<CartItem>() };
+  //   };
+
+  //   for (item in cartItems.vals()) {
+  //     userCartItems := List.filter(
+  //       userCartItems,
+  //       func(cartItem : CartItem) : Bool {
+  //         cartItem.id != item.id;
+  //       },
+  //     );
+  //   };
+
+  //   customerCartItems.put(userid, userCartItems);
+  //   return true;
+  // };
+
+  // -------------------------------------------Favourites items methods---------------------------------------------------
 
   public shared func addToFavourites(userId : Principal, productId : Text) : async Bool {
     var favouriteItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {
@@ -276,18 +301,20 @@ actor Tswaanda {
     return true;
   };
 
-  // Canister upgrade methods
+  // -----------------------------------------Canister upgrade methods---------------------------------------------------
   system func preupgrade() {
     ordersEntries := Iter.toArray(mapOfOrders.entries());
     customersEntries := Iter.toArray(mapOfCustomers.entries());
     cartItemsEntries := Iter.toArray(customerCartItems.entries());
+    // cartItemsEntries := Iter.toArray(customerCartItems.entries());
     favouriteItemsEntries := Iter.toArray(customerFavouriteItems.entries());
   };
 
   system func postupgrade() {
     mapOfOrders := HashMap.fromIter<Text, ProductOrder>(ordersEntries.vals(), 0, Text.equal, Text.hash);
     mapOfCustomers := HashMap.fromIter<Principal, Customer>(customersEntries.vals(), 0, Principal.equal, Principal.hash);
-    customerCartItems := HashMap.fromIter<Principal, List.List<CartItem>>(cartItemsEntries.vals(), 0, Principal.equal, Principal.hash);
+    customerCartItems := HashMap.fromIter<Principal, CartItem>(cartItemsEntries.vals(), 0, Principal.equal, Principal.hash);
+    // customerCartItems := HashMap.fromIter<Principal, List.List<CartItem>>(cartItemsEntries.vals(), 0, Principal.equal, Principal.hash);
     customerFavouriteItems := HashMap.fromIter<Principal, List.List<Text>>(favouriteItemsEntries.vals(), 0, Principal.equal, Principal.hash);
   };
 

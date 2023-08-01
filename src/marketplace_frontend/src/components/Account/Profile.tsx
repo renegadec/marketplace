@@ -2,27 +2,15 @@ import React, { useEffect, useState } from "react";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 import { AuthClient } from "@dfinity/auth-client";
 import { Actor, HttpAgent } from "@dfinity/agent";
-import {
-  canisterId,
-  idlFactory,
-  marketplace_backend,
-} from "../../../../declarations/marketplace_backend";
 import Loader from "../Loader";
 import { toast } from "react-toastify";
+import { backendActor } from "../../hooks/config";
 
 const Profile = ({ activate }) => {
   const [userId, setUserId] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [noUser, setNoUser] = useState(false);
-
-  const host = "https://icp0.io";
-  const agent = new HttpAgent({ host: host });
-
-  const backendActor = Actor.createActor(idlFactory, {
-    agent,
-    canisterId: "55ger-liaaa-aaaal-qb33q-cai",
-  });
 
   const getPrincipalId = async () => {
     const authClient = await AuthClient.create();

@@ -11,26 +11,14 @@ module {
     public type Product = {
         id : Text;
         minOrder : Int32;
-        additionalInformation : AdditionalInformation;
         name : Text;
         shortDescription : Text;
         category : Text;
-        image : [Nat8];
         fullDescription : Text;
-        price : Int32;
-        images : Images;
-    };
-
-    type AdditionalInformation = {
         price : Int32;
         weight : Int32;
         availability : Text;
-    };
-
-    type Images = {
-        image1 : [Nat8];
-        image2 : [Nat8];
-        image3 : [Nat8];
+        images : [Text]
     };
 
     // Types for Orders
@@ -38,7 +26,7 @@ module {
         orderId : Text;
         orderNumber: Text;
         userEmail: Text;
-        orderProducts: [OrderProduct];
+        orderProducts: OrderProduct;
         orderOwner: Principal;
         subtotal: Float;
         totalPrice: Float;
@@ -49,11 +37,27 @@ module {
         dateCreated: Int;
     };
 
+    // -----------------------ORDER TYPES FOR MULTIPLE PRODUCTS PER ORDER-----------------------------------------
+    // public type Order = {
+    //     orderId : Text;
+    //     orderNumber: Text;
+    //     userEmail: Text;
+    //     orderProducts: [OrderProduct];
+    //     orderOwner: Principal;
+    //     subtotal: Float;
+    //     totalPrice: Float;
+    //     shippingEstimate: Float;
+    //     taxEstimate: Float;
+    //     status: Text;
+    //     step: Nat;
+    //     dateCreated: Int;
+    // };
+
     public type OrderProduct = {
         id: Text;
         name: Text;
         description: Text;
-        image: Blob;
+        image: Text;
         quantity: Nat;
         price: Float;
     };
@@ -74,8 +78,8 @@ module {
         province: Text;
         zipCode: Nat;
         phoneNumber: Nat;
-        profilePhoto: Blob;
-        coverPhoto: Blob;
+        profilePhoto: Text;
+        kycDocs: Text;
         status: Text;
         dateCreated: Int;
     }; 

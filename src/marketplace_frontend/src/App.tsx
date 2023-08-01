@@ -10,6 +10,7 @@ import {
 
 // Components
 import { Navbar, Footer } from "./components";
+import { useSelector, useDispatch } from 'react-redux'
 
 // Pages
 const Home = lazy(() => import('./pages/Home'));
@@ -27,10 +28,13 @@ import { useAuth } from "./hooks";
 import ShoppingCart from "./pages/ShoppingCart";
 
 import Orders from "./pages/Orders";
-import Support from "./pages/Support";
+import { setInit } from "./state/globalSlice";
+import { initActors } from "./storage-config/functions";
+
 
 
 const App = () => {
+  const dispatch = useDispatch()
     const [session, setSession] = useState<boolean>(false)
 
     const { login, isLoggedIn } = useAuth(session, setSession);
@@ -39,7 +43,15 @@ const App = () => {
       if(await isLoggedIn()) setSession(true)
     }
 
+    const init = async () => {
+      const res = await initActors();
+      if (res) {
+        dispatch(setInit());
+      }
+    };
+
     useEffect(() => {
+      init()
       checkAuth()
     }, [])
 

@@ -13,11 +13,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Logo } from "../../assets/assets.js";
 import { useAuth } from "../hooks";
 import { AuthClient } from "@dfinity/auth-client";
-import { Actor, HttpAgent } from "@dfinity/agent";
-import {
-  canisterId,
-  idlFactory,
-} from "../../../declarations/marketplace_backend";
+import { backendActor } from "../hooks/config";
 
 const user = {
   name: "Lisa Marie",
@@ -42,14 +38,6 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
-  const host = "https://icp0.io";
-  const agent = new HttpAgent({ host: host });
-
-  const backendActor = Actor.createActor(idlFactory, {
-    agent,
-    canisterId: canisterId,
-  });
-
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userId, setUserId] = useState(null);
@@ -68,13 +56,23 @@ const Navbar = () => {
   const activeClassName =
     "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-green-500";
 
+  const getIdentity = async () => {
+    const authClient = await AuthClient.create();
+    const identity = authClient.getIdentity();
+    const userPrincipal = identity.getPrincipal();
+    setUserId(userPrincipal);
+  };
+
+  useEffect(() => {
+    if (session) {
+      getIdentity()
+    }
+  }, [session])
+
   useEffect(() => {
     const setAuth = async () => {
       const authClient = await AuthClient.create();
       if (await authClient.isAuthenticated()) {
-        const identity = authClient.getIdentity();
-        const userPrincipal = identity.getPrincipal();
-        setUserId(userPrincipal);
         setSession(true);
       } else {
         setSession(false);
@@ -86,7 +84,7 @@ const Navbar = () => {
   useEffect(() => {
     if (userId) {
       const getCartsNum = async () => {
-        const res = await backendActor.getMyCartItems(userId);
+        const res = await backendActor.getMyCartItem(userId);
         setCartItems(res);
       };
 
