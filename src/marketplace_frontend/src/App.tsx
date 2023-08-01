@@ -32,6 +32,7 @@ import { setInit } from "./state/globalSlice";
 import { initActors } from "./storage-config/functions";
 
 
+
 const App = () => {
   const dispatch = useDispatch()
     const [session, setSession] = useState<boolean>(false)
@@ -95,6 +96,15 @@ const App = () => {
                       <div className={`${styles.paddingX} ${styles.flexStart}`}>
                         <div className={`${styles.boxWidth}`}>
                           <Orders />
+                        </div>
+                      </div>
+                    } 
+                  />
+
+                  <Route path="support" element={
+                      <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                        <div className={`${styles.boxWidth}`}>
+                          <Support />
                         </div>
                       </div>
                     } 

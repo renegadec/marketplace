@@ -25,7 +25,7 @@ const accNavigation = [
   { name: "Dashboard", href: "/account" },
   { name: "Orders", href: "/orders" },
   { name: "Market", href: "/market" },
-  { name: "Support", href: "#" },
+  { name: "Support", href: "/support" },
 ];
 
 const userNavigation = [
