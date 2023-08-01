@@ -49,6 +49,7 @@ const useAuth = (session, setSession) => {
       authClientInstance.login({
         onSuccess: async () => {
           successHandler();
+          // console.log('Logged in')
           setSession(true);
         },
         onError: async () => {

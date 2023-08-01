@@ -9,6 +9,7 @@ import { backendActor } from "../../hooks/config";
 import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
 import { uploadFile } from "../../storage-config/functions";
+import { useDropzone } from "react-dropzone"
 
 export default function KYC() {
   const { storageInitiated } = useSelector((state: RootState) => state.global);
@@ -93,8 +94,6 @@ export default function KYC() {
     }
   };
 
-  console.log(saving)
-
   const uploadAsset = async (file) => {
     if (storageInitiated) {
       const file_path = location.pathname;
@@ -107,6 +106,13 @@ export default function KYC() {
       }
     }
   };
+
+  // ------------------------------------FILE DRAGE AND DROP--------------------------------------------------------
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: (acceptedFiles) => {
+      setPP(acceptedFiles)
+    },
+  })
 
   return (
     <form onSubmit={handleSave}>
