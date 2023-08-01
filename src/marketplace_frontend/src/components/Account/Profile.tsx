@@ -45,6 +45,7 @@ const Profile = ({ activate }) => {
       const res: Response = await backendActor.getKYCRequest(userId);
       if (res.ok) {
         setUserInfo(res.ok);
+        setLoading(false);
       } else if (res.err) {
         setNoUser(true);
         setLoading(false);
@@ -183,7 +184,7 @@ const Profile = ({ activate }) => {
                           aria-hidden="true"
                         />
                         <span className="ml-2 w-0 flex-1 truncate">
-                          {userInfo.firstName} -identiy.pdf
+                          {userInfo.firstName}-identiy.pdf
                         </span>
                       </div>
                       <div className="ml-4 flex flex-shrink-0 space-x-4">

@@ -37,18 +37,18 @@ export default function Product() {
   const [inCart, setInCart] = useState(false);
   const [checking, setChecking] = useState(false);
 
-  const Id = canisterId;
   const host = "https://icp0.io";
   const agent = new HttpAgent({ host: host });
+  const dashId = "56r5t-tqaaa-aaaal-qb4gq-cai"
 
   const dashboardActor = Actor.createActor(idlFactory, {
     agent,
-    canisterId: Id,
+    canisterId: dashId,
   });
 
   const marketActor = Actor.createActor(marketIdl, {
     agent,
-    canisterId: "55ger-liaaa-aaaal-qb33q-cai",
+    canisterId: canisterId,
   });
 
   const getPrincipalId = async () => {
@@ -157,7 +157,7 @@ export default function Product() {
   }, [cartItems]);
 
   const handleAddToCart = async () => {
-    if (userId && id && !checking) {
+    if (userId && id && !checking && !inCart) {
       setAddingToCart(true);
       const date = new Date();
       const timestamp = date.getTime();
@@ -175,9 +175,11 @@ export default function Product() {
         hideProgressBar: true,
       });
     } else {
-      console.log("Checking")
+      console.log("Checking");
     }
   };
+
+  console.log("Adding to cart", addingtocart)
 
   const handleGoToCart = () => {
     navigate("/shopping-cart");
@@ -280,23 +282,22 @@ export default function Product() {
 
               <div className="mt-6">
                 <div className="sm:flex-col1 mt-10 flex">
-                 
-                    <button
-                      onClick={!inCart ? handleAddToCart : null}
-                      disabled={addingtocart}
-                      className="flex max-w-xs gap-3 flex-1 items-center justify-center rounded-md border border-transparent bg-primary py-3 px-8 text-base font-medium text-white hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
-                    >
-                      {inCart && <CheckIcon className="h-7 w-10" />}
-                      {addingtocart ? (
-                        <span>Adding to cart....</span>
-                      ) : (
-                        <span>
-                          {inCart ? "Added to tswaanda" : "Add to tswaanda"}
-                        </span>
-                      )}
-                      {/* <ShoppingCartIcon  className="h-7 w-10"/> */}
-                    </button>
-                
+                  <button
+                    onClick={!inCart && !checking ? handleAddToCart : null}
+                    disabled={addingtocart}
+                    className="flex max-w-xs gap-3 flex-1 items-center justify-center rounded-md border border-transparent bg-primary py-3 px-8 text-base font-medium text-white hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
+                  >
+                    {inCart && <CheckIcon className="h-7 w-10" />}
+                    {addingtocart ? (
+                      <span>Adding to cart....</span>
+                    ) : (
+                      <span>
+                        {inCart ? "Added to tswaanda" : "Add to tswaanda"}
+                      </span>
+                    )}
+                    {/* <ShoppingCartIcon  className="h-7 w-10"/> */}
+                  </button>
+
                   <button
                     type="button"
                     className="ml-4 flex items-center justify-center rounded-md py-3 px-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500"

@@ -1,6 +1,11 @@
 import React, { useEffect, useState, useContext, Fragment } from "react";
 import { Dialog } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  BellIcon,
+  XMarkIcon,
+  ShoppingCartIcon,
+} from "@heroicons/react/24/outline";
 import { navigation } from "../constants";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
@@ -8,6 +13,11 @@ import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Logo } from "../../assets/assets.js";
 import { useAuth } from "../hooks";
 import { AuthClient } from "@dfinity/auth-client";
+import { Actor, HttpAgent } from "@dfinity/agent";
+import {
+  canisterId,
+  idlFactory,
+} from "../../../declarations/marketplace_backend";
 
 const user = {
   name: "Lisa Marie",
@@ -32,8 +42,19 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
+  const host = "https://icp0.io";
+  const agent = new HttpAgent({ host: host });
+
+  const backendActor = Actor.createActor(idlFactory, {
+    agent,
+    canisterId: canisterId,
+  });
+
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userId, setUserId] = useState(null);
+
+  const [cartItems, setCartItems] = useState(null);
 
   const [session, setSession] = useState(null);
 
@@ -51,6 +72,9 @@ const Navbar = () => {
     const setAuth = async () => {
       const authClient = await AuthClient.create();
       if (await authClient.isAuthenticated()) {
+        const identity = authClient.getIdentity();
+        const userPrincipal = identity.getPrincipal();
+        setUserId(userPrincipal);
         setSession(true);
       } else {
         setSession(false);
@@ -58,6 +82,17 @@ const Navbar = () => {
     };
     setAuth();
   }, []);
+
+  useEffect(() => {
+    if (userId) {
+      const getCartsNum = async () => {
+        const res = await backendActor.getMyCartItems(userId);
+        setCartItems(res);
+      };
+
+      getCartsNum();
+    }
+  }, [userId]);
 
   return (
     <nav className="bg-white pb-4">
@@ -199,30 +234,29 @@ const Navbar = () => {
                   </div>
                   {window.innerWidth > 768 ? (
                     <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
-                    <div className="w-full max-w-xs">
-                      <label htmlFor="search" className="sr-only">
-                        Search
-                      </label>
-                      <div className="relative">
-                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                          <MagnifyingGlassIcon
-                            className="h-5 w-5 flex-shrink-0 text-gray-400"
-                            aria-hidden="true"
+                      <div className="w-full max-w-xs">
+                        <label htmlFor="search" className="sr-only">
+                          Search
+                        </label>
+                        <div className="relative">
+                          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <MagnifyingGlassIcon
+                              className="h-5 w-5 flex-shrink-0 text-gray-400"
+                              aria-hidden="true"
+                            />
+                          </div>
+                          <input
+                            name="search"
+                            id="search"
+                            className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm placeholder-gray-500 focus:border-primary focus:text-gray-900 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-900 sm:text-sm"
+                            placeholder="Search"
+                            type="search"
                           />
                         </div>
-                        <input
-                          name="search"
-                          id="search"
-                          className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm placeholder-gray-500 focus:border-primary focus:text-gray-900 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-900 sm:text-sm"
-                          placeholder="Search"
-                          type="search"
-                        />
                       </div>
                     </div>
-                  </div>
-                  ) : null
-                  }
-                  
+                  ) : null}
+
                   <div className="relative z-10 flex items-center lg:hidden">
                     {/* Mobile menu button */}
                     <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-900">
@@ -240,7 +274,23 @@ const Navbar = () => {
                       )}
                     </Disclosure.Button>
                   </div>
-                  <div className="hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center">
+                  <div className="hidden lg:relative gap-3 lg:z-10 lg:ml-4 lg:flex lg:items-center">
+                    {cartItems && (
+                      <Link to="/shopping-cart">
+                        <div className="relative">
+                          <ShoppingCartIcon
+                            className="h-6 w-6"
+                            aria-hidden="true"
+                          />
+
+                          {cartItems.length > 0 && (
+                            <span className="absolute -top-3 -right-3 bg-primary text-white rounded-full px-2 py-1 text-xs">
+                              {cartItems.length}
+                            </span>
+                          )}
+                        </div>
+                      </Link>
+                    )}
                     <button
                       type="button"
                       className="flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
@@ -309,8 +359,13 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                {["/","/account", "/orders", "/market", "/support"].includes(location.pathname) && (
-                  <nav className="hidden lg:flex lg:space-x-8 lg:py-2" aria-label="Global">
+                {["/", "/account", "/orders", "/market"].includes(
+                  location.pathname
+                ) && (
+                  <nav
+                    className="hidden lg:flex lg:space-x-8 lg:py-2"
+                    aria-label="Global"
+                  >
                     {accNavigation.map((item) => (
                       <a
                         key={item.name}
