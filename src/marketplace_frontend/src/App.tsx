@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense, CSSProperties } from "react";
 import styles from "./style";
 
 // Router
@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 
 // Components
-import { Navbar, Footer } from "./components";
+import { Navbar, Footer, Loader } from "./components";
 import { useSelector, useDispatch } from 'react-redux'
 
 // Pages
@@ -30,10 +30,26 @@ import ShoppingCart from "./pages/ShoppingCart";
 import Orders from "./pages/Orders";
 import { setInit } from "./state/globalSlice";
 import { initActors } from "./storage-config/functions";
+import Support from "./pages/Support";
 
 
 
 const App = () => {
+
+  const containerStyle: CSSProperties = {
+    position: 'relative',
+    minHeight: '100vh', // Ensures the container covers the whole viewport
+  };
+
+
+  const loaderStyle: CSSProperties = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    /* Add more loader styles here */
+  };
+
   const dispatch = useDispatch()
     const [session, setSession] = useState<boolean>(false)
 
@@ -56,15 +72,17 @@ const App = () => {
     }, [])
 
     return (
-      <main className="font-mont" >
+      <main className="font-mont" style={containerStyle}>
         <UserContext.Provider value={{session, setSession}}>
           <BrowserRouter>
+          <Suspense fallback={<div style={loaderStyle}><Loader /></div>}>
+
           <div className={`${styles.paddingX} ${styles.flexCenter}`}>
             <div className={`${styles.boxWidth}`}>
               <Navbar/> 
             </div>
           </div>
-            <Suspense fallback={<h1>Loading...</h1>}>
+            
                 <Routes>
                   <Route index element={<Home />} />
                   <Route path="*" element={<NotFound />} />
@@ -154,13 +172,14 @@ const App = () => {
                     } 
                   />
                 </Routes>
-            </Suspense>
+            
                     
             <div className={`${styles.paddingX} ${styles.flexCenter}`}>
               <div className={`${styles.boxWidth}`}>
                 <Footer/> 
               </div>
           </div>
+          </Suspense>
           </BrowserRouter>
         </UserContext.Provider>
       </main>
