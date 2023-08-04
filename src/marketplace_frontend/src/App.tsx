@@ -51,6 +51,11 @@ const App = () => {
     /* Add more loader styles here */
   };
 
+
+  const [session, setSession] = useState<boolean>(false)
+
+  const { login, isLoggedIn } = useAuth(session, setSession);
+
   const dispatch = useDispatch()
   const getPrincipalId = async () => {
     const authClient = await AuthClient.create();
@@ -59,10 +64,6 @@ const App = () => {
       const identity = authClient.getIdentity();
     }
   };
-
-    const [session, setSession] = useState<boolean>(false)
-
-    const { login, isLoggedIn } = useAuth(session, setSession);
 
     const checkAuth = async () => {
       if(await isLoggedIn()) setSession(true)
