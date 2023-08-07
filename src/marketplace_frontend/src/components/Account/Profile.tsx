@@ -94,7 +94,7 @@ const Profile = ({ activate }) => {
                   </span>
                 </dd>
               </div>
-              <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+              {/* <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
                 <dt className="text-sm font-medium text-gray-500">
                   Designation
                 </dt>
@@ -109,7 +109,7 @@ const Profile = ({ activate }) => {
                     </button>
                   </span>
                 </dd>
-              </div>
+              </div> */}
               <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
                 <dt className="text-sm font-medium text-gray-500">
                   Email address

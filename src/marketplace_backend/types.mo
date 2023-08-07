@@ -79,7 +79,8 @@ module {
         zipCode: Nat;
         phoneNumber: Nat;
         profilePhoto: Text;
-        kycDocs: Text;
+        kycIDCopy: Text;
+        proofOfAddressCopy: Text;
         status: Text;
         dateCreated: Int;
     }; 

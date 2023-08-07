@@ -602,7 +602,7 @@ export default function ShoppingCart() {
               Items in your shopping cart
             </h2>
 
-            {product && (
+            {!product && (
               <div className="">
                 <h1>Your cart is empty</h1>
               </div>
