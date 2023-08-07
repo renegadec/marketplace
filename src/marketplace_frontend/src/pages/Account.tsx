@@ -18,7 +18,10 @@ import Billing from '../components/Account/Billing';
 
 import Notifications from "../components/Account/Notifications";
 import KYC from "../components/Account/KYC";
+
 import Transactions from "../components/Account/Transactions";
+import { Loader } from "../components";
+
 
 const subNavigation = [
   { name: "Profile", icon: UserCircleIcon },
@@ -163,7 +166,7 @@ export default function Account() {
 
       {session == null && (
         <div className="">
-          <h1>Loading...</h1>
+          <Loader />
         </div>
       )}
     </>
