@@ -61,7 +61,7 @@ const Orders = () => {
   return (
     <div>
       <OrderDetails orders={orders} />
-      <OrderHistory />
+      {/* <OrderHistory /> */}
     </div>
   );
 };

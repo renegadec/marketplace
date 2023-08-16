@@ -219,6 +219,7 @@ export default function KYC() {
                       id="profile-photo-upload"
                       name="file-upload"
                       type="file"
+                      accept="image/*, application/pdf"
                       onChange={(e) => setPP(e.target.files[0])}
                       className="sr-only"
                     />
@@ -245,6 +246,7 @@ export default function KYC() {
                       id="kyc-id"
                       name="file-upload"
                       type="file"
+                      accept="image/*, application/pdf"
                       onChange={(e) => setKYCID(e.target.files[0])}
                       className="sr-only"
                     />
@@ -271,6 +273,7 @@ export default function KYC() {
                       id="proof-of-address"
                       name="file-upload"
                       type="file"
+                      accept="image/*, application/pdf"
                       onChange={(e) => setProofOfAddress(e.target.files[0])}
                       className="sr-only"
                     />

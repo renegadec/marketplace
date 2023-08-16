@@ -370,7 +370,7 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                {["/", "/account", "/orders", "/market"].includes(
+                {["/", "/account", "/orders", "/market", "/shopping-cart", "/support"].includes(
                   location.pathname
                 ) && (
                   <nav
@@ -378,15 +378,15 @@ const Navbar = () => {
                     aria-label="Global"
                   >
                     {accNavigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
-                        href={item.href}
+                        to={item.href}
                         className={`${commonClassName} ${
                           location.pathname === item.href ? activeClassName : ""
                         }`}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </nav>
                 )}
