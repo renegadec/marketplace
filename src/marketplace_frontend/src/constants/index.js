@@ -197,6 +197,7 @@ export const notifications = [
 ];
 
 export const countryListAllIsoData = [
+	{"code": "SX", "code3": "OPT", "name": "Select Country", "number": "000"},
 	{"code": "AF", "code3": "AFG", "name": "Afghanistan", "number": "004"},
 	{"code": "AL", "code3": "ALB", "name": "Albania", "number": "008"},
 	{"code": "DZ", "code3": "DZA", "name": "Algeria", "number": "012"},

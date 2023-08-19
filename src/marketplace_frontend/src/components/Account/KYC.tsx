@@ -147,8 +147,7 @@ export default function KYC() {
               Company Profile
             </h2>
             <p className="mt-1 text-sm leading-6 text-gray-600">
-              This information will be displayed publicly so be careful what you
-              share.
+              This information will be displayed publicly.
             </p>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -172,7 +171,7 @@ export default function KYC() {
                       onChange={(e) => setUsername(e.target.value)}
                       autoComplete="username"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                      placeholder="foodlovers"
+                      placeholder="company"
                     />
                   </div>
                 </div>
@@ -214,7 +213,7 @@ export default function KYC() {
                     aria-hidden="true"
                   />
                   <label className="rounded-md cursor-pointer bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                    <span>Change</span>
+                    <span>Upload</span>
                     <input
                       id="profile-photo-upload"
                       name="file-upload"
@@ -228,61 +227,6 @@ export default function KYC() {
                 {profilePhoto && (
                   <>
                     <span>File attached:</span> <span>{profilePhoto.name}</span>
-                  </>
-                )}
-              </div>
-              <div className="col-span-full">
-                <label
-                  htmlFor="kyc-di"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  National ID Copy
-                </label>
-
-                <div className="mt-2 flex items-center gap-x-3">
-                  <label className="rounded-md cursor-pointer bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                    <span>Upload file</span>
-                    <input
-                      id="kyc-id"
-                      name="file-upload"
-                      type="file"
-                      accept="image/*, application/pdf"
-                      onChange={(e) => setKYCID(e.target.files[0])}
-                      className="sr-only"
-                    />
-                  </label>
-                </div>
-                {kycID && (
-                  <>
-                    <span>File attached:</span> <span>{kycID.name}</span>
-                  </>
-                )}
-              </div>
-              <div className="col-span-full">
-                <label
-                  htmlFor="proof-of-address"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Proof of Address Copy
-                </label>
-
-                <div className="mt-2 flex items-center gap-x-3">
-                  <label className="rounded-md cursor-pointer bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                    <span>Upload file</span>
-                    <input
-                      id="proof-of-address"
-                      name="file-upload"
-                      type="file"
-                      accept="image/*, application/pdf"
-                      onChange={(e) => setProofOfAddress(e.target.files[0])}
-                      className="sr-only"
-                    />
-                  </label>
-                </div>
-                {proofOfAddress && (
-                  <>
-                    <span>File attached:</span>{" "}
-                    <span>{proofOfAddress.name}</span>
                   </>
                 )}
               </div>
@@ -401,6 +345,7 @@ export default function KYC() {
                   />
                 </div>
               </div>
+
               <div className="sm:col-span-4">
                 <label
                   htmlFor="organization"
@@ -543,7 +488,75 @@ export default function KYC() {
                   />
                 </div>
               </div>
+
+              
             </div>
+          </div>
+
+          <div className="border-b border-gray-900/10 pb-12">
+            <h2 className="text-base font-semibold leading-7 text-gray-900">
+              KYC Documents
+            </h2>
+            <p className="mt-1 text-sm leading-6 text-gray-600">
+              Upload documents with the high quality.
+            </p>
+
+              <div className="col-span-full pb-6 pt-6">
+                <label
+                  htmlFor="kyc-di"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Passport/ID Scan
+                </label>
+
+                <div className="mt-2 flex items-center gap-x-3">
+                  <label className="rounded-md cursor-pointer bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    <span>Upload file</span>
+                    <input
+                      id="kyc-id"
+                      name="file-upload"
+                      type="file"
+                      accept="image/*, application/pdf"
+                      onChange={(e) => setKYCID(e.target.files[0])}
+                      className="sr-only"
+                    />
+                  </label>
+                </div>
+                {kycID && (
+                  <>
+                    <span>File attached:</span> <span>{kycID.name}</span>
+                  </>
+                )}
+              </div>
+
+              <div className="col-span-full">
+                <label
+                  htmlFor="proof-of-address"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Proof of Address <span className="text-xs leading-6 text-gray-600">(Utility/Bank Statement)</span>
+                </label>
+
+                <div className="mt-2 flex items-center gap-x-3">
+                  <label className="rounded-md cursor-pointer bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    <span>Upload file</span>
+                    <input
+                      id="proof-of-address"
+                      name="file-upload"
+                      type="file"
+                      accept="image/*, application/pdf"
+                      onChange={(e) => setProofOfAddress(e.target.files[0])}
+                      className="sr-only"
+                    />
+                  </label>
+                </div>
+                {proofOfAddress && (
+                  <>
+                    <span>File attached:</span>{" "}
+                    <span>{proofOfAddress.name}</span>
+                  </>
+                )}
+              </div>
           </div>
 
           <div className="border-b border-gray-900/10 pb-12">
@@ -556,77 +569,7 @@ export default function KYC() {
             </p>
 
             <div className="mt-10 space-y-10">
-              <fieldset>
-                <legend className="text-sm font-semibold leading-6 text-gray-900">
-                  By Email
-                </legend>
-                <div className="mt-6 space-y-6">
-                  <div className="relative flex gap-x-3">
-                    <div className="flex h-6 items-center">
-                      <input
-                        id="comments"
-                        name="comments"
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                      />
-                    </div>
-                    <div className="text-sm leading-6">
-                      <label
-                        htmlFor="comments"
-                        className="font-medium text-gray-900"
-                      >
-                        Comments
-                      </label>
-                      <p className="text-gray-500">
-                        Get notified when someones posts a comment on a posting.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="relative flex gap-x-3">
-                    <div className="flex h-6 items-center">
-                      <input
-                        id="candidates"
-                        name="candidates"
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                      />
-                    </div>
-                    <div className="text-sm leading-6">
-                      <label
-                        htmlFor="candidates"
-                        className="font-medium text-gray-900"
-                      >
-                        Candidates
-                      </label>
-                      <p className="text-gray-500">
-                        Get notified when a candidate applies for a job.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="relative flex gap-x-3">
-                    <div className="flex h-6 items-center">
-                      <input
-                        id="offers"
-                        name="offers"
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                      />
-                    </div>
-                    <div className="text-sm leading-6">
-                      <label
-                        htmlFor="offers"
-                        className="font-medium text-gray-900"
-                      >
-                        Offers
-                      </label>
-                      <p className="text-gray-500">
-                        Get notified when a candidate accepts or rejects an
-                        offer.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </fieldset>
+
               <fieldset>
                 <legend className="text-sm font-semibold leading-6 text-gray-900">
                   Push Notifications
