@@ -20,6 +20,7 @@ const Market = lazy(() => import('./pages/Market'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const Product = lazy(() => import('./pages/Product'));
 const Services = lazy(() => import('./pages/Services'));
+const Support = lazy(() => import ('./pages/Support'))
 
 import { UserContext } from "./UserContext";
 import { useAuth } from "./hooks";

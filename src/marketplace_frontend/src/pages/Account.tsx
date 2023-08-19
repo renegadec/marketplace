@@ -6,6 +6,7 @@ import {
   BellIcon,
   CogIcon,
   CreditCardIcon,
+  CurrencyDollarIcon,
   KeyIcon,
   SquaresPlusIcon,
   UserCircleIcon,
@@ -17,7 +18,10 @@ import Billing from '../components/Account/Billing';
 
 import Notifications from "../components/Account/Notifications";
 import KYC from "../components/Account/KYC";
+
+import Transactions from "../components/Account/Transactions";
 import { Loader } from "../components";
+
 
 const subNavigation = [
   { name: "Profile", icon: UserCircleIcon },
@@ -26,6 +30,7 @@ const subNavigation = [
   { name: "Notifications", icon: BellIcon },
   { name: "Plan & Billing", icon: CreditCardIcon },
   { name: "Integrations", icon: SquaresPlusIcon },
+  { name: "Transactions", icon: CurrencyDollarIcon}
 ];
 
 const payments = [
@@ -146,6 +151,12 @@ export default function Account() {
               {activeInfo === "Integrations" && (
                 <div className="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
                   <Wallet />
+                </div>
+              )}
+                 {/* Transactions*/}
+                 {activeInfo === "Transactions" && (
+                <div className="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
+                  <Transactions/>
                 </div>
               )}
             </div>
