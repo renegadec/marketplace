@@ -85,10 +85,10 @@ export default function Product() {
   const getCartItems = async () => {
     const res: Response = await backendActor.getMyCartItem(userId);
     if (res.ok) {
-      setCartItem(res.ok)
+      setCartItem(res.ok);
     } else {
-      setChecking(false)
-    };
+      setChecking(false);
+    }
     setAddingToCart(false);
   };
 
@@ -108,39 +108,49 @@ export default function Product() {
   }, [cartItem]);
 
   const handleAddToCart = async () => {
-   if (cartItem && !checking) {
-    toast.warning("Sorry, you can only have one product in the cart at a time", {
-      autoClose: 5000,
-      position: "top-center",
-      hideProgressBar: true,
-    });
-   } else {
-    if (userId && id && !checking && !inCart) {
-      setAddingToCart(true);
-      const date = new Date();
-      const timestamp = date.getTime();
-      const cartItem = {
-        id: id,
-        quantity: 1,
-        dateCreated: timestamp,
-      };
-      const res = await backendActor.addToCart(userId, cartItem);
-      getCartItems();
-    } else if (userId === null) {
-      toast.warning("You are not logged in", {
-        autoClose: 5000,
-        position: "top-center",
-        hideProgressBar: true,
-      });
+    if (cartItem && !checking) {
+      toast.warning(
+        "Sorry, you can only have one product in the cart at a time",
+        {
+          autoClose: 5000,
+          position: "top-center",
+          hideProgressBar: true,
+        }
+      );
     } else {
-      console.log("Checking");
+      if (userId && id && !checking && !inCart) {
+        setAddingToCart(true);
+        const date = new Date();
+        const timestamp = date.getTime();
+        const cartItem = {
+          id: id,
+          quantity: 1,
+          dateCreated: timestamp,
+        };
+        const res = await backendActor.addToCart(userId, cartItem);
+        getCartItems();
+      } else if (userId === null) {
+        toast.warning("You are not logged in", {
+          autoClose: 5000,
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      } else {
+        console.log("Checking");
+      }
     }
-   }
   };
 
   const handleGoToCart = () => {
     navigate("/shopping-cart");
   };
+
+  useEffect(() => {
+    const handleScrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    handleScrollToTop();
+  }, []);
 
   return (
     <div className="bg-white">
@@ -202,8 +212,11 @@ export default function Product() {
               <div className="mt-3">
                 <h2 className="sr-only">Product information</h2>
                 <p className="text-3xl tracking-tight text-gray-900">
-                  $ {product?.price}
+                  $ {product?.price} per tonne
                 </p>
+                <div className="my-4 text-gray-600">
+                  <h1>Minimum order: <span className="text-gray-900"> {product?.minOrder} Tonne</span></h1>
+                </div>
               </div>
 
               {/* Reviews */}

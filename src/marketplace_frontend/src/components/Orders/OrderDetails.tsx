@@ -46,17 +46,16 @@ export default function OrderDetails({orders}) {
             <div className="mt-6">
               <h2 className="sr-only">Products purchased</h2>
 
-              <div className="space-y-8">
-                {order?.orderProducts.map((product) => (
+              <div className="space-y-8">            
                   <div
-                    key={product.id}
+                    key={order.orderProducts.id}
                     className="border-t border-b border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border"
                   >
                     <div className="py-6 px-4 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8">
                       <div className="sm:flex lg:col-span-7">
                         <div className="aspect-w-1 aspect-h-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
                           <img
-                            src={product.image}
+                            src={order.orderProducts.image}
                             alt="Product image"
                             className="h-full w-full object-cover object-center sm:h-full sm:w-full"
                           />
@@ -64,15 +63,15 @@ export default function OrderDetails({orders}) {
 
                         <div className="mt-6 sm:mt-0 sm:ml-6">
                           <h3 className="text-base font-medium text-gray-900">
-                            <Link to={`../product/${product.id}`}>
-                              {product.name}
+                            <Link to={`../order.orderProducts/${order.orderProducts.id}`}>
+                              {order.orderProducts.name}
                             </Link>
                           </h3>
                           <p className="mt-2 text-sm font-medium text-gray-900">
-                            ${product.price}
+                            ${order.orderProducts.price}
                           </p>
                           <p className="mt-3 text-sm text-gray-500">
-                            {product.description}
+                            {order.orderProducts.description}
                           </p>
                         </div>
                       </div>
@@ -84,8 +83,8 @@ export default function OrderDetails({orders}) {
                               Shipping updates
                             </dt>
                             <dd className="mt-3 space-y-3 text-gray-500">
-                              <p>{product.email}</p>
-                              <p>{product.phone}</p>
+                              <p>{order.orderProducts.email}</p>
+                              <p>{order.orderProducts.phone}</p>
                               <button
                                 type="button"
                                 className="font-medium text-primary hover:text-indigo-500"
@@ -101,8 +100,8 @@ export default function OrderDetails({orders}) {
                     <div className="border-t border-gray-200 py-6 px-4 sm:px-6 lg:p-8">
                       <h4 className="sr-only">Status</h4>
                       <p className="text-sm font-medium text-gray-900">
-                        {product.status} on{" "}
-                        <time dateTime={product.datetime}>{product.date}</time>
+                        {order.orderProducts.status} on{" "}
+                        <time dateTime={order.orderProducts.datetime}>{order.orderProducts.date}</time>
                       </p>
                       <div className="mt-6" aria-hidden="true">
                         <div className="overflow-hidden rounded-full bg-gray-200">
@@ -143,7 +142,6 @@ export default function OrderDetails({orders}) {
                       </div>
                     </div>
                   </div>
-                ))}
               </div>
             </div>
 
@@ -153,7 +151,7 @@ export default function OrderDetails({orders}) {
 
               <div className="bg-gray-100 py-6 px-4 sm:rounded-lg sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-8 lg:py-8">
                 <dl className="grid grid-cols-2 gap-6 text-sm sm:grid-cols-2 md:gap-x-8 lg:col-span-7">
-                  <div>
+                  {/* <div>
                     <dt className="font-medium text-gray-900">
                       Billing address
                     </dt>
@@ -190,7 +188,7 @@ export default function OrderDetails({orders}) {
                         <p className="text-gray-600">Expires 02 / 24</p>
                       </div>
                     </dd>
-                  </div>
+                  </div> */}
                 </dl>
 
                 <dl className="mt-8 divide-y divide-gray-200 text-sm lg:col-span-5 lg:mt-0">

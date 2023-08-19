@@ -31,6 +31,7 @@ import ShoppingCart from "./pages/ShoppingCart";
 import Orders from "./pages/Orders";
 import { setInit } from "./state/globalSlice";
 import { initActors } from "./storage-config/functions";
+import { AuthClient } from "@dfinity/auth-client";
 import Support from "./pages/Support";
 
 
@@ -51,10 +52,19 @@ const App = () => {
     /* Add more loader styles here */
   };
 
-  const dispatch = useDispatch()
-    const [session, setSession] = useState<boolean>(false)
 
-    const { login, isLoggedIn } = useAuth(session, setSession);
+  const [session, setSession] = useState<boolean>(false)
+
+  const { login, isLoggedIn } = useAuth(session, setSession);
+
+  const dispatch = useDispatch()
+  const getPrincipalId = async () => {
+    const authClient = await AuthClient.create();
+
+    if (await authClient.isAuthenticated()) {
+      const identity = authClient.getIdentity();
+    }
+  };
 
     const checkAuth = async () => {
       if(await isLoggedIn()) setSession(true)
@@ -68,6 +78,7 @@ const App = () => {
     };
 
     useEffect(() => {
+      getPrincipalId()
       init()
       checkAuth()
     }, [])

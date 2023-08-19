@@ -16,9 +16,7 @@ import { AuthClient } from "@dfinity/auth-client";
 import { backendActor } from "../hooks/config";
 
 const user = {
-  name: "Lisa Marie",
-  email: "lisamarie@foodlovers.com",
-  imageUrl: "./user-profile.png",
+  imageUrl: "./avatar.webp",
 };
 
 const accNavigation = [
@@ -42,6 +40,8 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userId, setUserId] = useState(null);
 
+  const [userInfo, setUserInfo] = useState(null)
+
   const [cartItems, setCartItems] = useState(null);
 
   const [session, setSession] = useState(null);
@@ -55,6 +55,11 @@ const Navbar = () => {
 
   const activeClassName =
     "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-green-500";
+
+    interface Response {
+      err?: any;
+      ok?: any;
+    }
 
   const getIdentity = async () => {
     const authClient = await AuthClient.create();
@@ -81,8 +86,16 @@ const Navbar = () => {
     setAuth();
   }, []);
 
+  const getMyKYC = async () => {
+    const info: Response = await backendActor.getKYCRequest(userId);
+    if (info.ok) {
+      setUserInfo(info.ok)
+    }
+  }
+
   useEffect(() => {
     if (userId) {
+      getMyKYC()
       const getCartsNum = async () => {
         const res = await backendActor.getMyCartItem(userId);
         setCartItems(res);
@@ -304,7 +317,7 @@ const Navbar = () => {
                           <span className="sr-only">Open user menu</span>
                           <img
                             className="h-8 w-8 rounded-full"
-                            src={user.imageUrl}
+                            src={userInfo ? userInfo.profilePhoto : user.imageUrl}
                             alt=""
                           />
                         </Menu.Button>
@@ -357,7 +370,7 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                {["/", "/account", "/orders", "/market"].includes(
+                {["/", "/account", "/orders", "/market", "/shopping-cart", "/support"].includes(
                   location.pathname
                 ) && (
                   <nav
@@ -365,15 +378,15 @@ const Navbar = () => {
                     aria-label="Global"
                   >
                     {accNavigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
-                        href={item.href}
+                        to={item.href}
                         className={`${commonClassName} ${
                           location.pathname === item.href ? activeClassName : ""
                         }`}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </nav>
                 )}
@@ -400,18 +413,19 @@ const Navbar = () => {
                     <div className="flex-shrink-0">
                       <img
                         className="h-10 w-10 rounded-full"
-                        src={user.imageUrl}
+                        src={userInfo ? userInfo.profilePhoto : user.imageUrl}
                         alt=""
                       />
                     </div>
-                    <div className="ml-3">
+                    {userInfo && <div className="ml-3">
                       <div className="text-base font-medium text-gray-800">
-                        {user.name}
+                        {userInfo.firstName}
                       </div>
                       <div className="text-sm font-medium text-gray-500">
-                        {user.email}
+                        {userInfo.email}
                       </div>
-                    </div>
+                    </div>}
+                    
                     <button
                       type="button"
                       className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"

@@ -8,7 +8,7 @@ const getActor = async (canisterId, idlFactory, identity) => {
 
   const HOST = isProd ? `https://${canisterId}.icp0.io/` : "http://127.0.0.1:8080/";
 
-  console.log("Host here", HOST)
+  console.log("Host", HOST)
 
   if (canisterId === undefined) {
     console.log("canisterId: ", canisterId);
