@@ -5,6 +5,7 @@ import Product from "./Product";
 import Home from "./Home";
 import Services from "./Services";
 import Company from "./Company";
+import Support from "./Support"
 
 export { 
     Home,
@@ -14,4 +15,5 @@ export {
     Product,
     Services,
     Company,
+    Support
 }

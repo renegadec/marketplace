@@ -32,7 +32,6 @@ import Orders from "./pages/Orders";
 import { setInit } from "./state/globalSlice";
 import { initActors } from "./storage-config/functions";
 import { AuthClient } from "@dfinity/auth-client";
-import Support from "./pages/Support";
 
 
 

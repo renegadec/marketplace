@@ -12,6 +12,48 @@ const Profile = ({ activate }) => {
   const [loading, setLoading] = useState(false);
   const [noUser, setNoUser] = useState(false);
 
+  // update useStates
+  const [isEditNameMode, setIsEditNameMode] = useState(false);
+  const [isEditEmailMode, setIsEditEmailMode] = useState(false);
+  const [isEditCompanyMode, setIsEditCompanyMode] = useState(false);
+  const [isEditAboutMode, setIsEditAboutMode] = useState(false);
+
+  const handleFirstNameChange = (value) => {
+    setUserInfo((prevUserInfo) => ({
+      ...prevUserInfo,
+      firstName: value,
+    }));
+  };
+
+  const handleLastNameChange = (value) => {
+    setUserInfo((prevUserInfo) => ({
+      ...prevUserInfo,
+      lastName: value,
+    }));
+  };
+
+  const handleEmailChange = (value) => {
+    setUserInfo((prevUserInfo) => ({
+      ...prevUserInfo,
+      email: value,
+    }));
+  };
+
+  const handleCompanyChange = (value) => {
+    setUserInfo((prevUserInfo) => ({
+      ...prevUserInfo,
+      organization: value,
+    }));
+  };
+
+  const handleAboutChange = (value) => {
+    setUserInfo((prevUserInfo) => ({
+      ...prevUserInfo,
+      about: value,
+    }));
+  };
+
+
   const getPrincipalId = async () => {
     const authClient = await AuthClient.create();
 
@@ -81,15 +123,34 @@ const Profile = ({ activate }) => {
               <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
                 <dt className="text-sm font-medium text-gray-500">Full name</dt>
                 <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  <span className="flex-grow">
-                    {userInfo.firstName} {userInfo.lastName}
-                  </span>
+                  {isEditNameMode ? (
+                    <div className="flex-grow">
+                      <input
+                        type="text"
+                        value={userInfo.firstName}
+                        onChange={(e) => handleFirstNameChange(e.target.value)}
+                        className="w-full/2 bg-transparent rounded-md border-0 py-1 pl-2 mr-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      />
+                      <input
+                        type="text"
+                        value={userInfo.lastName}
+                        onChange={(e) => handleLastNameChange(e.target.value)}
+                        className="w-full/2 bg-transparent rounded-md border-0 py-1 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  ) : (
+                    <span className="flex-grow">
+                      {userInfo.firstName} {userInfo.lastName}
+                    </span>
+                  )}
+                  
                   <span className="ml-4 flex-shrink-0">
                     <button
                       type="button"
+                      onClick={() => setIsEditNameMode(!isEditNameMode)}
                       className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
-                      Update
+                      {isEditNameMode ? 'Save' : 'Update'}
                     </button>
                   </span>
                 </dd>
@@ -111,17 +172,33 @@ const Profile = ({ activate }) => {
                 </dd>
               </div> */}
               <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+                
                 <dt className="text-sm font-medium text-gray-500">
                   Email address
                 </dt>
                 <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  <span className="flex-grow">{userInfo.email}</span>
+                  {isEditEmailMode ? (
+                        <div className="flex-grow">
+                          <input
+                            type="text"
+                            value={userInfo.email}
+                            onChange={(e) => handleEmailChange(e.target.value)}
+                            className="w-full bg-transparent rounded-md border-0 py-1 pl-2 mr-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                          />
+                        </div>
+                      ) : (
+                        <span className="flex-grow">
+                          <span className="flex-grow">{userInfo.email}</span>
+                        </span>
+                      )}
+                  
                   <span className="ml-4 flex-shrink-0">
                     <button
                       type="button"
+                      onClick={() => setIsEditEmailMode(!isEditEmailMode)}
                       className="rounded-md  font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
-                      Update
+                      {isEditEmailMode ? 'Save' : 'Update'}
                     </button>
                   </span>
                 </dd>
@@ -131,13 +208,25 @@ const Profile = ({ activate }) => {
                   Organization Name
                 </dt>
                 <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  <span className="flex-grow">{userInfo.organization}</span>
+                  {isEditCompanyMode ? (
+                      <div className="flex-grow">
+                        <input
+                          type="text"
+                          value={userInfo.organization}
+                          onChange={(e) => handleCompanyChange(e.target.value)}
+                          className="w-full bg-transparent rounded-md border-0 py-1 pl-2 mr-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    ) : (
+                      <span className="flex-grow">{userInfo.organization}</span>
+                    )}
                   <span className="ml-4 flex-shrink-0">
                     <button
                       type="button"
+                      onClick={() => setIsEditCompanyMode(!isEditCompanyMode)}
                       className="rounded-md  font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
-                      Update
+                      {isEditCompanyMode ? 'Save' : 'Update'}
                     </button>
                   </span>
                 </dd>
@@ -145,13 +234,25 @@ const Profile = ({ activate }) => {
               <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
                 <dt className="text-sm font-medium text-gray-500">About</dt>
                 <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  <span className="flex-grow">{userInfo.about}</span>
+                    {isEditAboutMode ? (
+                        <div className="flex-grow">
+                          <input
+                            type="text"
+                            value={userInfo.about}
+                            onChange={(e) => handleAboutChange(e.target.value)}
+                            className="w-full bg-transparent rounded-md border-0 py-1 pl-2 mr-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                          />
+                        </div>
+                      ) : (
+                        <span className="flex-grow">{userInfo.about}</span>
+                    )}
                   <span className="ml-4 flex-shrink-0">
                     <button
                       type="button"
+                      onClick={() => setIsEditAboutMode(!isEditAboutMode)}
                       className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
-                      Update
+                      {isEditAboutMode ? 'Save' : 'Update'}
                     </button>
                   </span>
                 </dd>
