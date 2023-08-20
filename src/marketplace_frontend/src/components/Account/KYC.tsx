@@ -12,9 +12,143 @@ import { uploadFile } from "../../storage-config/functions";
 import { useDropzone } from "react-dropzone";
 import { countryListAllIsoData } from "../../constants";
 import Loader from "../Loader";
+import { ZodType, z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+type FormData = {
+  username: string;
+  firstName: string;
+  lastName: string;
+  about: string;
+  organization: string;
+  email: string;
+  country: string;
+  province: string;
+  phone: string;
+  streetAddress: string;
+  city: string;
+  zipCode: string;
+  profilePhoto: File;
+  kycID: File;
+  proofOfAddress: File;
+};
+
 
 export default function KYC() {
   const { storageInitiated } = useSelector((state: RootState) => state.global);
+
+  const MAX_FILE_SIZE = 500000;
+  const ACCEPTED_IMAGE_TYPES = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+  ];
+
+  const schema = z.object({
+    username: z.string().min(3).max(40),
+    firstName: z.string().min(3).max(50),
+    lastName: z.string().min(3).max(50),
+    about: z.string().min(20).max(500),
+    organization: z.string().min(3).max(50),
+    email: z.string().email(),
+    country: z.string().min(3).max(40),
+    province: z.string().min(3).max(40),
+    phone: z.number(),
+    streetAddress: z.string().min(3).max(100),
+    city: z.string().min(3).max(40),
+    zipCode: z.number(),
+    profilePhoto: z
+      .any()
+      .refine((files) => files?.length == 1, "Image is required.")
+      .refine(
+        (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+        `Max file size is 5MB.`
+      )
+      .refine(
+        (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+        ".jpg, .jpeg, .png and .webp files are accepted."
+      ),
+    kycID: z
+      .any()
+      .refine((files) => files?.length == 1, "Image is required.")
+      .refine(
+        (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+        `Max file size is 5MB.`
+      )
+      .refine(
+        (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+        ".jpg, .jpeg, .png and .webp files are accepted."
+      ),
+    proofOfAddress: z
+      .any()
+      .refine((files) => files?.length == 1, "Image is required.")
+      .refine(
+        (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+        `Max file size is 5MB.`
+      )
+      .refine(
+        (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+        ".jpg, .jpeg, .png and .webp files are accepted."
+      ),
+  });
+
+  const { register, handleSubmit, formState: {errors} } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const handleSave = async (data : FormData) => {
+
+    console.log("It worked", data)
+    // e.preventDefault();
+    // if (saving) {
+    //   console.log("Very busy for now");
+    // } else {
+    //   setSaving(true);
+    //   const date = new Date();
+    //   const timestamp = date.getTime();
+
+    //   const profilePhotoUrl = await uploadAsset(profilePhoto);
+    //   console.log("profilePhoto saved", profilePhotoUrl);
+
+    //   const kycIDUrl = await uploadAsset(kycID);
+    //   console.log("kyc id saved", kycIDUrl);
+
+    //   const proofOfAddressUrl = await uploadAsset(proofOfAddress);
+    //   console.log("proof of Address saved", proofOfAddressUrl);
+
+    //   const kycRequest = {
+    //     id: String(uuidv4()),
+    //     userId: userId,
+    //     userName: username,
+    //     firstName: firstName,
+    //     lastName: lastName,
+    //     about: about,
+    //     email: email,
+    //     organization: organization,
+    //     country: country,
+    //     streetAdrees: streetAddress,
+    //     city: city,
+    //     province: province,
+    //     zipCode: BigInt(zipcode),
+    //     phoneNumber: BigInt(phone),
+    //     profilePhoto: profilePhotoUrl,
+    //     kycIDCopy: kycIDUrl,
+    //     proofOfAddressCopy: proofOfAddressUrl,
+    //     status: "pending",
+    //     dateCreated: BigInt(timestamp),
+    //   };
+
+    //   const res = await backendActor.createKYCRequest(kycRequest);
+
+    //   if (res === true) {
+    //     setShow(true);
+    //   } else {
+    //     setShow(false);
+    //   }
+    //   setSaving(false);
+    //   window.location.reload()
+    // }
+  };
 
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -49,58 +183,6 @@ export default function KYC() {
   useEffect(() => {
     getPrincipalId();
   }, []);
-
-  const handleSave = async (e) => {
-    e.preventDefault();
-    if (saving) {
-      console.log("Very busy for now");
-    } else {
-      setSaving(true);
-      const date = new Date();
-      const timestamp = date.getTime();
-
-      const profilePhotoUrl = await uploadAsset(profilePhoto);
-      console.log("profilePhoto saved", profilePhotoUrl);
-
-      const kycIDUrl = await uploadAsset(kycID);
-      console.log("kyc id saved", kycIDUrl);
-
-      const proofOfAddressUrl = await uploadAsset(proofOfAddress);
-      console.log("proof of Address saved", proofOfAddressUrl);
-
-      const kycRequest = {
-        id: String(uuidv4()),
-        userId: userId,
-        userName: username,
-        firstName: firstName,
-        lastName: lastName,
-        about: about,
-        email: email,
-        organization: organization,
-        country: country,
-        streetAdrees: streetAddress,
-        city: city,
-        province: province,
-        zipCode: BigInt(zipcode),
-        phoneNumber: BigInt(phone),
-        profilePhoto: profilePhotoUrl,
-        kycIDCopy: kycIDUrl,
-        proofOfAddressCopy: proofOfAddressUrl,
-        status: "pending",
-        dateCreated: BigInt(timestamp),
-      };
-
-      const res = await backendActor.createKYCRequest(kycRequest);
-
-      if (res === true) {
-        setShow(true);
-      } else {
-        setShow(false);
-      }
-      setSaving(false);
-      window.location.reload()
-    }
-  };
 
   const uploadAsset = async (file) => {
     if (storageInitiated) {
@@ -140,7 +222,7 @@ export default function KYC() {
           <Loader />
         </div>
       )}
-      {!saving &&  <form onSubmit={handleSave}>
+      {!saving &&  <form onSubmit={handleSubmit(handleSave)}>
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -165,6 +247,8 @@ export default function KYC() {
                     </span>
                     <input
                       type="text"
+                      required
+                      {...register("username")}
                       name="username"
                       id="username"
                       value={username}
@@ -174,6 +258,7 @@ export default function KYC() {
                       placeholder="company"
                     />
                   </div>
+                  {errors.username && <span>{errors.username.message}</span>}
                 </div>
               </div>
 
@@ -188,12 +273,14 @@ export default function KYC() {
                   <textarea
                     id="about"
                     name="about"
+                    {...register("about")}
                     value={about}
                     onChange={(e) => setAbout(e.target.value)}
                     rows={3}
                     className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                   />
                 </div>
+                {errors.about && <span>{errors.about.message}</span>}
                 <p className="mt-3 text-sm leading-6 text-gray-600">
                   Write a few sentences about company.
                 </p>
@@ -215,8 +302,9 @@ export default function KYC() {
                   <label className="rounded-md cursor-pointer bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                     <span>Upload</span>
                     <input
-                      id="profile-photo-upload"
-                      name="file-upload"
+                        {...register("profilePhoto")}
+                      id="profilePhoto"
+                      name="profilePhoto"
                       type="file"
                       accept="image/*, application/pdf"
                       onChange={(e) => setPP(e.target.files[0])}
@@ -224,6 +312,7 @@ export default function KYC() {
                     />
                   </label>
                 </div>
+                {errors.profilePhoto && <span>{errors.profilePhoto.message}</span>}
                 {profilePhoto && (
                   <>
                     <span>File attached:</span> <span>{profilePhoto.name}</span>
@@ -297,6 +386,7 @@ export default function KYC() {
                   <input
                     type="text"
                     name="first-name"
+                    {...register("firstName")}
                     id="first-name"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
@@ -304,6 +394,7 @@ export default function KYC() {
                     className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                   />
                 </div>
+                {errors.firstName && <span>{errors.firstName.message}</span>}
               </div>
 
               <div className="sm:col-span-3">
@@ -318,12 +409,14 @@ export default function KYC() {
                     type="text"
                     name="last-name"
                     id="last-name"
+                    {...register("lastName")}
                     value={lastName}
                     onChange={(e) => setLastname(e.target.value)}
                     autoComplete="family-name"
                     className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                   />
                 </div>
+                {errors.lastName && <span>{errors.lastName.message}</span>}
               </div>
 
               <div className="sm:col-span-4">
@@ -338,12 +431,14 @@ export default function KYC() {
                     id="email"
                     name="email"
                     type="email"
+                    {...register("email")}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
                     className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                   />
                 </div>
+                {errors.email && <span>{errors.email.message}</span>}
               </div>
 
               <div className="sm:col-span-4">
@@ -358,12 +453,16 @@ export default function KYC() {
                     id="organization"
                     name="organization"
                     type="text"
+                    {...register("organization")}
                     value={organization}
                     onChange={(e) => setOrg(e.target.value)}
                     autoComplete="organization"
                     className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                   />
                 </div>
+                {errors.organization && (
+                  <span>{errors.organization.message}</span>
+                )}
               </div>
 
               <div className="sm:col-span-4">
@@ -377,6 +476,7 @@ export default function KYC() {
                   <input
                     id="phone"
                     name="phone"
+                    {...register("phone", {valueAsNumber: true}) }
                     type="number"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
@@ -384,6 +484,7 @@ export default function KYC() {
                     className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                   />
                 </div>
+                {errors.phone && <span>{errors.phone.message}</span>}
               </div>
 
               <div className="sm:col-span-3">
@@ -396,6 +497,7 @@ export default function KYC() {
                 <div className="mt-2">
                   <select
                     id="country"
+                    {...register("country")}
                     name="country"
                     autoComplete="country-name"
                     value={country}
@@ -407,11 +509,12 @@ export default function KYC() {
                     ))}
                   </select>
                 </div>
+                {errors.country && <span>{errors.country.message}</span>}
               </div>
 
               <div className="col-span-full">
                 <label
-                  htmlFor="street-address"
+                  htmlFor="streetAddress"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   Street address
@@ -419,14 +522,18 @@ export default function KYC() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="street-address"
-                    id="street-address"
+                    id="streetAddress"
+                    {...register("streetAddress")}
+                    name="streetAddress"
                     value={streetAddress}
                     onChange={(e) => setStreet(e.target.value)}
-                    autoComplete="street-address"
+                    autoComplete="streetAddress"
                     className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                   />
                 </div>
+                {errors.streetAddress && (
+                  <span>{errors.streetAddress.message}</span>
+                )}
               </div>
 
               <div className="sm:col-span-2 sm:col-start-1">
@@ -439,6 +546,7 @@ export default function KYC() {
                 <div className="mt-2">
                   <input
                     type="text"
+                    {...register("city")}
                     name="city"
                     id="city"
                     value={city}
@@ -447,11 +555,12 @@ export default function KYC() {
                     className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                   />
                 </div>
-              </div>
+                {errors.city && <span>{errors.city.message}</span>}
+              </div> 
 
               <div className="sm:col-span-2">
                 <label
-                  htmlFor="region"
+                  htmlFor="province"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   State / Province
@@ -459,14 +568,16 @@ export default function KYC() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="region"
-                    id="region"
+                    {...register("province")}
+                    name="province"
+                    id="province"
                     value={province}
                     onChange={(e) => setProvince(e.target.value)}
                     autoComplete="address-level1"
                     className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                   />
                 </div>
+                {errors.province && <span>{errors.province.message}</span>}
               </div>
 
               <div className="sm:col-span-2">
@@ -481,12 +592,14 @@ export default function KYC() {
                     type="text"
                     name="postal-code"
                     id="postal-code"
+                    {...register("zipCode", {valueAsNumber: true}) }
                     value={zipcode}
                     onChange={(e) => setZip(e.target.value)}
                     autoComplete="postal-code"
                     className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                   />
                 </div>
+                {errors.zipCode && <span>{errors.zipCode.message}</span>}
               </div>
 
               
@@ -515,6 +628,7 @@ export default function KYC() {
                     <input
                       id="kyc-id"
                       name="file-upload"
+                      {...register("kycID")}
                       type="file"
                       accept="image/*, application/pdf"
                       onChange={(e) => setKYCID(e.target.files[0])}
@@ -522,6 +636,10 @@ export default function KYC() {
                     />
                   </label>
                 </div>
+                {errors.kycID && (
+                  <span>{errors.kycID.message}</span>
+                )}
+                
                 {kycID && (
                   <>
                     <span>File attached:</span> <span>{kycID.name}</span>
@@ -543,6 +661,7 @@ export default function KYC() {
                     <input
                       id="proof-of-address"
                       name="file-upload"
+                      {...register("proofOfAddress")}
                       type="file"
                       accept="image/*, application/pdf"
                       onChange={(e) => setProofOfAddress(e.target.files[0])}
@@ -550,6 +669,9 @@ export default function KYC() {
                     />
                   </label>
                 </div>
+                {errors.proofOfAddress && (
+                  <span>{errors.proofOfAddress.message}</span>
+                )}
                 {proofOfAddress && (
                   <>
                     <span>File attached:</span>{" "}
@@ -647,7 +769,7 @@ export default function KYC() {
             className="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6"
           >
             <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
-              {/* Notification panel, dynamically insert this into the live region when it needs to be displayed */}
+              {/* Notification panel, dynamically insert this into the live province when it needs to be displayed */}
               <Transition
                 show={show}
                 as={Fragment}
