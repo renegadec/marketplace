@@ -42,6 +42,7 @@ export default function KYC() {
   const [valid, setValid] = useState(true);
   const [phoneNumber, setPhoneNumber] = useState(null);
   const { storageInitiated } = useSelector((state: RootState) => state.global);
+  const [step, setStep] = useState(1);
 
   const MAX_FILE_SIZE = 500000;
   const ACCEPTED_FILE_TYPES = [
@@ -106,7 +107,7 @@ export default function KYC() {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const handleSave = async (data: FormData) => {
-    console.log("It worked", data);
+   try {
     if (saving || !phoneNumber) {
       console.log("Very busy for now");
     } else {
@@ -117,8 +118,12 @@ export default function KYC() {
       const profilePhotoUrl = await uploadAsset(data.profilePhoto[0]);
       console.log("profilePhoto saved", profilePhotoUrl);
 
+      setStep(2);
+
       const kycIDUrl = await uploadAsset(data.kycID[0]);
       console.log("kyc id saved", kycIDUrl);
+
+      setStep(3);
 
       const proofOfAddressUrl = await uploadAsset(data.proofOfAddress[0]);
       console.log("proof of Address saved", proofOfAddressUrl);
@@ -147,6 +152,8 @@ export default function KYC() {
 
       const res = await backendActor.createKYCRequest(kycRequest);
 
+      console.log(res)
+
       if (res === true) {
         setShow(true);
       } else {
@@ -155,14 +162,14 @@ export default function KYC() {
       setSaving(false);
       window.location.reload()
     }
+   } catch (error) {
+    console.log("Error when saving profile information", error)
+   }
   };
 
   const handleChange = (event) => {
-    console.log("Event object:", event);
     if (event) {
       const input = event;
-      console.log("Input value:", input);
-      
       setPhoneNumber(input);
       setValid(validatePhoneNumber(input));
     } else {
@@ -226,7 +233,21 @@ export default function KYC() {
     <>
       {saving && (
         <div className="flex flex-col gap-5 justify-center items-center px-7 lg:px-28 pt-8 pb-10 h-[70vh]">
-          <h1 className="text-lg">Saving your information, please wait...</h1>
+          <h1 className="text-xl text-gray-500">
+            We're saving your information. It should be done in under a minute.
+            Thank you for your patience.
+          </h1>
+          <h1 className="text-lg text-gray-500 mt-3 mb-10">
+            Step <span className="text-gray-700">{step}</span> of{" "}
+            <span className="text-gray-700">3</span>:{" "}
+            <span className="block">
+              {step === 1 && "Saving your data…"}
+              {step === 2 &&
+                "Processing your request. Thanks for your patience."}
+              {step === 3 && "Finalizing. Almost there. :)"}
+            </span>
+          </h1>
+
           <Loader />
         </div>
       )}
