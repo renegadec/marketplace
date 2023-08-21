@@ -1,19 +1,21 @@
+import { Brocoli } from "../../../assets/assets"
+
 const orders = [
   {
     number: 'WU88191111',
-    date: 'January 22, 2021',
-    datetime: '2021-01-22',
+    date: 'January 22, 2023',
+    datetime: '2023-01-22',
     invoiceHref: '#',
-    total: '$238.00',
+    total: '$23800.00',
     products: [
       {
         id: 1,
-        name: 'Machined Pen and Pencil Set',
+        name: 'Brocoli',
         href: '#',
-        price: '$70.00',
-        status: 'Delivered Jan 25, 2021',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/order-history-page-02-product-01.jpg',
-        imageAlt: 'Detail of mechanical pencil tip with machined black steel shaft and chrome lead tip.',
+        price: '$700.00',
+        status: 'Delivered Jan 25, 2023',
+        imageSrc: Brocoli,
+        imageAlt: 'Brocoli vegetable',
       },
       // More products...
     ],
@@ -105,8 +107,8 @@ export default function Transactions() {
                         <td className="hidden py-6 pr-8 sm:table-cell">{product.price}</td>
                         <td className="hidden py-6 pr-8 sm:table-cell">{product.status}</td>
                         <td className="whitespace-nowrap py-6 text-right font-medium">
-                          <a href={product.href} className="text-indigo-600">
-                            View<span className="hidden lg:inline">Product</span>
+                          <a href={product.href} className="text-primary">
+                            View<span className="hidden lg:inline">{' '}Product</span>
                             <span className="sr-only">, {product.name}</span>
                           </a>
                         </td>

@@ -302,12 +302,12 @@ export default function KYC() {
                       name="about"
                       {...register("about")}
                       rows={3}
-                      className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      className="block w-full bg-transparent rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     />
                   </div>
                   {errors.about && <span className="text-red-600">{errors.about.message}</span>}
                   <p className="mt-3 text-sm leading-6 text-gray-600">
-                    Write a few sentences about company.
+                    Write a few sentences about organization.
                   </p>
                 </div>
 
@@ -373,7 +373,7 @@ export default function KYC() {
                       name="first-name"
                       {...register("firstName")}
                       id="first-name"
-                      className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      className="block w-full bg-transparent rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     />
                   </div>
                   {errors.firstName && <span className="text-red-600">{errors.firstName.message}</span>}
@@ -392,7 +392,7 @@ export default function KYC() {
                       name="last-name"
                       id="last-name"
                       {...register("lastName")}
-                      className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      className="block w-full bg-transparent rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     />
                   </div>
                   {errors.lastName && <span className="text-red-600">{errors.lastName.message}</span>}
@@ -412,7 +412,7 @@ export default function KYC() {
                       type="email"
                       {...register("email")}
                       autoComplete="email"
-                      className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      className="block w-full bg-transparent rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     />
                   </div>
                   {errors.email && <span className="text-red-600">{errors.email.message}</span>}
@@ -431,7 +431,7 @@ export default function KYC() {
                       name="organization"
                       type="text"
                       {...register("organization")}
-                      className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      className="block w-full bg-transparent rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     />
                   </div>
                   {errors.organization && (
@@ -495,7 +495,7 @@ export default function KYC() {
                       id="streetAddress"
                       {...register("streetAddress")}
                       name="streetAddress"
-                      className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      className="block w-full bg-transparent rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     />
                   </div>
                   {errors.streetAddress && (
@@ -516,7 +516,7 @@ export default function KYC() {
                       {...register("city")}
                       name="city"
                       id="city"
-                      className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      className="block w-full bg-transparent rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     />
                   </div>
                   {errors.city && <span className="text-red-600">{errors.city.message}</span>}
@@ -535,7 +535,7 @@ export default function KYC() {
                       {...register("province")}
                       name="province"
                       id="province"
-                      className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      className="block w-full bg-transparent rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     />
                   </div>
                   {errors.province && <span className="text-red-600">{errors.province.message}</span>}
@@ -554,7 +554,7 @@ export default function KYC() {
                       name="postal-code"
                       id="postal-code"
                       {...register("zipCode", { valueAsNumber: true })}
-                      className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      className="block w-full bg-transparent rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     />
                   </div>
                   {errors.zipCode && <span className="text-red-600">{errors.zipCode.message}</span>}
