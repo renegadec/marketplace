@@ -21,34 +21,32 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 const Product = lazy(() => import('./pages/Product'));
 const Services = lazy(() => import('./pages/Services'));
 const Support = lazy(() => import ('./pages/Support'))
+const VerifyEmail = lazy(() => import ('./pages/VerifyEmail'))
 
 import { UserContext } from "./UserContext";
 import { useAuth } from "./hooks";
 
 
-import ShoppingCart from "./pages/ShoppingCart";
+import ShoppingCart from "./pages/ShoppingCart";;
 
 import Orders from "./pages/Orders";
 import { setInit } from "./state/globalSlice";
-import { initActors } from "./storage-config/functions";
+import { initActors } from "./utils/storage-config/functions";
 import { AuthClient } from "@dfinity/auth-client";
 
-
+export const loaderStyle: CSSProperties = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  /* Add more loader styles here */
+};
 
 const App = () => {
 
   const containerStyle: CSSProperties = {
     position: 'relative',
     minHeight: '100vh', // Ensures the container covers the whole viewport
-  };
-
-
-  const loaderStyle: CSSProperties = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    /* Add more loader styles here */
   };
 
 
@@ -178,6 +176,14 @@ const App = () => {
                       <div className={`${styles.paddingX} ${styles.flexStart}`}>
                         <div className={`${styles.boxWidth}`}>
                           <Product />
+                        </div>
+                      </div>
+                    } 
+                  />
+                  <Route path="verify-email/:userid/:uniquestr" element={
+                      <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                        <div className={`${styles.boxWidth}`}>
+                          <VerifyEmail />
                         </div>
                       </div>
                     } 
