@@ -43,10 +43,10 @@ export const sendVerificationEmail = async (
 
   emailjs
     .send(
-      "service_515ffkj",
-      "template_mev2i6v",
+      "service_bsld0fh",
+      "template_85wx5f6",
       templateParams,
-      "ni25KjXycoHjn-cD1"
+      "cEuqVJj0eDt8tfwPN"
     )
     .then(
       (result) => {
@@ -54,7 +54,7 @@ export const sendVerificationEmail = async (
         console.log("message was sent");
       },
       (error) => {
-        console.log(error.text);
+        console.log(error);
       }
     );
 };

@@ -195,24 +195,27 @@ export default function KYC() {
           status: "pending",
           dateCreated: BigInt(timestamp),
           isUpdated: false,
-          isEmailVerified : false,
-          membershipLevel : "general",
-          userWebsite : "non",
-          isFarmer : false,
-          isBuyer : true,
-          isStaff : false,
-          pushNotification : {
-              email : false,
-              sms : false,
-              everything : false,
-          }
+          isEmailVerified: false,
+          membershipLevel: "general",
+          userWebsite: "non",
+          isFarmer: false,
+          isBuyer: true,
+          isStaff: false,
+          pushNotification: {
+            email: false,
+            sms: false,
+            everything: false,
+          },
         };
 
         /// Sending verification email section
 
         let uniqueString: string = String(uuidv4());
 
-        const verificationUrl = generateVerificationUrl(kycRequest.id, uniqueString);
+        const verificationUrl = generateVerificationUrl(
+          kycRequest.id,
+          uniqueString
+        );
 
         await createVerificationEntry(userId, kycRequest.id, uniqueString);
 
@@ -229,7 +232,7 @@ export default function KYC() {
           setShow(false);
         }
         setSaving(false);
-        window.location.reload()
+        window.location.reload();
       }
     } catch (error) {
       console.log("Error when saving profile information", error);
@@ -351,7 +354,7 @@ export default function KYC() {
                           {...register("username")}
                           name="username"
                           id="username"
-                          className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                          className="block flex-1 border-0 bg-transparent py-2.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                           placeholder="company"
                         />
                       </div>
@@ -376,7 +379,7 @@ export default function KYC() {
                         name="about"
                         {...register("about")}
                         rows={3}
-                        className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        className="block w-full bg-transparent rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                       />
                     </div>
                     {errors.about && (
@@ -385,7 +388,7 @@ export default function KYC() {
                       </span>
                     )}
                     <p className="mt-3 text-sm leading-6 text-gray-600">
-                      Write a few sentences about company.
+                      Write a few sentences about organization.
                     </p>
                   </div>
 
@@ -453,7 +456,7 @@ export default function KYC() {
                         name="first-name"
                         {...register("firstName")}
                         id="first-name"
-                        className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        className="block w-full bg-transparent rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                       />
                     </div>
                     {errors.firstName && (
@@ -476,7 +479,7 @@ export default function KYC() {
                         name="last-name"
                         id="last-name"
                         {...register("lastName")}
-                        className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        className="block w-full bg-transparent rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                       />
                     </div>
                     {errors.lastName && (
@@ -500,7 +503,7 @@ export default function KYC() {
                         type="email"
                         {...register("email")}
                         autoComplete="email"
-                        className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        className="block w-full bg-transparent rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                       />
                     </div>
                     {errors.email && (
@@ -523,7 +526,7 @@ export default function KYC() {
                         name="organization"
                         type="text"
                         {...register("organization")}
-                        className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        className="block w-full bg-transparent rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                       />
                     </div>
                     {errors.organization && (
@@ -570,7 +573,7 @@ export default function KYC() {
                         {...register("country")}
                         name="country"
                         autoComplete="country-name"
-                        className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary sm:max-w-xs sm:text-sm sm:leading-6"
+                        className="block w-full bg-transparent rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary sm:max-w-xs sm:text-sm sm:leading-6"
                       >
                         {countryListAllIsoData.map((country, index) => (
                           <option key={index}>{country.name}</option>
@@ -597,7 +600,7 @@ export default function KYC() {
                         id="streetAddress"
                         {...register("streetAddress")}
                         name="streetAddress"
-                        className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        className="block w-full bg-transparent rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                       />
                     </div>
                     {errors.streetAddress && (
@@ -620,7 +623,7 @@ export default function KYC() {
                         {...register("city")}
                         name="city"
                         id="city"
-                        className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        className="block w-full bg-transparent rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                       />
                     </div>
                     {errors.city && (
@@ -643,7 +646,7 @@ export default function KYC() {
                         {...register("province")}
                         name="province"
                         id="province"
-                        className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        className="block w-full bg-transparent rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                       />
                     </div>
                     {errors.province && (
@@ -666,7 +669,7 @@ export default function KYC() {
                         name="postal-code"
                         id="postal-code"
                         {...register("zipCode", { valueAsNumber: true })}
-                        className="block w-full bg-transparent rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        className="block w-full bg-transparent rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                       />
                     </div>
                     {errors.zipCode && (
