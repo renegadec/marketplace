@@ -33,6 +33,7 @@ import Orders from "./pages/Orders";
 import { setInit } from "./state/globalSlice";
 import { initActors } from "./utils/storage-config/functions";
 import { AuthClient } from "@dfinity/auth-client";
+import VerifyNewsLetterEmail from "./pages/VerifyNewsLetterEmail";
 
 export const loaderStyle: CSSProperties = {
   position: 'absolute',
@@ -184,6 +185,14 @@ const App = () => {
                       <div className={`${styles.paddingX} ${styles.flexStart}`}>
                         <div className={`${styles.boxWidth}`}>
                           <VerifyEmail />
+                        </div>
+                      </div>
+                    } 
+                  />
+                  <Route path="verify-email/:id" element={
+                      <div className={`${styles.paddingX} ${styles.flexStart}`}>
+                        <div className={`${styles.boxWidth}`}>
+                          <VerifyNewsLetterEmail />
                         </div>
                       </div>
                     } 

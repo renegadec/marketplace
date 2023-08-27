@@ -3,6 +3,13 @@ export interface Result {
   ok?: any;
 }
 
+export interface NewsLetterSubscription {
+  id: string;
+  email: string;
+  isVerified: boolean;
+  created: bigint;
+}
+
 export interface KYCRequest {
   id: string;
   userId: string;

@@ -4,6 +4,7 @@ import Text "mo:base/Text";
 import Blob "mo:base/Blob";
 import List "mo:base/List";
 import Float "mo:base/Float";
+import Int "mo:base/Int";
 
 module {
 
@@ -83,7 +84,7 @@ module {
         proofOfAddressCopy : Text;
         status : Text;
         dateCreated : Int;
-        isUpdated: Bool;
+        isUpdated : Bool;
         isEmailVerified : Bool;
         membershipLevel : Text;
         userWebsite : Text;
@@ -109,7 +110,14 @@ module {
         userPrincipal : Principal;
         hashedUniqueString : Text;
         created : Int;
-        expires : Int
+        expires : Int;
     };
+
+    public type NewsLetterSubscription = {
+        id: Text;
+        email: Text;
+        isVerified: Bool;
+        created: Int;
+    }
 
 };

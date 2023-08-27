@@ -15,6 +15,7 @@ actor Tswaanda {
   type Customer = Type.Customer;
   type CartItem = Type.CartItem;
   type EmailVerificationSchema = Type.EmailVerificationSchema;
+  type NewsLetterSubscription = Type.NewsLetterSubscription;
 
   var mapOfOrders = HashMap.HashMap<Text, ProductOrder>(0, Text.equal, Text.hash);
   var mapOfCustomers = HashMap.HashMap<Principal, Customer>(0, Principal.equal, Principal.hash);
@@ -22,6 +23,7 @@ actor Tswaanda {
   var customerCartItems = HashMap.HashMap<Principal, CartItem>(0, Principal.equal, Principal.hash);
   var customerFavouriteItems = HashMap.HashMap<Principal, List.List<Text>>(0, Principal.equal, Principal.hash);
   var unverifiedEmailUsers = HashMap.HashMap<Text, EmailVerificationSchema>(0, Text.equal, Text.hash);
+  var newsLetterSubscriptions = HashMap.HashMap<Text, NewsLetterSubscription>(0, Text.equal, Text.hash);
 
   private stable var ordersEntries : [(Text, ProductOrder)] = [];
   private stable var customersEntries : [(Principal, Customer)] = [];
@@ -30,6 +32,7 @@ actor Tswaanda {
   private stable var favouriteItemsEntries : [(Principal, List.List<Text>)] = [];
 
   private stable var unverifiedEmailUsersEntries : [(Text, EmailVerificationSchema)] = [];
+  private stable var newLetterSubscibers : [(Text, NewsLetterSubscription)] = [];
 
   //-----------------------------Product methods------------------------------------------------------
 
@@ -317,11 +320,56 @@ actor Tswaanda {
     return true;
   };
 
-  public shared query func getUnverifiedEmailUsers(userId : Text) : async Result.Result<EmailVerificationSchema, Text> {
+  public shared query func getUnverifiedEmailUser(userId : Text) : async Result.Result<EmailVerificationSchema, Text> {
     switch (unverifiedEmailUsers.get(userId)) {
       case (null) { return #err("No record found for this user") };
       case (?result) { return #ok(result) };
     };
+  };
+
+  public shared query func getAllUnverifiedEmailEntries() : async [EmailVerificationSchema] {
+    let unverifiedUsersArray = Iter.toArray(unverifiedEmailUsers.vals());
+    return unverifiedUsersArray;
+  };
+
+  // -------------------------------------------NewsLetter Subscriptions---------------------------------------------------
+
+  public shared func addToNewsLetterSubscibers(args : NewsLetterSubscription) : async Bool {
+    newsLetterSubscriptions.put(args.id, args);
+    return true;
+  };
+
+  public shared query func getNewsLetterSubscriberEntry(id : Text) : async Result.Result<NewsLetterSubscription, Text> {
+    switch (newsLetterSubscriptions.get(id)) {
+      case (null) { return #err("No record found for this id") };
+      case (?result) { return #ok(result) };
+    };
+  };
+
+  public shared func deleteNewsLetterSubscriberEntry(id : Text) : async Bool {
+    newsLetterSubscriptions.delete(id);
+    return true;
+  };
+
+    public shared query func checkIfEmailSubscribed(email : Text) : async [NewsLetterSubscription] {
+    let subscridedArray = Iter.toArray(newsLetterSubscriptions.vals());
+    let entry = Array.filter<NewsLetterSubscription>(subscridedArray, func customer = customer.email == email);
+    return entry;
+  };
+
+  public shared func updateNewsLetterSubscriberEntry(args : NewsLetterSubscription) : async Bool {
+    switch (newsLetterSubscriptions.get(args.id)) {
+      case (null) { return false };
+      case (?result) {
+        ignore newsLetterSubscriptions.replace(args.id, args);
+        return true;
+      };
+    };
+  };
+
+  public shared query func getAllNewsLetterSubcribersEntries() : async [NewsLetterSubscription] {
+    let subscribersArray = Iter.toArray(newsLetterSubscriptions.vals());
+    return subscribersArray;
   };
 
   // -----------------------------------------Canister upgrade methods---------------------------------------------------
@@ -332,6 +380,7 @@ actor Tswaanda {
     // cartItemsEntries := Iter.toArray(customerCartItems.entries());
     favouriteItemsEntries := Iter.toArray(customerFavouriteItems.entries());
     unverifiedEmailUsersEntries := Iter.toArray(unverifiedEmailUsers.entries());
+    newLetterSubscibers := Iter.toArray(newsLetterSubscriptions.entries());
   };
 
   system func postupgrade() {
@@ -341,6 +390,7 @@ actor Tswaanda {
     // customerCartItems := HashMap.fromIter<Principal, List.List<CartItem>>(cartItemsEntries.vals(), 0, Principal.equal, Principal.hash);
     customerFavouriteItems := HashMap.fromIter<Principal, List.List<Text>>(favouriteItemsEntries.vals(), 0, Principal.equal, Principal.hash);
     unverifiedEmailUsers := HashMap.fromIter<Text, EmailVerificationSchema>(unverifiedEmailUsersEntries.vals(), 0, Text.equal, Text.hash);
+    newsLetterSubscriptions := HashMap.fromIter<Text, NewsLetterSubscription>(newLetterSubscibers.vals(), 0, Text.equal, Text.hash);
   };
 
 };

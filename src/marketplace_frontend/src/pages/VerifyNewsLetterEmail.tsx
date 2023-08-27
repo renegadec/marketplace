@@ -3,61 +3,54 @@ import { useNavigate, useParams } from "react-router-dom";
 import { backendActor } from "../hooks/config";
 import { Loader } from "../components";
 import { loaderStyle } from "../App";
-import { KYCRequest, Result } from "../utils/types";
+import { Result } from "../utils/types";
 import { toast } from "react-toastify";
 
-const VerifyEmail = () => {
+const VerifyNewsLetterEmail = () => {
   const navigate = useNavigate();
-  const { userid, uniquestr } = useParams();
+  const { id } = useParams();
   const [record, setRecord] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [unmatched, setUnmatched] = useState(false);
-  const [expired, setExpired] = useState(false)
+  const [alreadyVerified, setAlreadyVerified] = useState(false);
 
   useEffect(() => {
     const getRecord = async () => {
-      const res: Result = await backendActor.getUnverifiedEmailUser(userid);
+      const res: Result = await backendActor.getNewsLetterSubscriberEntry(id);
 
       if (res.ok) {
         setLoading(false);
         setRecord(res.ok);
-        if (res.ok.hashedUniqueString !== uniquestr) {
+        if (res.ok.id !== id) {
           setUnmatched(true);
         }
-        if (Date.now() > res.ok.expires) {
-          setExpired(true)
+        if (res.ok.isVerified) {
+          setAlreadyVerified(true);
         }
       } else {
         setLoading(false);
         setNotFound(true);
       }
     };
-    if (userid) {
+    if (id) {
       getRecord();
     }
-  }, [userid]);
+  }, [id]);
 
   const handleVerify = async () => {
     setVerifying(true);
     try {
-      const userKYCRecord: Result = await backendActor.getKYCRequest(
-        record.userPrincipal
-      );
-      if (userKYCRecord.ok) {
-        let userEntry: KYCRequest = userKYCRecord.ok;
-        userEntry.isEmailVerified = true;
-        await backendActor.updateKYCRequest(userEntry.userId, userEntry);
-        await backendActor.removeFromUnverified(userid);
-        setVerifying(false);
-        toast.success("Success! You email have been verified", {
-          autoClose: 5000,
-          position: "top-center",
-          hideProgressBar: true,
-        });
-        navigate("/");
-      }
+      record.isVerified = true;
+      await backendActor.updateNewsLetterSubscriberEntry(record);
+      setVerifying(false);
+      toast.success("Success! You email have been verified", {
+        autoClose: 5000,
+        position: "top-center",
+        hideProgressBar: true,
+      });
+      navigate("/");
     } catch (error) {
       setVerifying(false);
       console.error("Error updating KYC request:", error);
@@ -66,6 +59,7 @@ const VerifyEmail = () => {
 
   return (
     <>
+      {" "}
       {loading && (
         <div className="min-h-screen" style={loaderStyle}>
           <Loader />
@@ -77,20 +71,25 @@ const VerifyEmail = () => {
             <h2 className="text-2xl text-center font-semibold mb-4">
               Welcome to Tswaanda
             </h2>
-            {!unmatched && (
+            {!unmatched && !alreadyVerified && (
               <p className="text-gray-600 mb-6">
-                Please verify your email address to get started and unlock the
-                amazing features of Tswaanda.
+                Please verify your email address to start recieving some
+                insights and updates from tswaanda
               </p>
             )}
-            {unmatched && (
+            {unmatched && !alreadyVerified && (
               <p className="text-gray-600 mb-6">
                 Uh-oh! It seems like the verification link you used isn't quite
                 right. Make sure you're using the exact link from your email.
               </p>
             )}
+            {alreadyVerified && (
+              <p className="text-gray-600 mb-6">
+                Your email is already verified :)
+              </p>
+            )}
 
-            {!unmatched && (
+            {!unmatched && !alreadyVerified && (
               <button
                 onClick={handleVerify}
                 className="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-green-400 font-semibold transition duration-300"
@@ -118,4 +117,4 @@ const VerifyEmail = () => {
   );
 };
 
-export default VerifyEmail;
+export default VerifyNewsLetterEmail;
