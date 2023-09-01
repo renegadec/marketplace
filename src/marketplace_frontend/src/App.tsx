@@ -56,13 +56,6 @@ const App = () => {
   const { login, isLoggedIn } = useAuth(session, setSession);
 
   const dispatch = useDispatch()
-  const getPrincipalId = async () => {
-    const authClient = await AuthClient.create();
-
-    if (await authClient.isAuthenticated()) {
-      const identity = authClient.getIdentity();
-    }
-  };
 
     const checkAuth = async () => {
       if(await isLoggedIn()) setSession(true)
@@ -76,7 +69,6 @@ const App = () => {
     };
 
     useEffect(() => {
-      getPrincipalId()
       init()
       checkAuth()
     }, [])

@@ -12,16 +12,17 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 
-import Profile from '../components/Account/Profile';
+import Profile from "../components/Account/Profile";
 import Wallet from "../components/Wallet";
-import Billing from '../components/Account/Billing';
+import Billing from "../components/Account/Billing";
 
 import Notifications from "../components/Account/Notifications";
 import KYC from "../components/Account/KYC";
 
 import Transactions from "../components/Account/Transactions";
 import { Loader } from "../components";
-
+import { useSelector } from "react-redux";
+import { RootState } from "../state/store";
 
 const subNavigation = [
   { name: "Profile", icon: UserCircleIcon },
@@ -30,19 +31,7 @@ const subNavigation = [
   { name: "Notifications", icon: BellIcon },
   { name: "Plan & Billing", icon: CreditCardIcon },
   { name: "Integrations", icon: SquaresPlusIcon },
-  { name: "Transactions", icon: CurrencyDollarIcon}
-];
-
-const payments = [
-  {
-    id: 1,
-    date: "1/1/2023",
-    datetime: "2020-01-01",
-    description: "Business Plan - Annual Billing",
-    amount: "CA$109.00",
-    href: "#",
-  },
-  // More payments...
+  { name: "Transactions", icon: CurrencyDollarIcon },
 ];
 
 function classNames(...classes) {
@@ -50,9 +39,17 @@ function classNames(...classes) {
 }
 
 export default function Account() {
+  const { userRegistered } = useSelector((state: RootState) => state.global);
   const [activeInfo, setActiveInfo] = useState("Profile");
   const navigate = useNavigate();
   const [session, setSession] = useState(null);
+
+  const filteredSubNavigation = subNavigation.filter((item) => {
+    if (item.name === "Account") {
+      return userRegistered ? false : true;
+    }
+    return true;
+  });
 
   useEffect(() => {
     const setAuth = async () => {
@@ -81,7 +78,7 @@ export default function Account() {
             <div className="lg:grid lg:grid-cols-12 lg:gap-x-5">
               <aside className="py-6 px-2 sm:px-6 lg:col-span-3 lg:py-0 lg:px-0">
                 <nav className="space-y-1">
-                  {subNavigation.map((item) => (
+                  {filteredSubNavigation.map((item) => (
                     <button
                       key={item.name}
                       onClick={() => setActiveInfo(item.name)}
@@ -153,10 +150,10 @@ export default function Account() {
                   <Wallet />
                 </div>
               )}
-                 {/* Transactions*/}
-                 {activeInfo === "Transactions" && (
+              {/* Transactions*/}
+              {activeInfo === "Transactions" && (
                 <div className="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
-                  <Transactions/>
+                  <Transactions />
                 </div>
               )}
             </div>
