@@ -13,22 +13,31 @@ import {
 } from "../../utils/emails-verification/verify";
 import SubscriptionModal from "../SubscriptionModal";
 import { ThreeCircles } from "react-loader-spinner";
+import { useSelector } from "react-redux";
+import { RootState } from "../../state/store";
+import { deleteAsset, uploadFile } from "../../utils/storage-config/functions";
 
 const Profile = ({ activate }) => {
+  const { storageInitiated } = useSelector((state: RootState) => state.global);
   const [userId, setUserId] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [updating, setUpdating] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [noUser, setNoUser] = useState(false);
 
   const [email, setEmail] = useState(null);
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [proofOfAddress, setProofOfAddress] = useState(null);
+  const [idCopy, setIdCopy] = useState(null);
+  const [idTooBig, setIdTooBig] = useState(false);
+  const [addresFileTooBig, setAddresFileTooBig] = useState(false);
 
   // update useStates
   const [isEditNameMode, setIsEditNameMode] = useState(false);
   const [isEditEmailMode, setIsEditEmailMode] = useState(false);
   const [isEditCompanyMode, setIsEditCompanyMode] = useState(false);
   const [isEditAboutMode, setIsEditAboutMode] = useState(false);
-  const [updating, setUpdating] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleFirstNameChange = (value) => {
     setUserInfo((prevUserInfo) => ({
@@ -63,6 +72,103 @@ const Profile = ({ activate }) => {
       ...prevUserInfo,
       about: value,
     }));
+  };
+
+  const handleIdCopyChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      const maxSize = 5 * 1024 * 1024;
+      if (selectedFile.size > maxSize) {
+        setIdTooBig(true);
+        setIdCopy(selectedFile);
+      } else {
+        setIdCopy(selectedFile);
+        setIdTooBig(false);
+      }
+    }
+  };
+
+  const handleAddressCopyChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      const maxSize = 5 * 1024 * 1024;
+      if (selectedFile.size > maxSize) {
+        setAddresFileTooBig(true);
+        setProofOfAddress(selectedFile);
+      } else {
+        setProofOfAddress(selectedFile);
+        setAddresFileTooBig(false);
+      }
+    }
+  };
+
+  const updateProfileIdCopy = async () => {
+    setUpdating(true);
+    try {
+      console.log("Updating id file");
+      await deleteAsset(userInfo.kycIDCopy);
+      const idCopyUrl = await uploadAsset(idCopy);
+      console.log("Profile id copy saved", idCopyUrl);
+      const updatedObject = {
+        ...userInfo,
+        kycIDCopy: idCopyUrl,
+        status: "pending",
+        isUpdated: true,
+      };
+      await backendActor.updateKYCRequest(userInfo.userId, updatedObject);
+      toast.success("Profile Information updated", {
+        autoClose: 5000,
+        position: "top-center",
+        hideProgressBar: true,
+      });
+      setUpdating(false);
+      setIdCopy(null);
+      setIdTooBig(false);
+    } catch (error) {
+      setUpdating(false);
+      console.log("Error when updating profile id copy");
+    }
+  };
+
+  const updateProfileProofOfAddress = async () => {
+    setUpdating(true);
+    try {
+      console.log("Updating id file");
+      await deleteAsset(userInfo.proofOfAddressCopy);
+      const addressUrl = await uploadAsset(proofOfAddress);
+      console.log("address file saved", addressUrl);
+      const updatedObject = {
+        ...userInfo,
+        proofOfAddressCopy: addressUrl,
+        status: "pending",
+        isUpdated: true,
+      };
+      await backendActor.updateKYCRequest(userInfo.userId, updatedObject);
+      toast.success("Profile Information updated", {
+        autoClose: 5000,
+        position: "top-center",
+        hideProgressBar: true,
+      });
+      setUpdating(false);
+      setProofOfAddress(null);
+      setAddresFileTooBig(false);
+    } catch (error) {
+      setUpdating(false);
+      console.log("Error when updating profile id copy");
+    }
+  };
+
+  const uploadAsset = async (file) => {
+    if (storageInitiated) {
+      const file_path = location.pathname;
+      try {
+        const assetUrl = await uploadFile(file, file_path);
+        console.log("This file was successfully uploaded:", file.name);
+        return assetUrl;
+      } catch (error) {
+        console.error("Error uploading file:", file.name, error);
+      }
+    }
   };
 
   const getPrincipalId = async () => {
@@ -104,7 +210,7 @@ const Profile = ({ activate }) => {
   }, [userId]);
 
   const initProfileUpdate = async (field: string) => {
-    setLoading(true);
+    setUpdating(true);
     if (field === "first-last-name") {
       await updateProfile();
       setIsEditNameMode(false);
@@ -132,9 +238,9 @@ const Profile = ({ activate }) => {
         position: "top-center",
         hideProgressBar: true,
       });
-      setLoading(false);
+      setUpdating(false);
     } catch (error) {
-      setLoading(false);
+      setUpdating(false);
       console.log("Error when updating user information", error);
     }
   };
@@ -143,7 +249,7 @@ const Profile = ({ activate }) => {
     try {
       if (email === userInfo.email) {
         console.log("Not updating the email is the same");
-        setLoading(false);
+        setUpdating(false);
       } else {
         await backendActor.updateKYCRequest(userInfo.userId, userInfo);
 
@@ -157,12 +263,12 @@ const Profile = ({ activate }) => {
         );
 
         await sendVerificationEmail(userInfo.firstName, userInfo.email, url);
-        setLoading(false);
+        setUpdating(false);
         setShowModal(true);
       }
     } catch (error) {
       console.log("Error when updating email", error);
-      setLoading(false);
+      setUpdating(false);
     }
   };
 
@@ -188,7 +294,9 @@ const Profile = ({ activate }) => {
                 >
                   <circle cx={4} cy={4} r={3} />
                 </svg>
-                Pending verification
+                {userInfo.status === "pending"
+                  ? "Pending verification"
+                  : "Verified"}
               </span>
             </div>
           </div>
@@ -251,7 +359,7 @@ const Profile = ({ activate }) => {
                             disabled={
                               !userInfo.firstName ||
                               !userInfo.lastName ||
-                              loading
+                              updating
                             }
                             onClick={(e) => {
                               e.preventDefault();
@@ -259,22 +367,22 @@ const Profile = ({ activate }) => {
                             }}
                             className="rounded-md ml-5 px-3 font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                           >
-                           {loading ? (
-                            <ThreeCircles
-                              height="20"
-                              width="20"
-                              color="#4fa94d"
-                              wrapperStyle={{}}
-                              wrapperClass=""
-                              visible={true}
-                              ariaLabel="three-circles-rotating"
-                              outerCircleColor=""
-                              innerCircleColor=""
-                              middleCircleColor=""
-                            />
-                          ) : (
-                            "Save"
-                          )}
+                            {updating ? (
+                              <ThreeCircles
+                                height="20"
+                                width="20"
+                                color="#4fa94d"
+                                wrapperStyle={{}}
+                                wrapperClass=""
+                                visible={true}
+                                ariaLabel="three-circles-rotating"
+                                outerCircleColor=""
+                                innerCircleColor=""
+                                middleCircleColor=""
+                              />
+                            ) : (
+                              "Save"
+                            )}
                           </button>
                         </>
                       ) : (
@@ -325,14 +433,14 @@ const Profile = ({ activate }) => {
                       {isEditEmailMode ? (
                         <button
                           type="submit"
-                          disabled={!email || loading}
+                          disabled={!email || updating}
                           onClick={(e) => {
                             e.preventDefault();
                             initProfileUpdate("email");
                           }}
                           className="rounded-md ml-5 px-3 font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         >
-                          {loading ? (
+                          {updating ? (
                             <ThreeCircles
                               height="20"
                               width="20"
@@ -394,14 +502,14 @@ const Profile = ({ activate }) => {
                       {isEditCompanyMode ? (
                         <button
                           type="submit"
-                          disabled={!userInfo.organization || loading}
+                          disabled={!userInfo.organization || updating}
                           onClick={(e) => {
                             e.preventDefault();
                             initProfileUpdate("organization");
                           }}
                           className="rounded-md ml-5 px-3 font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         >
-                          {loading ? (
+                          {updating ? (
                             <ThreeCircles
                               height="20"
                               width="20"
@@ -460,14 +568,14 @@ const Profile = ({ activate }) => {
                       {isEditAboutMode ? (
                         <button
                           type="submit"
-                          disabled={!userInfo.about || loading}
+                          disabled={!userInfo.about || updating}
                           onClick={(e) => {
                             e.preventDefault();
                             initProfileUpdate("about");
                           }}
                           className="rounded-md ml-5 px-3 font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         >
-                         {loading ? (
+                          {updating ? (
                             <ThreeCircles
                               height="20"
                               width="20"
@@ -509,61 +617,162 @@ const Profile = ({ activate }) => {
                     role="list"
                     className="divide-y divide-gray-200 rounded-md border border-gray-200"
                   >
-                    <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                      <div className="flex w-0 flex-1 items-center">
-                        <PaperClipIcon
-                          className="h-5 w-5 flex-shrink-0 text-gray-400"
-                          aria-hidden="true"
-                        />
-                        <span className="ml-2 w-0 flex-1 truncate">
-                          {userInfo.firstName}-identiy.pdf
-                        </span>
+                    <li className="">
+                      <div className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                        <div className="flex w-0 flex-1 items-center">
+                          <PaperClipIcon
+                            className="h-5 w-5 flex-shrink-0 text-gray-400"
+                            aria-hidden="true"
+                          />
+                          <span className="ml-2 w-0 flex-1 truncate">
+                            Passport/ID-Copy pdf
+                          </span>
+                        </div>
+                        <div className="ml-4 flex flex-shrink-0 space-x-4">
+                          {idCopy && !idTooBig ? (
+                            <button
+                              onClick={updateProfileIdCopy}
+                              className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                            >
+                              {updating ? (
+                                <ThreeCircles
+                                  height="20"
+                                  width="20"
+                                  color="#4fa94d"
+                                  wrapperStyle={{}}
+                                  wrapperClass=""
+                                  visible={true}
+                                  ariaLabel="three-circles-rotating"
+                                  outerCircleColor=""
+                                  innerCircleColor=""
+                                  middleCircleColor=""
+                                />
+                              ) : (
+                                "Save File"
+                              )}
+                            </button>
+                          ) : (
+                            <button className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                              <form>
+                                <label htmlFor="id-copy" className="">
+                                  {idCopy && idTooBig
+                                    ? "Change File"
+                                    : "Update"}
+                                </label>
+                                <input
+                                  type="file"
+                                  name="id-copy"
+                                  id="id-copy"
+                                  onChange={handleIdCopyChange}
+                                  className="hidden"
+                                  accept="application/pdf, image/x-png,image/jpeg,image/gif,image/svg+xml,image/webp"
+                                />
+                              </form>
+                            </button>
+                          )}
+                          <span className="text-gray-300" aria-hidden="true">
+                            |
+                          </span>
+                          <a href={userInfo.kycIDCopy}>
+                            <button className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                              View
+                            </button>
+                          </a>
+                        </div>
                       </div>
-                      <div className="ml-4 flex flex-shrink-0 space-x-4">
-                        <button
-                          type="button"
-                          className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                        >
-                          Update
-                        </button>
-                        <span className="text-gray-300" aria-hidden="true">
-                          |
-                        </span>
-                        <button
-                          type="button"
-                          className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                        >
-                          Remove
-                        </button>
-                      </div>
+                      {idCopy && (
+                        <div className="flex gap-5 px-3 items-center">
+                          {idTooBig ? (
+                            <span className="text-red-600">
+                              File too big. Must be less than 5MB
+                            </span>
+                          ) : (
+                            <span>{idCopy.name}</span>
+                          )}
+                        </div>
+                      )}
                     </li>
-                    <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                      <div className="flex w-0 flex-1 items-center">
-                        <PaperClipIcon
-                          className="h-5 w-5 flex-shrink-0 text-gray-400"
-                          aria-hidden="true"
-                        />
-                        <span className="ml-2 w-0 flex-1 truncate">
-                          foodlovers-kyc.pdf
-                        </span>
+                    <li className="">
+                      <div className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                        <div className="flex w-0 flex-1 items-center">
+                          <PaperClipIcon
+                            className="h-5 w-5 flex-shrink-0 text-gray-400"
+                            aria-hidden="true"
+                          />
+                          <span className="ml-2 w-0 flex-1 truncate">
+                            Proof-of-Address pdf
+                          </span>
+                        </div>
+                        <div className="ml-4 flex flex-shrink-0 space-x-4">
+                          {proofOfAddress && !addresFileTooBig ? (
+                            <button
+                              onClick={updateProfileProofOfAddress}
+                              className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                            >
+                              {updating ? (
+                                <ThreeCircles
+                                  height="20"
+                                  width="20"
+                                  color="#4fa94d"
+                                  wrapperStyle={{}}
+                                  wrapperClass=""
+                                  visible={true}
+                                  ariaLabel="three-circles-rotating"
+                                  outerCircleColor=""
+                                  innerCircleColor=""
+                                  middleCircleColor=""
+                                />
+                              ) : (
+                                "Save File"
+                              )}
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                            >
+                              <form>
+                                <label htmlFor="address-copy" className="">
+                                  {proofOfAddress && addresFileTooBig
+                                    ? "Change File"
+                                    : "Update"}
+                                </label>
+                                <input
+                                  type="file"
+                                  name="address-copy"
+                                  id="address-copy"
+                                  onChange={handleAddressCopyChange}
+                                  className="hidden"
+                                  accept="application/pdf, image/x-png,image/jpeg,image/gif,image/svg+xml,image/webp"
+                                />
+                              </form>
+                            </button>
+                          )}
+
+                          <span className="text-gray-300" aria-hidden="true">
+                            |
+                          </span>
+                          <a href={userInfo.proofOfAddressCopy}>
+                            <button
+                              type="button"
+                              className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                            >
+                              View
+                            </button>
+                          </a>
+                        </div>
                       </div>
-                      <div className="ml-4 flex flex-shrink-0 space-x-4">
-                        <button
-                          type="button"
-                          className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                        >
-                          Update
-                        </button>
-                        <span className="text-gray-300" aria-hidden="true">
-                          |
-                        </span>
-                        <button
-                          type="button"
-                          className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                        >
-                          Remove
-                        </button>
-                      </div>
+                      {proofOfAddress && (
+                        <div className="flex gap-5 px-3 items-center">
+                          {addresFileTooBig ? (
+                            <span className="text-red-600">
+                              File too big. Must be less than 5MB
+                            </span>
+                          ) : (
+                            <span>{proofOfAddress.name}</span>
+                          )}
+                        </div>
+                      )}
                     </li>
                   </ul>
                 </dd>
