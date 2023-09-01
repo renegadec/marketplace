@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 import { AuthClient } from "@dfinity/auth-client";
-import { Actor, HttpAgent } from "@dfinity/agent";
+import { v4 as uuidv4 } from "uuid";
 import Loader from "../Loader";
 import { toast } from "react-toastify";
 import { backendActor } from "../../hooks/config";
+import { Result } from "../../utils/types";
+import {
+  createVerificationEntry,
+  generateVerificationUrl,
+  sendVerificationEmail,
+} from "../../utils/emails-verification/verify";
+import SubscriptionModal from "../SubscriptionModal";
+import { ThreeCircles } from "react-loader-spinner";
 
 const Profile = ({ activate }) => {
   const [userId, setUserId] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [noUser, setNoUser] = useState(false);
+
+  const [email, setEmail] = useState(null);
 
   // update useStates
   const [isEditNameMode, setIsEditNameMode] = useState(false);
@@ -26,17 +37,17 @@ const Profile = ({ activate }) => {
     }));
   };
 
-  const handleLastNameChange = (value) => {
-    setUserInfo((prevUserInfo) => ({
-      ...prevUserInfo,
-      lastName: value,
-    }));
-  };
-
   const handleEmailChange = (value) => {
     setUserInfo((prevUserInfo) => ({
       ...prevUserInfo,
       email: value,
+    }));
+  };
+
+  const handleLastNameChange = (value) => {
+    setUserInfo((prevUserInfo) => ({
+      ...prevUserInfo,
+      lastName: value,
     }));
   };
 
@@ -64,17 +75,13 @@ const Profile = ({ activate }) => {
     }
   };
 
-  interface Response {
-    err?: any;
-    ok?: any;
-  }
-
   const getCustomerInfo = async () => {
     setLoading(true);
     try {
-      const res: Response = await backendActor.getKYCRequest(userId);
+      const res: Result = await backendActor.getKYCRequest(userId);
       if (res.ok) {
         setUserInfo(res.ok);
+        setEmail(res.ok.email);
         setLoading(false);
       } else if (res.err) {
         setNoUser(true);
@@ -102,11 +109,14 @@ const Profile = ({ activate }) => {
       await updateProfile();
       setIsEditNameMode(false);
     } else if (field === "organization") {
-      await updateProfile()
-      setIsEditCompanyMode(false)
+      await updateProfile();
+      setIsEditCompanyMode(false);
     } else if (field === "about") {
-      await updateProfile()
-      setIsEditAboutMode(false)
+      await updateProfile();
+      setIsEditAboutMode(false);
+    } else if (field === "email") {
+      await updateEmail();
+      setIsEditEmailMode(false);
     }
   };
 
@@ -126,6 +136,33 @@ const Profile = ({ activate }) => {
     } catch (error) {
       setLoading(false);
       console.log("Error when updating user information", error);
+    }
+  };
+
+  const updateEmail = async () => {
+    try {
+      if (email === userInfo.email) {
+        console.log("Not updating the email is the same");
+        setLoading(false);
+      } else {
+        await backendActor.updateKYCRequest(userInfo.userId, userInfo);
+
+        let uniqueString: string = String(uuidv4());
+        const url = generateVerificationUrl(userInfo.id, uniqueString);
+
+        await createVerificationEntry(
+          userInfo.userId,
+          userInfo.id,
+          uniqueString
+        );
+
+        await sendVerificationEmail(userInfo.firstName, userInfo.email, url);
+        setLoading(false);
+        setShowModal(true);
+      }
+    } catch (error) {
+      console.log("Error when updating email", error);
+      setLoading(false);
     }
   };
 
@@ -222,7 +259,22 @@ const Profile = ({ activate }) => {
                             }}
                             className="rounded-md ml-5 px-3 font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                           >
-                            Save
+                           {loading ? (
+                            <ThreeCircles
+                              height="20"
+                              width="20"
+                              color="#4fa94d"
+                              wrapperStyle={{}}
+                              wrapperClass=""
+                              visible={true}
+                              ariaLabel="three-circles-rotating"
+                              outerCircleColor=""
+                              innerCircleColor=""
+                              middleCircleColor=""
+                            />
+                          ) : (
+                            "Save"
+                          )}
                           </button>
                         </>
                       ) : (
@@ -240,53 +292,79 @@ const Profile = ({ activate }) => {
                   </dd>
                 </div>
               </form>
-              {/* <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-                <dt className="text-sm font-medium text-gray-500">
-                  Designation
-                </dt>
-                <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  <span className="flex-grow">Managing Director</span>
-                  <span className="ml-4 flex-shrink-0">
-                    <button
-                      type="button"
-                      className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                    >
-                      Update
-                    </button>
-                  </span>
-                </dd>
-              </div> */}
-              <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-                <dt className="text-sm font-medium text-gray-500">
-                  Email address
-                </dt>
-                <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {isEditEmailMode ? (
-                    <div className="flex-grow">
-                      <input
-                        type="text"
-                        value={userInfo.email}
-                        onChange={(e) => handleEmailChange(e.target.value)}
-                        className="w-full bg-transparent rounded-md border-0 py-1 pl-2 mr-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  ) : (
-                    <span className="flex-grow">
-                      <span className="flex-grow">{userInfo.email}</span>
-                    </span>
-                  )}
+              <form action="">
+                <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+                  <dt className="text-sm font-medium text-gray-500">
+                    Email address
+                  </dt>
+                  <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {isEditEmailMode ? (
+                      <div className="flex-grow">
+                        <input
+                          type="email"
+                          value={userInfo.email}
+                          onChange={(e) => handleEmailChange(e.target.value)}
+                          required
+                          className="w-full bg-transparent rounded-md border-0 py-1 pl-2 mr-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        />
+                        <span
+                          className={`mt-1 text-red-600 text-xs" ${
+                            email ? `hidden` : `block`
+                          }`}
+                        >
+                          Email is required
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="flex-grow">
+                        <span className="flex-grow">{email}</span>
+                      </span>
+                    )}
 
-                  <span className="ml-4 flex-shrink-0">
-                    <button
-                      type="button"
-                      onClick={() => setIsEditEmailMode(!isEditEmailMode)}
-                      className="rounded-md  font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                    >
-                      {isEditEmailMode ? "Save" : "Update"}
-                    </button>
-                  </span>
-                </dd>
-              </div>
+                    <span className="ml-4 flex-shrink-0">
+                      {isEditEmailMode ? (
+                        <button
+                          type="submit"
+                          disabled={!email || loading}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            initProfileUpdate("email");
+                          }}
+                          className="rounded-md ml-5 px-3 font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                        >
+                          {loading ? (
+                            <ThreeCircles
+                              height="20"
+                              width="20"
+                              color="#4fa94d"
+                              wrapperStyle={{}}
+                              wrapperClass=""
+                              visible={true}
+                              ariaLabel="three-circles-rotating"
+                              outerCircleColor=""
+                              innerCircleColor=""
+                              middleCircleColor=""
+                            />
+                          ) : (
+                            "Save"
+                          )}
+                        </button>
+                      ) : (
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setIsEditEmailMode(true);
+                          }}
+                          className="rounded-md  font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                        >
+                          Update
+                        </button>
+                      )}
+                    </span>
+                  </dd>
+                </div>
+                {showModal && <SubscriptionModal />}
+              </form>
               <form action="">
                 <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
                   <dt className="text-sm font-medium text-gray-500">
@@ -323,14 +401,29 @@ const Profile = ({ activate }) => {
                           }}
                           className="rounded-md ml-5 px-3 font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         >
-                          Save
+                          {loading ? (
+                            <ThreeCircles
+                              height="20"
+                              width="20"
+                              color="#4fa94d"
+                              wrapperStyle={{}}
+                              wrapperClass=""
+                              visible={true}
+                              ariaLabel="three-circles-rotating"
+                              outerCircleColor=""
+                              innerCircleColor=""
+                              middleCircleColor=""
+                            />
+                          ) : (
+                            "Save"
+                          )}
                         </button>
                       ) : (
                         <button
                           onClick={(e) => {
-                            e.preventDefault()
-                            setIsEditCompanyMode(true)
-                          } }
+                            e.preventDefault();
+                            setIsEditCompanyMode(true);
+                          }}
                           className="rounded-md  font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         >
                           Update
@@ -341,52 +434,71 @@ const Profile = ({ activate }) => {
                 </div>
               </form>
               <form action="">
-              <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-                <dt className="text-sm font-medium text-gray-500">About</dt>
-                <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {isEditAboutMode ? (
-                    <div className="flex-grow">
-                      <input
-                        type="text"
-                        value={userInfo.about}
-                        onChange={(e) => handleAboutChange(e.target.value)}
-                        className="w-full bg-transparent rounded-md border-0 py-1 pl-2 mr-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                      />
-                      <span
+                <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+                  <dt className="text-sm font-medium text-gray-500">About</dt>
+                  <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {isEditAboutMode ? (
+                      <div className="flex-grow">
+                        <input
+                          type="text"
+                          value={userInfo.about}
+                          onChange={(e) => handleAboutChange(e.target.value)}
+                          className="w-full bg-transparent rounded-md border-0 py-1 pl-2 mr-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        />
+                        <span
                           className={`mt-1 text-red-600 text-xs" ${
                             userInfo.about ? `hidden` : `block`
                           }`}
                         >
                           About name is required
                         </span>
-                    </div>
-                  ) : (
-                    <span className="flex-grow">{userInfo.about}</span>
-                  )}
-                  <span className="ml-4 flex-shrink-0">
-                   {isEditAboutMode ?  <button
-                      type="submit"
-                      disabled={!userInfo.about || loading}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        initProfileUpdate("about")
-                      }}
-                      className="rounded-md ml-5 px-3 font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                    >
-                      Save
-                    </button> :  <button
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        setIsEditAboutMode(true)
-                      }}
-                      className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                    >
-                    Update
-                    </button>}
-                  </span>
-                </dd>
-              </div>
+                      </div>
+                    ) : (
+                      <span className="flex-grow">{userInfo.about}</span>
+                    )}
+                    <span className="ml-4 flex-shrink-0">
+                      {isEditAboutMode ? (
+                        <button
+                          type="submit"
+                          disabled={!userInfo.about || loading}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            initProfileUpdate("about");
+                          }}
+                          className="rounded-md ml-5 px-3 font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                        >
+                         {loading ? (
+                            <ThreeCircles
+                              height="20"
+                              width="20"
+                              color="#4fa94d"
+                              wrapperStyle={{}}
+                              wrapperClass=""
+                              visible={true}
+                              ariaLabel="three-circles-rotating"
+                              outerCircleColor=""
+                              innerCircleColor=""
+                              middleCircleColor=""
+                            />
+                          ) : (
+                            "Save"
+                          )}
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setIsEditAboutMode(true);
+                          }}
+                          className="rounded-md font-medium text-primary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                        >
+                          Update
+                        </button>
+                      )}
+                    </span>
+                  </dd>
+                </div>
               </form>
               <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
                 <dt className="text-sm font-medium text-gray-500">
