@@ -2,11 +2,13 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface GlobalState {
-  storageInitiated: boolean
+  storageInitiated: boolean,
+  userRegistered: boolean,
 }
 
 const initialState: GlobalState = {
   storageInitiated: false,
+  userRegistered: false,
 }
 
 export const globalSlice = createSlice({
@@ -16,9 +18,12 @@ export const globalSlice = createSlice({
     setInit: (state) => {
         state.storageInitiated = true;
     },
+    setIsRegistered: (state) => {
+        state.userRegistered = true;
+    },
   },
 })
 
-export const { setInit } = globalSlice.actions
+export const { setInit, setIsRegistered } = globalSlice.actions
 
 export default globalSlice.reducer

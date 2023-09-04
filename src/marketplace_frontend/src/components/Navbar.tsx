@@ -14,6 +14,8 @@ import { Logo } from "../../assets/assets.js";
 import { useAuth } from "../hooks";
 import { AuthClient } from "@dfinity/auth-client";
 import { backendActor } from "../hooks/config";
+import { useDispatch } from "react-redux";
+import { setIsRegistered } from "../state/globalSlice";
 
 const user = {
   imageUrl: "./avatar.webp",
@@ -37,6 +39,7 @@ function classNames(...classes) {
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userId, setUserId] = useState(null);
 
@@ -90,6 +93,7 @@ const Navbar = () => {
     const info: Response = await backendActor.getKYCRequest(userId);
     if (info.ok) {
       setUserInfo(info.ok)
+      dispatch(setIsRegistered())
     }
   }
 

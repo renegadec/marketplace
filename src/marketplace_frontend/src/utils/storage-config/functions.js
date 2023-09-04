@@ -2,8 +2,8 @@ import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { getActor } from "./actor";
 import { updateChecksum } from "./utils";
 
-import { idlFactory as fileStorageIdlFactory } from "../../../declarations/file_storage/index";
-import { idlFactory as fileScalingManagerIdlFactory } from "../../../declarations/file_scaling_manager/index";
+import { idlFactory as fileStorageIdlFactory } from "../../../../declarations/file_storage/index";
+import { idlFactory as fileScalingManagerIdlFactory } from "../../../../declarations/file_scaling_manager/index";
 // import { canisterId as scalingCanId } from "../../declarations/file_scaling_manager/index";
 // import { canisterId as storageCanid } from "../../declarations/file_storage/index";
 
