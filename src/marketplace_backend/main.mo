@@ -154,9 +154,14 @@ actor Tswaanda {
 
   public shared query func getPendingKYCReaquest() : async [Customer] {
     let customersArray = Iter.toArray(mapOfCustomers.vals());
-    let pending = Array.filter<Customer>(customersArray, func customer = customer.status == "pending");
-    return pending;
+    return Array.filter<Customer>(customersArray, func customer = customer.status == "pending");
   };
+
+  public shared query func getApprovedKYC() : async [Customer] {
+    let customersArray = Iter.toArray(mapOfCustomers.vals());
+    return Array.filter<Customer>(customersArray, func customer = customer.status == "approved");
+  };
+
   public shared query func getPendingKYCReaquestSize() : async Nat {
     let customersArray = Iter.toArray(mapOfCustomers.vals());
     let pending = Array.filter<Customer>(customersArray, func customer = customer.status == "pending");
@@ -351,7 +356,7 @@ actor Tswaanda {
     return true;
   };
 
-    public shared query func checkIfEmailSubscribed(email : Text) : async [NewsLetterSubscription] {
+  public shared query func checkIfEmailSubscribed(email : Text) : async [NewsLetterSubscription] {
     let subscridedArray = Iter.toArray(newsLetterSubscriptions.vals());
     let entry = Array.filter<NewsLetterSubscription>(subscridedArray, func customer = customer.email == email);
     return entry;
