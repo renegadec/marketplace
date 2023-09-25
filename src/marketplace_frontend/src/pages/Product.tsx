@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import { AuthClient } from "@dfinity/auth-client";
 import { toast } from "react-toastify";
 import { adminBackendActor, backendActor } from "../hooks/config";
+import LeaveReview from "../components/LeaveReview";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -30,6 +31,9 @@ export default function Product() {
   const [inCart, setInCart] = useState(false);
   const [checking, setChecking] = useState(true);
 
+  const [reviews, setReviews] = useState<any>([])
+  const [openReviewModal, setOpenReviewModal] = useState(false)
+
   const getPrincipalId = async () => {
     const authClient = await AuthClient.create();
 
@@ -41,24 +45,6 @@ export default function Product() {
       setChecking(false);
     }
   };
-
-  const details = [
-    {
-      name: "Weighting",
-      items: [`Total Weight: ${product?.weight} KG, Unit Weight: 20KG`],
-    },
-    {
-      name: "Reviews",
-      items: ["Great product"],
-    },
-    {
-      name: "Shipping",
-      items: [
-        "Shipping will be initiated on down payments",
-        "Available for shipping to SA, AU, EU",
-      ],
-    },
-  ];
 
   interface Response {
     err?: any;
@@ -145,11 +131,20 @@ export default function Product() {
     navigate("/shopping-cart");
   };
 
+  const getProductReviews = async () => {
+    const res = await adminBackendActor.getProductReviews(id);
+    console.log("reviews",  res)
+    if (res) {
+      setReviews(res)
+    }
+  }
+
   useEffect(() => {
     const handleScrollToTop = () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
     handleScrollToTop();
+    getProductReviews()
   }, []);
 
   return (
@@ -215,7 +210,13 @@ export default function Product() {
                   $ {product?.price} per tonne
                 </p>
                 <div className="my-4 text-gray-600">
-                  <h1>Minimum order: <span className="text-gray-900"> {product?.minOrder} Tonne</span></h1>
+                  <h1>
+                    Minimum order:{" "}
+                    <span className="text-gray-900">
+                      {" "}
+                      {product?.minOrder} Tonne
+                    </span>
+                  </h1>
                 </div>
               </div>
 
@@ -297,49 +298,97 @@ export default function Product() {
                 </h2>
 
                 <div className="divide-y divide-gray-200 border-t">
-                  {details.map((detail) => (
-                    <Disclosure as="div" key={detail.name}>
-                      {({ open }) => (
-                        <>
-                          <h3>
-                            <Disclosure.Button className="group relative flex w-full items-center justify-between py-6 text-left">
-                              <span
-                                className={classNames(
-                                  open ? "text-indigo-600" : "text-gray-900",
-                                  "text-sm font-medium"
-                                )}
-                              >
-                                {detail.name}
-                              </span>
-                              <span className="ml-6 flex items-center">
-                                {open ? (
-                                  <MinusIcon
-                                    className="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500"
-                                    aria-hidden="true"
-                                  />
-                                ) : (
-                                  <PlusIcon
-                                    className="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                                    aria-hidden="true"
-                                  />
-                                )}
-                              </span>
-                            </Disclosure.Button>
-                          </h3>
-                          <Disclosure.Panel
-                            as="div"
-                            className="prose prose-sm pb-6"
-                          >
-                            <ul role="list">
-                              {detail.items.map((item) => (
-                                <li key={item}>{item}</li>
-                              ))}
-                            </ul>
-                          </Disclosure.Panel>
-                        </>
-                      )}
-                    </Disclosure>
-                  ))}
+                  {/* Shipping Info */}
+
+                  <Disclosure as="div">
+                    {({ open }) => (
+                      <>
+                        <h3>
+                          <Disclosure.Button className="group relative flex w-full items-center justify-between py-6 text-left">
+                            <span
+                              className={classNames(
+                                open ? "text-green-700" : "text-gray-900",
+                                " font-medium"
+                              )}
+                            >
+                              Shipping
+                            </span>
+                            <span className="ml-6 flex items-center">
+                              {open ? (
+                                <MinusIcon
+                                  className="block h-6 w-6 text-primary group-hover:text-primary"
+                                  aria-hidden="true"
+                                />
+                              ) : (
+                                <PlusIcon
+                                  className="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                                  aria-hidden="true"
+                                />
+                              )}
+                            </span>
+                          </Disclosure.Button>
+                        </h3>
+                        <Disclosure.Panel
+                          as="div"
+                          className="prose prose-sm pb-6"
+                        >
+                          <ul role="list">
+                            <li>
+                              Shipping will be initiated on down payments,
+                            </li>
+                            <li>
+                              Available for shipping to SA, AU, EU, US, UK
+                            </li>
+                          </ul>
+                        </Disclosure.Panel>
+                      </>
+                    )}
+                  </Disclosure>
+
+                  {/* Product Reviews */}
+                  <Disclosure as="div">
+                    {({ open }) => (
+                      <>
+                        <h3>
+                          <Disclosure.Button className="group relative flex w-full items-center justify-between py-6 text-left">
+                            <span
+                              className={classNames(
+                                open ? "text-green-700" : "text-gray-900",
+                                " font-medium"
+                              )}
+                            >
+                              Reviews
+                            </span>
+                            <span className="ml-6 flex items-center">
+                              {open ? (
+                                <MinusIcon
+                                  className="block h-6 w-6 text-primary group-hover:text-primary"
+                                  aria-hidden="true"
+                                />
+                              ) : (
+                                <PlusIcon
+                                  className="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                                  aria-hidden="true"
+                                />
+                              )}
+                            </span>
+                          </Disclosure.Button>
+                        </h3>
+                        <Disclosure.Panel
+                          as="div"
+                          className="prose prose-sm pb-6"
+                        >
+                          <button onClick={() => setOpenReviewModal(true)} className="text-white bg-primary rounded py-1.5 px-2 my-3">
+                            Leave a review
+                          </button>
+                          {openReviewModal && (<LeaveReview {...{setOpenReviewModal}} />)}
+                          <ul role="list">
+                            <li>This product is so sick</li>
+                          </ul>
+                        </Disclosure.Panel>
+                      </>
+                    )}
+                  </Disclosure>
                 </div>
               </section>
             </div>
