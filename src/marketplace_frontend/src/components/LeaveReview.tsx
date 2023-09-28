@@ -3,8 +3,8 @@ import { ZodType, z } from "zod";
 import { set, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { v4 as uuidv4 } from "uuid";
-import { adminBackendActor, backendActor } from "../hooks/config";
 import { toast } from "react-toastify";
+import { useAuth } from "./ContextWrapper";
 
 type FormData = {
   review: string;
@@ -15,7 +15,9 @@ interface Response {
   ok?: any;
 }
 
-const LeaveReview = ({ setOpenReviewModal, id, userId, getProductReviews }) => {
+const LeaveReview = ({ setOpenReviewModal, id, getProductReviews }) => {
+
+  const {identity, backendActor, adminBackendActor} = useAuth();
   const [rating, setRating] = React.useState(0);
   const [userInfo, setUserInfo] = React.useState(null);
   const [submitting, setSubmitting] = React.useState(false);
@@ -34,10 +36,10 @@ const LeaveReview = ({ setOpenReviewModal, id, userId, getProductReviews }) => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   useEffect(() => {
-    if (userId)
+    if (identity)
       (async () => {
         try {
-          const res: Response = await backendActor.getKYCRequest(userId);
+          const res: Response = await backendActor.getKYCRequest(identity.getPrincipal());
           if (res.err) {
             console.log(res.err);
           } else {
@@ -47,7 +49,7 @@ const LeaveReview = ({ setOpenReviewModal, id, userId, getProductReviews }) => {
           console.log(error);
         }
       })();
-  }, [userId]);
+  }, [identity]);
 
   const submitReview = async (data: FormData) => {
     if (rating === 0) {

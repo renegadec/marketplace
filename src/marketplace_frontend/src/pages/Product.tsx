@@ -10,11 +10,10 @@ import {
 } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { AuthClient } from "@dfinity/auth-client";
 import { toast } from "react-toastify";
-import { adminBackendActor, backendActor } from "../hooks/config";
 import LeaveReview from "../components/LeaveReview";
 import ToolTip from "../components/ToolTip";
+import { useAuth } from "../components/ContextWrapper";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -31,12 +30,13 @@ type Review = {
 };
 
 export default function Product() {
+  const {backendActor, adminBackendActor, identity} = useAuth()
+
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [images, setImages] = useState(null);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
-  const [userId, setUserId] = useState(null);
   const [addingtocart, setAddingToCart] = useState(false);
   const [cartItem, setCartItem] = useState(null);
   const [inCart, setInCart] = useState(false);
@@ -46,18 +46,6 @@ export default function Product() {
 
   const [reviews, setReviews] = useState<Review[]>([]);
 
-  const getPrincipalId = async () => {
-    const authClient = await AuthClient.create();
-
-    if (await authClient.isAuthenticated()) {
-      const identity = authClient.getIdentity();
-      const userPrincipal = identity.getPrincipal();
-      setUserId(userPrincipal);
-    } else {
-      setChecking(false);
-    }
-  };
-
   interface Response {
     err?: any;
     ok?: any;
@@ -65,7 +53,6 @@ export default function Product() {
 
   useEffect(() => {
     if (id) {
-      getPrincipalId();
       setLoading(true);
       const getProduct = async () => {
         const result: Response = await adminBackendActor.getProductById(id);
@@ -81,7 +68,7 @@ export default function Product() {
   }, [id]);
 
   const getCartItems = async () => {
-    const res: Response = await backendActor.getMyCartItem(userId);
+    const res: Response = await backendActor.getMyCartItem(identity.getPrincipal());
     if (res.ok) {
       setCartItem(res.ok);
     } else {
@@ -91,10 +78,10 @@ export default function Product() {
   };
 
   useEffect(() => {
-    if (userId) {
+    if (identity) {
       getCartItems();
     }
-  }, [userId]);
+  }, [identity]);
 
   useEffect(() => {
     if (cartItem) {
@@ -116,7 +103,7 @@ export default function Product() {
         }
       );
     } else {
-      if (userId && id && !checking && !inCart) {
+      if (identity.getPrincipal() && id && !checking && !inCart) {
         setAddingToCart(true);
         const date = new Date();
         const timestamp = date.getTime();
@@ -125,9 +112,9 @@ export default function Product() {
           quantity: 1,
           dateCreated: timestamp,
         };
-        const res = await backendActor.addToCart(userId, cartItem);
+        const res = await backendActor.addToCart(identity.getPrincipal(), cartItem);
         getCartItems();
-      } else if (userId === null) {
+      } else if (identity.getPrincipal() === null) {
         toast.warning("You are not logged in", {
           autoClose: 5000,
           position: "top-center",
@@ -144,7 +131,7 @@ export default function Product() {
   };
 
   const handleLeaveReview = () => {
-    if (!userId) {
+    if (!identity.getPrincipal()) {
       toast.warning("Please login first to leave a review", {
         autoClose: 5000,
         position: "top-center",
@@ -211,6 +198,31 @@ export default function Product() {
   useEffect(() => {
     ratingValue(reviews);
   }, [reviews]);
+
+  // Add to favourites
+
+  const addToFavourites = async () => {
+   try {
+    if (!identity.getPrincipal()) {
+      toast.warning("Please login first to add to favourites", {
+        autoClose: 5000,
+        position: "top-center",
+        hideProgressBar: true,
+      });
+    } else {
+      const res = await backendActor.addToFavourites(identity.getPrincipal(), id);
+      if (res) {
+        toast.success("Added to favourites", {
+          autoClose: 5000,
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      }
+    }
+   } catch (error) {
+    console.log(error)
+   }
+  }
 
   return (
     <div className="bg-white">
@@ -459,7 +471,7 @@ export default function Product() {
                           </button>
                           {openReviewModal && (
                             <LeaveReview
-                              {...{ setOpenReviewModal, id, userId, getProductReviews }}
+                              {...{ setOpenReviewModal, id, getProductReviews }}
                             />
                           )}
                           <ul role="list">

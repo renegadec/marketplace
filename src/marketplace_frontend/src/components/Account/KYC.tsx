@@ -1,11 +1,9 @@
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { Fragment, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { AuthClient } from "@dfinity/auth-client";
 import { Transition } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/20/solid";
-import { backendActor } from "../../hooks/config";
 import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
 import { uploadFile } from "../../utils/storage-config/functions";
@@ -22,6 +20,7 @@ import {
   generateVerificationUrl,
   sendVerificationEmail,
 } from "../../utils/emails-verification/verify";
+import { useAuth } from "../ContextWrapper";
 
 type FormData = {
   username: string;
@@ -41,6 +40,8 @@ type FormData = {
 };
 
 export default function KYC() {
+const {backendActor, identity} = useAuth()
+
   const [profilePhoto, setPP] = useState(null);
   const [kycID, setKYCID] = useState(null);
   const [proofOfAddress, setProofOfAddress] = useState(null);
@@ -176,7 +177,7 @@ export default function KYC() {
 
         const kycRequest = {
           id: String(uuidv4()),
-          userId: userId,
+          userId: identity.getPrincipal(),
           userName: data.username,
           firstName: data.firstName,
           lastName: data.lastName,
@@ -217,7 +218,7 @@ export default function KYC() {
           uniqueString
         );
 
-        await createVerificationEntry(userId, kycRequest.id, uniqueString);
+        await createVerificationEntry(identity.getPrincipal(), kycRequest.id, uniqueString);
 
         await sendVerificationEmail(
           data.firstName,
@@ -253,24 +254,9 @@ export default function KYC() {
     const phoneNumberPattern = /^\d{10,13}$/;
     return phoneNumberPattern.test(phoneNumber);
   };
-  const [userId, setUserId] = useState(null);
 
   const [show, setShow] = useState(false);
   const [saving, setSaving] = useState(false);
-
-  const getPrincipalId = async () => {
-    const authClient = await AuthClient.create();
-
-    if (await authClient.isAuthenticated()) {
-      const identity = authClient.getIdentity();
-      const userPrincipal = identity.getPrincipal();
-      setUserId(userPrincipal);
-    }
-  };
-
-  useEffect(() => {
-    getPrincipalId();
-  }, []);
 
   const uploadAsset = async (file) => {
     if (storageInitiated) {

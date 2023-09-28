@@ -39,6 +39,8 @@ export default function Favorites({ openFavourites, setOpenFavourites }) {
     navigate("/market");
   };
 
+  
+
   return (
     <Transition.Root show={openFavourites} as={Fragment}>
       <Dialog

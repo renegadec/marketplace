@@ -8,16 +8,18 @@ import {
   generateNewsLetterVerificationUrl,
   sendNewsLetterVerificationEmail,
 } from "../utils/emails-verification/verify";
-import { backendActor } from "../hooks/config";
 import SubscriptionModal from "./SubscriptionModal";
 import { NewsLetterSubscription } from "../utils/types";
 import Subscribed from "./Subscribed";
+import { useAuth } from "./ContextWrapper";
 
 type FormData = {
   email: string;
 };
 
 function SubscribeForm() {
+const { backendActor } = useAuth()
+
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [subNVerified, setSubNVerified] = useState(false);

@@ -3,11 +3,13 @@ import { useState } from "react";
 import SearchBar from "../components/Searchbar/Searchbar";
 import Button from "../components/Button/Button";
 import { Loader, ProductCard } from "../components";
-import { adminBackendActor } from "../hooks/config";
+import { useAuth } from "../components/ContextWrapper";
 
 const categories = ["All", "Fruits", "Nuts", "Legumes", "Spices", "Vegetables"];
 
 const Market = () => {
+const { adminBackendActor } = useAuth();
+
   const [activeCategory, setActiveCategory] = useState("All");
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState(null);

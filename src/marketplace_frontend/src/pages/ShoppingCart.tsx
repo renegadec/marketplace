@@ -8,12 +8,11 @@ import {
   XMarkIcon as XMarkIconMini,
 } from "@heroicons/react/20/solid";
 import { Beans, Brocoli, GroundNuts } from "../../assets/assets";
-import { AuthClient } from "@dfinity/auth-client";
 import { Link, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
-import { adminBackendActor, backendActor } from "../hooks/config";
 import { Loader } from "../components";
+import { useAuth } from "../components/ContextWrapper";
 
 const navigation = {
   pages: [
@@ -40,9 +39,10 @@ function classNames(...classes) {
 }
 
 export default function ShoppingCart() {
+  const {backendActor, adminBackendActor, identity } = useAuth();
+
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [userId, setUserId] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [noAcc, setNoAcc] = useState(false);
   // const [cartRawProducts, setRawProducts] = useState(null);
@@ -53,29 +53,10 @@ export default function ShoppingCart() {
   const [cartItem, setCartItem] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Checks if the user is authenticated and then obtain the principal id
-
-  const getPrincipalId = async () => {
-    setLoading(true);
-    const authClient = await AuthClient.create();
-
-    if (await authClient.isAuthenticated()) {
-      const identity = authClient.getIdentity();
-      const userPrincipal = identity.getPrincipal();
-      setUserId(userPrincipal);
-    } else {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getPrincipalId();
-  }, []);
-
   // --------------------------------------FOR MULTIPLE PRODUCTS----------------------------------------------------
 
   // const getCartProducts = async () => {
-  //   const res = await backendActor.getMyCartItemsProducts(userId);
+  //   const res = await backendActor.getMyCartItemsProducts(identity.getPrincipal());
   //   setRawProducts(res);
   // };
 
@@ -87,12 +68,12 @@ export default function ShoppingCart() {
   // }, [cartRawProducts]);
 
   // useEffect(() => {
-  //   if (userId) {
+  //   if (identity.getPrincipal()) {
   //     getCartProducts();
   //     getCartItems();
   //     getUserDetails();
   //   }
-  // }, [userId]);
+  // }, [identity.getPrincipal()]);
 
   // const handleRemove = async (id: String) => {
   //   const item = cartItems.find((item) => item.id === id);
@@ -108,7 +89,7 @@ export default function ShoppingCart() {
   //     dateCreated: item.dateCreated,
   //     quantity: BigInt(item.quantity),
   //   };
-  //   const res = backendActor.removeFromCart(userId, itemToRemove);
+  //   const res = backendActor.removeFromCart(identity.getPrincipal(), itemToRemove);
   // };
 
   // //----------------------------------Order summary calculations-------------------------------------------------------
@@ -217,7 +198,7 @@ export default function ShoppingCart() {
   //       orderNumber: `TSWA-${lastDigits}${randomLetters}`,
   //       orderProducts,
   //       userEmail: userInfo.email,
-  //       orderOwner: userId,
+  //       orderOwner: identity.getPrincipal(),
   //       subtotal: parseFloat(subtotal),
   //       totalPrice: parseFloat(orderTotal),
   //       shippingEstimate: parseFloat(shippingEstimate),
@@ -253,7 +234,7 @@ export default function ShoppingCart() {
 
   //     // const res = await backendActor.createOrder(order);
   //     // const result = await backendActor.removeBatchCartItems(
-  //     //   userId,
+  //     //   identity.getPrincipal(),
   //     //   convertedCartItems
   //     // );
   //   }
@@ -276,7 +257,7 @@ export default function ShoppingCart() {
     ok?: any;
   }
   const getCartItems = async () => {
-    const res: Response = await backendActor.getMyCartItem(userId);
+    const res: Response = await backendActor.getMyCartItem(identity.getPrincipal());
     if (res.ok) {
       setCartItem(res.ok);
     } else {
@@ -286,7 +267,7 @@ export default function ShoppingCart() {
   };
 
   const getUserDetails = async () => {
-    const res: Response = await backendActor.getKYCRequest(userId);
+    const res: Response = await backendActor.getKYCRequest(identity.getPrincipal());
     if (res.err) {
       setNoAcc(true);
     } else if (res.ok) {
@@ -295,11 +276,11 @@ export default function ShoppingCart() {
   };
 
   useEffect(() => {
-    if (userId) {
+    if (identity) {
       getCartItems();
       getUserDetails();
     }
-  }, [userId]);
+  }, [identity]);
 
   useEffect(() => {
     if (cartItem) {
@@ -322,7 +303,7 @@ export default function ShoppingCart() {
   const handleRemove = async () => {
     setCartItem(null);
     setProduct(null);
-    await backendActor.removeFromCart(userId);
+    await backendActor.removeFromCart(identity.getPrincipal());
   };
 
   //----------------------------------Order summary calculations-------------------------------------------------------
@@ -417,7 +398,7 @@ export default function ShoppingCart() {
           orderNumber: `TSWA-${lastDigits}${randomLetters}`,
           orderProducts: orderProduct,
           userEmail: userInfo.email,
-          orderOwner: userId,
+          orderOwner: identity.getPrincipal(),
           subtotal: parseFloat(subtotal),
           totalPrice: parseFloat(orderTotal),
           shippingEstimate: parseFloat(shippingEstimate),
@@ -430,7 +411,7 @@ export default function ShoppingCart() {
         console.log(order);
 
         const res = await backendActor.createOrder(order);
-        const result = await backendActor.removeFromCart(userId);
+        const result = await backendActor.removeFromCart(identity.getPrincipal());
         toast.success(
           "Order successfully created. Head over to the orders page to track your order's progress.",
           {

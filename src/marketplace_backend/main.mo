@@ -277,19 +277,18 @@ actor Tswaanda {
 
   // -------------------------------------------Favourites items methods---------------------------------------------------
 
-  public shared func addToFavourites(userId : Principal, productId : Text) : async Bool {
-    var favouriteItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {
+  public shared ({ caller }) func addToFavourites(productId : Text) : async Bool {
+    var favouriteItems : List.List<Text> = switch (customerFavouriteItems.get(caller)) {
       case (?value) { value };
       case (null) { List.nil<Text>() };
     };
     favouriteItems := List.push(productId, favouriteItems);
-    customerFavouriteItems.put(userId, favouriteItems);
+    customerFavouriteItems.put(caller, favouriteItems);
     return true;
   };
 
-  public shared func getMyFavItems(userId : Principal) : async [Product] {
-
-    var favItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {
+  public shared ({ caller }) func getMyFavItems() : async [Product] {
+    var favItems : List.List<Text> = switch (customerFavouriteItems.get(caller)) {
       case (?value) { value };
       case (null) { List.nil<Text>() };
     };
@@ -298,8 +297,8 @@ actor Tswaanda {
     return products;
   };
 
-  public shared func removeFromFavourites(userId : Principal, productId : Text) : async Bool {
-    var favItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {
+  public shared ({ caller }) func removeFromFavourites(productId : Text) : async Bool {
+    var favItems : List.List<Text> = switch (customerFavouriteItems.get(caller)) {
       case (?value) { value };
       case (null) { List.nil<Text>() };
     };
@@ -309,7 +308,7 @@ actor Tswaanda {
         item != productId;
       },
     );
-    customerFavouriteItems.put(userId, favItems);
+    customerFavouriteItems.put(caller, favItems);
     return true;
   };
 

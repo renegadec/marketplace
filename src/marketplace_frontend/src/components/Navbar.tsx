@@ -12,12 +12,10 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Logo } from "../../assets/assets.js";
-import { useAuth } from "../hooks";
-import { AuthClient } from "@dfinity/auth-client";
-import { backendActor } from "../hooks/config";
 import { useDispatch } from "react-redux";
 import { setIsRegistered } from "../state/globalSlice";
 import Favorites from "./Favorites";
+import { useAuth } from "./ContextWrapper";
 
 const user = {
   imageUrl: "./avatar.webp",
@@ -40,21 +38,18 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
+  const { login, logout, backendActor, identity, isAuthenticated } = useAuth();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openFavourites, setOpenFavourites] = useState(false);
-  const [userId, setUserId] = useState(null);
 
   const [userInfo, setUserInfo] = useState(null);
 
   const [cartItems, setCartItems] = useState(null);
 
   const [favoriteItems, setFavoriteItems] = useState();
-
-  const [session, setSession] = useState(null);
-
-  const { login, logout, isLoggedIn } = useAuth(session, setSession);
 
   const location = useLocation();
 
@@ -69,33 +64,10 @@ const Navbar = () => {
     ok?: any;
   }
 
-  const getIdentity = async () => {
-    const authClient = await AuthClient.create();
-    const identity = authClient.getIdentity();
-    const userPrincipal = identity.getPrincipal();
-    setUserId(userPrincipal);
-  };
-
-  useEffect(() => {
-    if (session) {
-      getIdentity();
-    }
-  }, [session]);
-
-  useEffect(() => {
-    const setAuth = async () => {
-      const authClient = await AuthClient.create();
-      if (await authClient.isAuthenticated()) {
-        setSession(true);
-      } else {
-        setSession(false);
-      }
-    };
-    setAuth();
-  }, []);
-
   const getMyKYC = async () => {
-    const info: Response = await backendActor.getKYCRequest(userId);
+    const info: Response = await backendActor.getKYCRequest(
+      identity.getPrincipal()
+    );
     if (info.ok) {
       setUserInfo(info.ok);
       dispatch(setIsRegistered());
@@ -103,20 +75,20 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    if (userId) {
+    if (identity) {
       getMyKYC();
       const getCartsNum = async () => {
-        const res = await backendActor.getMyCartItem(userId);
+        const res = await backendActor.getMyCartItem(identity.getPrincipal());
         setCartItems(res);
       };
 
       getCartsNum();
     }
-  }, [userId]);
+  }, [identity]);
 
   return (
     <nav className="bg-white pb-4">
-      {session === false || mobileMenuOpen ? (
+      {isAuthenticated === false || mobileMenuOpen ? (
         <div className="px-6 pt-6 lg:px-8">
           <div>
             <nav
@@ -159,12 +131,7 @@ const Navbar = () => {
               <div className="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-end">
                 <button
                   onClick={() => {
-                    login(
-                      () => {
-                        navigate("/");
-                      },
-                      () => console.log("Error")
-                    );
+                    login();
                   }}
                   className="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-primary hover:ring-gray-900/20"
                 >
@@ -217,12 +184,7 @@ const Navbar = () => {
                     <div className="py-6">
                       <button
                         onClick={() => {
-                          login(
-                            () => {
-                              navigate("/");
-                            },
-                            () => setMobileMenuOpen(false)
-                          );
+                          login();
                         }}
                         className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-6 text-gray-900 hover:bg-gray-400/10 cursor-pointer"
                       >
