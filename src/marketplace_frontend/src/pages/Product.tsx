@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import LeaveReview from "../components/LeaveReview";
 import ToolTip from "../components/ToolTip";
 import { useAuth } from "../components/ContextWrapper";
+import { ThreeCircles } from "react-loader-spinner";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -43,6 +44,8 @@ export default function Product() {
   const [checking, setChecking] = useState(true);
   const [ratevalue, setRateValue] = useState(0);
   const [openReviewModal, setOpenReviewModal] = useState(false);
+  const [isFavourite, setIsFavourite] = useState(false);
+  const [addingtoFav, setAddingToFav] = useState(false);
 
   const [reviews, setReviews] = useState<Review[]>([]);
 
@@ -79,9 +82,17 @@ export default function Product() {
     setAddingToCart(false);
   };
 
+  const checkIsFavourite = async () => {
+    const res = await backendActor.isProductFavoutite(id);
+    if (res) {
+      setIsFavourite(true);
+    }
+  };
+
   useEffect(() => {
     if (identity) {
       getCartItems();
+      checkIsFavourite();
     }
   }, [identity]);
 
@@ -217,6 +228,7 @@ export default function Product() {
           hideProgressBar: true,
         });
       } else {
+        setAddingToFav(true);
         const res = await backendActor.addToFavourites(id);
         if (res) {
           toast.success("Added to favourites", {
@@ -225,9 +237,12 @@ export default function Product() {
             hideProgressBar: true,
           });
         }
+        setIsFavourite(true);
+        setAddingToFav(false);
       }
     } catch (error) {
       console.log(error);
+      setAddingToFav(false);
     }
   };
 
@@ -339,11 +354,11 @@ export default function Product() {
               </div>
 
               <div className="mt-6">
-                <div className="sm:flex-col1 mt-10 flex">
+                <div className=" mt-10 flex">
                   <button
                     onClick={!inCart && !checking ? handleAddToCart : null}
                     disabled={addingtocart}
-                    className="flex max-w-xs gap-3 flex-1 items-center justify-center rounded-md border border-transparent bg-primary py-3 px-8 text-base font-medium text-white hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
+                    className="flex max-w-xs gap-3 flex-1 items-center justify-center rounded-md border border-transparent bg-primary py-3 px-8 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
                   >
                     {inCart && <CheckIcon className="h-7 w-10" />}
                     {addingtocart ? (
@@ -358,15 +373,42 @@ export default function Product() {
 
                   <button
                     type="button"
-                    onClick={addToFavourites}
+                    onClick={isFavourite ? null : addToFavourites}
                     className="ml-4 flex items-center justify-center rounded-md py-3 px-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                   >
-                    <ToolTip tooltip="Add to favourites">
-                      <HeartIcon
-                        className="h-10 w-10 flex-shrink-0"
-                        aria-hidden="true"
+                    {addingtoFav ? (
+                      <ThreeCircles
+                        height="20"
+                        width="20"
+                        color="#4fa94d"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                        visible={true}
+                        ariaLabel="three-circles-rotating"
+                        outerCircleColor=""
+                        innerCircleColor=""
+                        middleCircleColor=""
                       />
-                    </ToolTip>
+                    ) : (
+                      <>
+                        {isFavourite ? (
+                          <ToolTip tooltip="Added to your favourites">
+                            <SolidHeartIcon
+                              className="h-7 w-7 flex-shrink-0"
+                              aria-hidden="true"
+                            />
+                          </ToolTip>
+                        ) : (
+                          <ToolTip tooltip="Add to favourites">
+                            <HeartIcon
+                              className="h-7 w-7 flex-shrink-0"
+                              aria-hidden="true"
+                            />
+                          </ToolTip>
+                        )}
+                      </>
+                    )}
+
                     <span className="sr-only">Add to favorites</span>
                   </button>
                 </div>
