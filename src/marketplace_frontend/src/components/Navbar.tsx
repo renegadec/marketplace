@@ -5,6 +5,7 @@ import {
   BellIcon,
   XMarkIcon,
   ShoppingCartIcon,
+  HeartIcon,
 } from "@heroicons/react/24/outline";
 import { navigation } from "../constants";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
@@ -46,6 +47,8 @@ const Navbar = () => {
   const [userInfo, setUserInfo] = useState(null)
 
   const [cartItems, setCartItems] = useState(null);
+
+  const [favoriteItems, setFavoriteItems] = useState()
 
   const [session, setSession] = useState(null);
 
@@ -290,6 +293,15 @@ const Navbar = () => {
                     </Disclosure.Button>
                   </div>
                   <div className="hidden lg:relative gap-3 lg:z-10 lg:ml-4 lg:flex lg:items-center">
+                    <div className="relative">
+                      <Link to="/favorites">
+                          <HeartIcon 
+                            className="h-6 w-6"
+                            aria-hidden="true"
+                          />
+                      </Link>
+                    </div>
+                    
                     {cartItems && (
                       <Link to="/shopping-cart">
                         <div className="relative">
