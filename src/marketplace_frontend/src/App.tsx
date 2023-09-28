@@ -32,9 +32,7 @@ import ShoppingCart from "./pages/ShoppingCart";;
 import Orders from "./pages/Orders";
 import { setInit } from "./state/globalSlice";
 import { initActors } from "./utils/storage-config/functions";
-import { AuthClient } from "@dfinity/auth-client";
 import VerifyNewsLetterEmail from "./pages/VerifyNewsLetterEmail";
-import Favorites from "./components/Favorites";
 
 export const loaderStyle: CSSProperties = {
   position: 'absolute',
@@ -147,16 +145,6 @@ const App = () => {
                         </div>
                       </div>
                     } 
-                  />
-
-                  <Route path="favorites" element={
-                      <div className={`${styles.paddingX} ${styles.flexStart}`}>
-                        <div className={`${styles.boxWidth}`}>
-                          <Favorites />
-                        </div>
-                      </div>
-                    }
-
                   />
 
                   <Route path="shopping-cart" element={

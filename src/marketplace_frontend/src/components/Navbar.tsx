@@ -17,6 +17,7 @@ import { AuthClient } from "@dfinity/auth-client";
 import { backendActor } from "../hooks/config";
 import { useDispatch } from "react-redux";
 import { setIsRegistered } from "../state/globalSlice";
+import Favorites from "./Favorites";
 
 const user = {
   imageUrl: "./avatar.webp",
@@ -40,15 +41,16 @@ function classNames(...classes) {
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openFavourites, setOpenFavourites] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  const [userInfo, setUserInfo] = useState(null)
+  const [userInfo, setUserInfo] = useState(null);
 
   const [cartItems, setCartItems] = useState(null);
 
-  const [favoriteItems, setFavoriteItems] = useState()
+  const [favoriteItems, setFavoriteItems] = useState();
 
   const [session, setSession] = useState(null);
 
@@ -62,10 +64,10 @@ const Navbar = () => {
   const activeClassName =
     "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-green-500";
 
-    interface Response {
-      err?: any;
-      ok?: any;
-    }
+  interface Response {
+    err?: any;
+    ok?: any;
+  }
 
   const getIdentity = async () => {
     const authClient = await AuthClient.create();
@@ -76,9 +78,9 @@ const Navbar = () => {
 
   useEffect(() => {
     if (session) {
-      getIdentity()
+      getIdentity();
     }
-  }, [session])
+  }, [session]);
 
   useEffect(() => {
     const setAuth = async () => {
@@ -95,14 +97,14 @@ const Navbar = () => {
   const getMyKYC = async () => {
     const info: Response = await backendActor.getKYCRequest(userId);
     if (info.ok) {
-      setUserInfo(info.ok)
-      dispatch(setIsRegistered())
+      setUserInfo(info.ok);
+      dispatch(setIsRegistered());
     }
-  }
+  };
 
   useEffect(() => {
     if (userId) {
-      getMyKYC()
+      getMyKYC();
       const getCartsNum = async () => {
         const res = await backendActor.getMyCartItem(userId);
         setCartItems(res);
@@ -293,15 +295,10 @@ const Navbar = () => {
                     </Disclosure.Button>
                   </div>
                   <div className="hidden lg:relative gap-3 lg:z-10 lg:ml-4 lg:flex lg:items-center">
-                    <div className="relative">
-                      <Link to="/favorites">
-                          <HeartIcon 
-                            className="h-6 w-6"
-                            aria-hidden="true"
-                          />
-                      </Link>
-                    </div>
-                    
+                    <Favorites {...{ openFavourites, setOpenFavourites }} />
+                    <button onClick={() => setOpenFavourites(true)}>
+                      <HeartIcon className="h-6 w-6" aria-hidden="true" />
+                    </button>
                     {cartItems && (
                       <Link to="/shopping-cart">
                         <div className="relative">
@@ -333,7 +330,9 @@ const Navbar = () => {
                           <span className="sr-only">Open user menu</span>
                           <img
                             className="h-8 w-8 rounded-full"
-                            src={userInfo ? userInfo.profilePhoto : user.imageUrl}
+                            src={
+                              userInfo ? userInfo.profilePhoto : user.imageUrl
+                            }
                             alt=""
                           />
                         </Menu.Button>
@@ -386,9 +385,14 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                {["/", "/account", "/orders", "/market", "/shopping-cart", "/support"].includes(
-                  location.pathname
-                ) && (
+                {[
+                  "/",
+                  "/account",
+                  "/orders",
+                  "/market",
+                  "/shopping-cart",
+                  "/support",
+                ].includes(location.pathname) && (
                   <nav
                     className="hidden lg:flex lg:space-x-8 lg:py-2"
                     aria-label="Global"
@@ -433,15 +437,17 @@ const Navbar = () => {
                         alt=""
                       />
                     </div>
-                    {userInfo && <div className="ml-3">
-                      <div className="text-base font-medium text-gray-800">
-                        {userInfo.firstName}
+                    {userInfo && (
+                      <div className="ml-3">
+                        <div className="text-base font-medium text-gray-800">
+                          {userInfo.firstName}
+                        </div>
+                        <div className="text-sm font-medium text-gray-500">
+                          {userInfo.email}
+                        </div>
                       </div>
-                      <div className="text-sm font-medium text-gray-500">
-                        {userInfo.email}
-                      </div>
-                    </div>}
-                    
+                    )}
+
                     <button
                       type="button"
                       className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
