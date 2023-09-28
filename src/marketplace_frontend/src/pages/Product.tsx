@@ -8,6 +8,7 @@ import {
   PlusIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
+import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -20,21 +21,20 @@ function classNames(...classes) {
 }
 
 type Review = {
-  id: string; 
+  id: string;
   productId: string;
   userName: string;
-  userLastName: string; 
-  rating: bigint; 
+  userLastName: string;
+  rating: bigint;
   review: string;
-  created: bigint; 
+  created: bigint;
 };
 
 export default function Product() {
-  const {backendActor, adminBackendActor, identity} = useAuth()
+  const { backendActor, adminBackendActor, identity } = useAuth();
 
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
-  const [images, setImages] = useState(null);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const [addingtocart, setAddingToCart] = useState(false);
@@ -68,7 +68,9 @@ export default function Product() {
   }, [id]);
 
   const getCartItems = async () => {
-    const res: Response = await backendActor.getMyCartItem(identity.getPrincipal());
+    const res: Response = await backendActor.getMyCartItem(
+      identity.getPrincipal()
+    );
     if (res.ok) {
       setCartItem(res.ok);
     } else {
@@ -112,7 +114,10 @@ export default function Product() {
           quantity: 1,
           dateCreated: timestamp,
         };
-        const res = await backendActor.addToCart(identity.getPrincipal(), cartItem);
+        const res = await backendActor.addToCart(
+          identity.getPrincipal(),
+          cartItem
+        );
         getCartItems();
       } else if (identity.getPrincipal() === null) {
         toast.warning("You are not logged in", {
@@ -145,7 +150,9 @@ export default function Product() {
   const getProductReviews = async () => {
     const res = await adminBackendActor.getProductReviews(id);
     if (Array.isArray(res)) {
-      const sortedReviews = res.sort(( b: Review, a: Review) => Number(a.rating) - Number(b.rating));
+      const sortedReviews = res.sort(
+        (b: Review, a: Review) => Number(a.rating) - Number(b.rating)
+      );
       setReviews(sortedReviews);
     }
   };
@@ -202,27 +209,27 @@ export default function Product() {
   // Add to favourites
 
   const addToFavourites = async () => {
-   try {
-    if (!identity.getPrincipal()) {
-      toast.warning("Please login first to add to favourites", {
-        autoClose: 5000,
-        position: "top-center",
-        hideProgressBar: true,
-      });
-    } else {
-      const res = await backendActor.addToFavourites(identity.getPrincipal(), id);
-      if (res) {
-        toast.success("Added to favourites", {
+    try {
+      if (!identity.getPrincipal()) {
+        toast.warning("Please login first to add to favourites", {
           autoClose: 5000,
           position: "top-center",
           hideProgressBar: true,
         });
+      } else {
+        const res = await backendActor.addToFavourites(id);
+        if (res) {
+          toast.success("Added to favourites", {
+            autoClose: 5000,
+            position: "top-center",
+            hideProgressBar: true,
+          });
+        }
       }
+    } catch (error) {
+      console.log(error);
     }
-   } catch (error) {
-    console.log(error)
-   }
-  }
+  };
 
   return (
     <div className="bg-white">
@@ -349,21 +356,19 @@ export default function Product() {
                     {/* <ShoppingCartIcon  className="h-7 w-10"/> */}
                   </button>
 
-                
-                 <button
+                  <button
                     type="button"
                     onClick={addToFavourites}
                     className="ml-4 flex items-center justify-center rounded-md py-3 px-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                   >
-                     <ToolTip tooltip="Add to favourites">
-                    <HeartIcon
-                      className="h-6 w-6 flex-shrink-0"
-                      aria-hidden="true"
-                    />
+                    <ToolTip tooltip="Add to favourites">
+                      <HeartIcon
+                        className="h-10 w-10 flex-shrink-0"
+                        aria-hidden="true"
+                      />
                     </ToolTip>
                     <span className="sr-only">Add to favorites</span>
                   </button>
-                
                 </div>
                 {inCart && (
                   <div className="sm:flex-col1 mt-3 flex">

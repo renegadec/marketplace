@@ -312,6 +312,17 @@ actor Tswaanda {
     return true;
   };
 
+  public shared query ({ caller }) func isProductFavoutite(productId : Text) : async Bool {
+    var favItems : List.List<Text> = switch (customerFavouriteItems.get(caller)) {
+      case (?value) { value };
+      case (null) { List.nil<Text>() };
+    };
+
+    let itemsArray = List.toArray(favItems);
+    let isFavourite = Array.find<Text>(itemsArray, func x = x == productId);
+    return isFavourite != null;
+  };
+
   // -------------------------------------------Email Verification---------------------------------------------------
 
   public shared func addToUnverified(userId : Text, args : EmailVerificationSchema) : async Bool {
