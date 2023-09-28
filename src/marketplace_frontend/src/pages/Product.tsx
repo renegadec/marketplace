@@ -19,6 +19,16 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+type Review = {
+  id: string; 
+  productId: string;
+  userName: string;
+  userLastName: string; 
+  rating: bigint; 
+  review: string;
+  created: bigint; 
+};
+
 export default function Product() {
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
@@ -30,9 +40,26 @@ export default function Product() {
   const [cartItem, setCartItem] = useState(null);
   const [inCart, setInCart] = useState(false);
   const [checking, setChecking] = useState(true);
+  const [ratevalue, setRateValue] = useState(0);
+  const [openReviewModal, setOpenReviewModal] = useState(false);
 
-  const [reviews, setReviews] = useState<any>([])
-  const [openReviewModal, setOpenReviewModal] = useState(false)
+  const [reviews, setReviews] = useState<Review[]>([]);
+
+  const getProductReviews = async () => {
+    const res = await adminBackendActor.getProductReviews(id);
+    if (Array.isArray(res)) {
+      const sortedReviews = res.sort(( b: Review, a: Review) => Number(a.rating) - Number(b.rating));
+      setReviews(sortedReviews);
+    }
+  };
+
+  useEffect(() => {
+    const handleScrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    handleScrollToTop();
+    getProductReviews();
+  }, []);
 
   const getPrincipalId = async () => {
     const authClient = await AuthClient.create();
@@ -131,21 +158,59 @@ export default function Product() {
     navigate("/shopping-cart");
   };
 
-  const getProductReviews = async () => {
-    const res = await adminBackendActor.getProductReviews(id);
-    console.log("reviews",  res)
-    if (res) {
-      setReviews(res)
+  const handleLeaveReview = () => {
+    if (!userId) {
+      toast.warning("Please login first to leave a review", {
+        autoClose: 5000,
+        position: "top-center",
+        hideProgressBar: true,
+      });
+    } else {
+      setOpenReviewModal(true);
     }
-  }
+  };
+
+  const formatOrderDate = (timestamp: bigint): string => {
+    const date = new Date(Number(timestamp));
+    const options = { month: "long", day: "numeric", year: "numeric" };
+    return date.toLocaleDateString();
+  };
+
+  const calculateAverageRating = (reviews: any) => {
+    if (!reviews || reviews.length === 0) {
+      return 0;
+    }
+
+    const totalRating = reviews.reduce((accumulator: number, review: any) => {
+      return accumulator + Number(review.rating);
+    }, 0);
+    const averageRating = totalRating / reviews.length;
+
+    const roundedAverage = Math.round(averageRating * 10) / 10;
+
+    return roundedAverage;
+  };
+
+  const ratingValue = (reviews) => {
+    if (!reviews || reviews.length === 0) {
+      return 0;
+    }
+
+    const totalRating = reviews.reduce((accumulator, review) => {
+      return accumulator + Number(review.rating);
+    }, 0);
+
+    const averageRating = totalRating / reviews.length;
+
+    // Round the average rating to the nearest whole number.
+    const roundedAverage = Math.round(averageRating);
+
+    setRateValue(roundedAverage);
+  };
 
   useEffect(() => {
-    const handleScrollToTop = () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-    handleScrollToTop();
-    getProductReviews()
-  }, []);
+    ratingValue(reviews);
+  }, [reviews]);
 
   return (
     <div className="bg-white">
@@ -229,16 +294,19 @@ export default function Product() {
                       <StarIcon
                         key={rating}
                         className={classNames(
-                          product?.rating > rating
-                            ? "text-primary"
-                            : "text-gray-300",
+                          ratevalue > rating ? "text-primary" : "text-gray-300",
                           "h-5 w-5 flex-shrink-0"
                         )}
                         aria-hidden="true"
                       />
                     ))}
                   </div>
-                  <p className="sr-only">4 out of 5 stars</p>
+                  <div className="ml-2 flex items-center gap-3">
+                    <p className="text-gray-500">
+                      ( {calculateAverageRating(reviews)})
+                    </p>
+                    <p className="text-gray-700">{reviews.length} reviews</p>
+                  </div>
                 </div>
               </div>
 
@@ -378,12 +446,49 @@ export default function Product() {
                           as="div"
                           className="prose prose-sm pb-6"
                         >
-                          <button onClick={() => setOpenReviewModal(true)} className="text-white bg-primary rounded py-1.5 px-2 my-3">
+                          <button
+                            onClick={handleLeaveReview}
+                            className="text-white hover:bg-green-700 bg-green-500 py-1.5 px-2 mt-3 mb-5"
+                          >
                             Leave a review
                           </button>
-                          {openReviewModal && (<LeaveReview {...{setOpenReviewModal}} />)}
+                          {openReviewModal && (
+                            <LeaveReview
+                              {...{ setOpenReviewModal, id, userId, getProductReviews }}
+                            />
+                          )}
                           <ul role="list">
-                            <li>This product is so sick</li>
+                            {reviews?.map((review: any, index: number) => (
+                              <li key={index} className="mb-4">
+                                <div className="flex items-center">
+                                  <div className="flex items-center">
+                                    {[0, 1, 2, 3, 4].map((rating) => (
+                                      <StarIcon
+                                        key={rating}
+                                        className={classNames(
+                                          review.rating > rating
+                                            ? "text-primary"
+                                            : "text-gray-300",
+                                          "h-5 w-5 flex-shrink-0"
+                                        )}
+                                        aria-hidden="true"
+                                      />
+                                    ))}
+                                  </div>
+                                  <div className="ml-2 flex items-center gap-2">
+                                    <p className=" font-semibold">
+                                      {review.userName} {review.userLastName}
+                                    </p>
+                                    <p className="text-gray-500">
+                                      {formatOrderDate(review.created)}
+                                    </p>
+                                  </div>
+                                </div>
+                                <p className="mt-2 text-gray-700">
+                                  {review.review}
+                                </p>
+                              </li>
+                            ))}
                           </ul>
                         </Disclosure.Panel>
                       </>
