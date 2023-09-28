@@ -14,6 +14,7 @@ import { AuthClient } from "@dfinity/auth-client";
 import { toast } from "react-toastify";
 import { adminBackendActor, backendActor } from "../hooks/config";
 import LeaveReview from "../components/LeaveReview";
+import ToolTip from "../components/ToolTip";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -44,22 +45,6 @@ export default function Product() {
   const [openReviewModal, setOpenReviewModal] = useState(false);
 
   const [reviews, setReviews] = useState<Review[]>([]);
-
-  const getProductReviews = async () => {
-    const res = await adminBackendActor.getProductReviews(id);
-    if (Array.isArray(res)) {
-      const sortedReviews = res.sort(( b: Review, a: Review) => Number(a.rating) - Number(b.rating));
-      setReviews(sortedReviews);
-    }
-  };
-
-  useEffect(() => {
-    const handleScrollToTop = () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-    handleScrollToTop();
-    getProductReviews();
-  }, []);
 
   const getPrincipalId = async () => {
     const authClient = await AuthClient.create();
@@ -170,6 +155,22 @@ export default function Product() {
     }
   };
 
+  const getProductReviews = async () => {
+    const res = await adminBackendActor.getProductReviews(id);
+    if (Array.isArray(res)) {
+      const sortedReviews = res.sort(( b: Review, a: Review) => Number(a.rating) - Number(b.rating));
+      setReviews(sortedReviews);
+    }
+  };
+
+  useEffect(() => {
+    const handleScrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    handleScrollToTop();
+    getProductReviews();
+  }, []);
+
   const formatOrderDate = (timestamp: bigint): string => {
     const date = new Date(Number(timestamp));
     const options = { month: "long", day: "numeric", year: "numeric" };
@@ -202,7 +203,6 @@ export default function Product() {
 
     const averageRating = totalRating / reviews.length;
 
-    // Round the average rating to the nearest whole number.
     const roundedAverage = Math.round(averageRating);
 
     setRateValue(roundedAverage);
@@ -337,16 +337,21 @@ export default function Product() {
                     {/* <ShoppingCartIcon  className="h-7 w-10"/> */}
                   </button>
 
-                  <button
+                
+                 <button
                     type="button"
+                    onClick={addToFavourites}
                     className="ml-4 flex items-center justify-center rounded-md py-3 px-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                   >
+                     <ToolTip tooltip="Add to favourites">
                     <HeartIcon
                       className="h-6 w-6 flex-shrink-0"
                       aria-hidden="true"
                     />
+                    </ToolTip>
                     <span className="sr-only">Add to favorites</span>
                   </button>
+                
                 </div>
                 {inCart && (
                   <div className="sm:flex-col1 mt-3 flex">
