@@ -35,8 +35,10 @@ type Context = {
   backendActor: any;
   adminBackendActor: any;
   isAuthenticated: boolean;
+  favouritesUpdated: boolean;
   setContextPrincipleID: (_value: string) => void;
   setUserIdentity: (_value: any) => void;
+  setFavouritesUpdated: (_value: boolean) => void;
   login: () => void;
   logout: () => void;
   checkAuth: () => void;
@@ -48,7 +50,11 @@ const initialContext: Context = {
   backendActor: null,
   adminBackendActor: null,
   isAuthenticated: false,
+  favouritesUpdated: false,
   setContextPrincipleID: (string): void => {
+    throw new Error("setContext function must be overridden");
+  },
+  setFavouritesUpdated: (boolean): void => {
     throw new Error("setContext function must be overridden");
   },
   setUserIdentity: (any): void => {
@@ -75,6 +81,7 @@ const ContextWrapper: FC<LayoutProps> = ({ children }) => {
   const [principleId, setPrincipleId] = useState("");
   const [identity, setIdentity] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [favouritesUpdated, setFavouritesUpdated] = useState(false);
 
   const setContextPrincipleID = (value: string) => {
     setPrincipleId(value);
@@ -142,6 +149,8 @@ const ContextWrapper: FC<LayoutProps> = ({ children }) => {
         backendActor,
         adminBackendActor,
         isAuthenticated,
+        favouritesUpdated,
+        setFavouritesUpdated,
         login,
         logout,
         checkAuth,

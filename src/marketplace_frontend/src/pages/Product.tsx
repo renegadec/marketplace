@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { Disclosure, RadioGroup, Tab } from "@headlessui/react";
+import { Disclosure, Tab } from "@headlessui/react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import {
   CheckIcon,
   HeartIcon,
   MinusIcon,
   PlusIcon,
-  ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +31,7 @@ type Review = {
 };
 
 export default function Product() {
-  const { backendActor, adminBackendActor, identity } = useAuth();
+  const { backendActor, adminBackendActor, identity, setFavouritesUpdated } = useAuth();
 
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
@@ -231,12 +230,13 @@ export default function Product() {
         setAddingToFav(true);
         const res = await backendActor.addToFavourites(id);
         if (res) {
-          toast.success("Added to favourites", {
+          toast.success("Added to favourites!", {
             autoClose: 5000,
             position: "top-center",
             hideProgressBar: true,
           });
         }
+        setFavouritesUpdated(true);
         setIsFavourite(true);
         setAddingToFav(false);
       }

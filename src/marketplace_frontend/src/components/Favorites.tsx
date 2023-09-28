@@ -1,45 +1,53 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router";
-
-const products = [
-  {
-    id: 1,
-    name: "Bananas",
-    href: "#",
-    availability: "Available",
-    price: "$90.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg",
-    imageAlt:
-      "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
-  },
-  {
-    id: 2,
-    name: "Blue Berries",
-    href: "#",
-    availability: "Out of Stock",
-    price: "$32.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg",
-    imageAlt:
-      "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
-  },
-  // More products...
-];
+import { useAuth } from "./ContextWrapper";
+import Loader from "./Loader";
+import { Link } from "react-router-dom";
 
 export default function Favorites({ openFavourites, setOpenFavourites }) {
+  const { backendActor, identity, favouritesUpdated, setFavouritesUpdated } =
+    useAuth();
+
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleContinueShopping = () => {
     setOpenFavourites(false);
     navigate("/market");
   };
 
-  
+  const getFavourites = async () => {
+    setLoading(true);
+    const response = await backendActor.getMyFavItems();
+    setProducts(response);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (identity) {
+      getFavourites();
+    }
+  }, [identity]);
+
+  const handleRemove = async (id: string) => {
+    try {
+      const updatedProducts = products.filter((product) => product.id !== id);
+      setProducts(updatedProducts);
+      await backendActor.removeFromFavourites(id);
+    } catch (e) {
+      console.log("Error", e);
+    }
+  };
+
+  useEffect(() => {
+    if (favouritesUpdated) {
+      getFavourites();
+      setFavouritesUpdated(false);
+    }
+  }, [favouritesUpdated]);
 
   return (
     <Transition.Root show={openFavourites} as={Fragment}>
@@ -91,57 +99,83 @@ export default function Favorites({ openFavourites, setOpenFavourites }) {
                           </button>
                         </div>
                       </div>
-
-                      <div className="mt-8">
-                        <div className="flow-root">
-                          <ul
-                            role="list"
-                            className="-my-6 divide-y divide-gray-200"
-                          >
-                            {products.map((product) => (
-                              <li key={product.id} className="flex py-6">
-                                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                  <img
-                                    src={product.imageSrc}
-                                    alt={product.imageAlt}
-                                    className="h-full w-full object-cover object-center"
-                                  />
-                                </div>
-
-                                <div className="ml-4 flex flex-1 flex-col">
-                                  <div>
-                                    <div className="flex justify-between text-base font-medium text-gray-900">
-                                      <h3>
-                                        <a href={product.href}>
-                                          {product.name}
-                                        </a>
-                                      </h3>
-                                      <p className="ml-4">{product.price}</p>
-                                    </div>
-                                    <p className="mt-1 text-sm text-gray-500">
-                                      {product.availability}
-                                    </p>
-                                  </div>
-                                  <div className="flex flex-1 items-end justify-between text-sm">
-                                    <p className="text-gray-500">
-                                      Qty {product.quantity}
-                                    </p>
-
-                                    <div className="flex">
-                                      <button
-                                        type="button"
-                                        className="font-medium text-primary hover:text-secondary"
-                                      >
-                                        Remove
-                                      </button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
+                      {loading ? (
+                        <div className="flex justify-center items-center px-7 lg:px-28 pt-8 pb-10 h-[70vh]">
+                          <Loader />
                         </div>
-                      </div>
+                      ) : (
+                        <div className="mt-8">
+                          <div className="flow-root">
+                            <ul
+                              role="list"
+                              className="-my-6 divide-y divide-gray-200"
+                            >
+                              {products.map((product) => (
+                                <li key={product.id} className="flex py-6">
+                                  <div
+                                    onClick={() => {
+                                      setOpenFavourites(false);
+                                      navigate(`/product/${product.id}`);
+                                    }}
+                                    className="hover:cursor-pointer h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200"
+                                  >
+                                    <img
+                                      src={product.images[0]}
+                                      alt={product.imageAlt}
+                                      className="h-full w-full object-cover object-center"
+                                    />
+                                  </div>
+
+                                  <div className="ml-4 flex flex-1 flex-col">
+                                    <div>
+                                      <div className="flex justify-between text-base font-medium text-gray-900">
+                                        <h3>
+                                          <button
+                                            onClick={() => {
+                                              setOpenFavourites(false);
+                                              navigate(
+                                                `/product/${product.id}`
+                                              );
+                                            }}
+                                          >
+                                            {product.name}
+                                          </button>
+                                        </h3>
+                                        <p className="ml-4">
+                                          $ {product.price}
+                                        </p>
+                                      </div>
+                                      <p className="mt-1 text-sm text-gray-500">
+                                        {product.availability}
+                                      </p>
+                                    </div>
+                                    <div className="flex flex-1 items-end justify-between text-sm">
+                                      <p className="text-gray-500">
+                                        Min Order{" "}
+                                        <span className="text-gray-800">
+                                          {product.minOrder} Tonne
+                                        </span>
+                                      </p>
+
+                                      <div className="flex">
+                                        <button
+                                          type="button"
+                                          onClick={() =>
+                                            handleRemove(product.id)
+                                          }
+                                          className="font-medium text-primary hover:text-secondary"
+                                        >
+                                          Remove
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
