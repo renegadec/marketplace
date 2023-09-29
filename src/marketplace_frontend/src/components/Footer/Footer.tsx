@@ -8,10 +8,10 @@ import {
   generateNewsLetterVerificationUrl,
   sendNewsLetterVerificationEmail,
 } from "../../utils/emails-verification/verify";
-import { backendActor } from "../../hooks/config";
 import SubscriptionModal from "../SubscriptionModal";
 import { NewsLetterSubscription } from "../../utils/types";
 import SubscribedFooter from "../SubscribedFooter";
+import { useAuth } from "../ContextWrapper";
 
 type FormData = {
   email: string;
@@ -107,6 +107,8 @@ const navigation = {
   ],
 };
 export default function Footer() {
+const {backendActor} = useAuth()
+
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [subNVerified, setSubNVerified] = useState(false);

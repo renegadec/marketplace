@@ -5,17 +5,17 @@ import {
   BellIcon,
   XMarkIcon,
   ShoppingCartIcon,
+  HeartIcon,
 } from "@heroicons/react/24/outline";
 import { navigation } from "../constants";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Logo } from "../../assets/assets.js";
-import { useAuth } from "../hooks";
-import { AuthClient } from "@dfinity/auth-client";
-import { backendActor } from "../hooks/config";
 import { useDispatch } from "react-redux";
 import { setIsRegistered } from "../state/globalSlice";
+import Favorites from "./Favorites";
+import { useAuth } from "./ContextWrapper";
 
 const user = {
   imageUrl: "./avatar.webp",
@@ -38,18 +38,18 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [userId, setUserId] = useState(null);
+  const { login, logout, backendActor, identity, isAuthenticated } = useAuth();
 
-  const [userInfo, setUserInfo] = useState(null)
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openFavourites, setOpenFavourites] = useState(false);
+
+  const [userInfo, setUserInfo] = useState(null);
 
   const [cartItems, setCartItems] = useState(null);
 
-  const [session, setSession] = useState(null);
-
-  const { login, logout, isLoggedIn } = useAuth(session, setSession);
+  const [favoriteItems, setFavoriteItems] = useState();
 
   const location = useLocation();
 
@@ -59,59 +59,36 @@ const Navbar = () => {
   const activeClassName =
     "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium text-green-500";
 
-    interface Response {
-      err?: any;
-      ok?: any;
-    }
+  interface Response {
+    err?: any;
+    ok?: any;
+  }
 
-  const getIdentity = async () => {
-    const authClient = await AuthClient.create();
-    const identity = authClient.getIdentity();
-    const userPrincipal = identity.getPrincipal();
-    setUserId(userPrincipal);
+  const getMyKYC = async () => {
+    const info: Response = await backendActor.getKYCRequest(
+      identity.getPrincipal()
+    );
+    if (info.ok) {
+      setUserInfo(info.ok);
+      dispatch(setIsRegistered());
+    }
   };
 
   useEffect(() => {
-    if (session) {
-      getIdentity()
-    }
-  }, [session])
-
-  useEffect(() => {
-    const setAuth = async () => {
-      const authClient = await AuthClient.create();
-      if (await authClient.isAuthenticated()) {
-        setSession(true);
-      } else {
-        setSession(false);
-      }
-    };
-    setAuth();
-  }, []);
-
-  const getMyKYC = async () => {
-    const info: Response = await backendActor.getKYCRequest(userId);
-    if (info.ok) {
-      setUserInfo(info.ok)
-      dispatch(setIsRegistered())
-    }
-  }
-
-  useEffect(() => {
-    if (userId) {
-      getMyKYC()
+    if (identity) {
+      getMyKYC();
       const getCartsNum = async () => {
-        const res = await backendActor.getMyCartItem(userId);
+        const res = await backendActor.getMyCartItem(identity.getPrincipal());
         setCartItems(res);
       };
 
       getCartsNum();
     }
-  }, [userId]);
+  }, [identity]);
 
   return (
     <nav className="bg-white pb-4">
-      {session === false || mobileMenuOpen ? (
+      {isAuthenticated === false || mobileMenuOpen ? (
         <div className="px-6 pt-6 lg:px-8">
           <div>
             <nav
@@ -154,12 +131,7 @@ const Navbar = () => {
               <div className="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-end">
                 <button
                   onClick={() => {
-                    login(
-                      () => {
-                        navigate("/");
-                      },
-                      () => console.log("Error")
-                    );
+                    login();
                   }}
                   className="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-primary hover:ring-gray-900/20"
                 >
@@ -212,12 +184,7 @@ const Navbar = () => {
                     <div className="py-6">
                       <button
                         onClick={() => {
-                          login(
-                            () => {
-                              navigate("/");
-                            },
-                            () => setMobileMenuOpen(false)
-                          );
+                          login();
                         }}
                         className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-6 text-gray-900 hover:bg-gray-400/10 cursor-pointer"
                       >
@@ -290,6 +257,10 @@ const Navbar = () => {
                     </Disclosure.Button>
                   </div>
                   <div className="hidden lg:relative gap-3 lg:z-10 lg:ml-4 lg:flex lg:items-center">
+                    <Favorites {...{ openFavourites, setOpenFavourites }} />
+                    <button onClick={() => setOpenFavourites(true)}>
+                      <HeartIcon className="h-6 w-6" aria-hidden="true" />
+                    </button>
                     {cartItems && (
                       <Link to="/shopping-cart">
                         <div className="relative">
@@ -321,7 +292,9 @@ const Navbar = () => {
                           <span className="sr-only">Open user menu</span>
                           <img
                             className="h-8 w-8 rounded-full"
-                            src={userInfo ? userInfo.profilePhoto : user.imageUrl}
+                            src={
+                              userInfo ? userInfo.profilePhoto : user.imageUrl
+                            }
                             alt=""
                           />
                         </Menu.Button>
@@ -374,9 +347,14 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                {["/", "/account", "/orders", "/market", "/shopping-cart", "/support"].includes(
-                  location.pathname
-                ) && (
+                {[
+                  "/",
+                  "/account",
+                  "/orders",
+                  "/market",
+                  "/shopping-cart",
+                  "/support",
+                ].includes(location.pathname) && (
                   <nav
                     className="hidden lg:flex lg:space-x-8 lg:py-2"
                     aria-label="Global"
@@ -421,15 +399,17 @@ const Navbar = () => {
                         alt=""
                       />
                     </div>
-                    {userInfo && <div className="ml-3">
-                      <div className="text-base font-medium text-gray-800">
-                        {userInfo.firstName}
+                    {userInfo && (
+                      <div className="ml-3">
+                        <div className="text-base font-medium text-gray-800">
+                          {userInfo.firstName}
+                        </div>
+                        <div className="text-sm font-medium text-gray-500">
+                          {userInfo.email}
+                        </div>
                       </div>
-                      <div className="text-sm font-medium text-gray-500">
-                        {userInfo.email}
-                      </div>
-                    </div>}
-                    
+                    )}
+
                     <button
                       type="button"
                       className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"

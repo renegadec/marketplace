@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
-import { AuthClient } from "@dfinity/auth-client";
 import { v4 as uuidv4 } from "uuid";
 import Loader from "../Loader";
 import { toast } from "react-toastify";
-import { backendActor } from "../../hooks/config";
 import { Result } from "../../utils/types";
 import {
   createVerificationEntry,
@@ -16,10 +14,12 @@ import { ThreeCircles } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
 import { deleteAsset, uploadFile } from "../../utils/storage-config/functions";
+import { useAuth } from "../ContextWrapper";
 
 const Profile = ({ activate }) => {
+  const {backendActor , identity} = useAuth();
+
   const { storageInitiated } = useSelector((state: RootState) => state.global);
-  const [userId, setUserId] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [updating, setUpdating] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -115,7 +115,7 @@ const Profile = ({ activate }) => {
         status: "pending",
         isUpdated: true,
       };
-      await backendActor.updateKYCRequest(userInfo.userId, updatedObject);
+      await backendActor.updateKYCRequest(userInfo.identity, updatedObject);
       toast.success("Profile Information updated", {
         autoClose: 5000,
         position: "top-center",
@@ -143,7 +143,7 @@ const Profile = ({ activate }) => {
         status: "pending",
         isUpdated: true,
       };
-      await backendActor.updateKYCRequest(userInfo.userId, updatedObject);
+      await backendActor.updateKYCRequest(userInfo.identity, updatedObject);
       toast.success("Profile Information updated", {
         autoClose: 5000,
         position: "top-center",
@@ -171,20 +171,10 @@ const Profile = ({ activate }) => {
     }
   };
 
-  const getPrincipalId = async () => {
-    const authClient = await AuthClient.create();
-
-    if (await authClient.isAuthenticated()) {
-      const identity = authClient.getIdentity();
-      const userPrincipal = identity.getPrincipal();
-      setUserId(userPrincipal);
-    }
-  };
-
   const getCustomerInfo = async () => {
     setLoading(true);
     try {
-      const res: Result = await backendActor.getKYCRequest(userId);
+      const res: Result = await backendActor.getKYCRequest(identity.getPrincipal());
       if (res.ok) {
         setUserInfo(res.ok);
         setEmail(res.ok.email);
@@ -200,14 +190,10 @@ const Profile = ({ activate }) => {
   };
 
   useEffect(() => {
-    getPrincipalId();
-  }, []);
-
-  useEffect(() => {
-    if (userId) {
+    if (identity) {
       getCustomerInfo();
     }
-  }, [userId]);
+  }, [identity]);
 
   const initProfileUpdate = async (field: string) => {
     setUpdating(true);
@@ -229,7 +215,7 @@ const Profile = ({ activate }) => {
   const updateProfile = async () => {
     try {
       const res = await backendActor.updateKYCRequest(
-        userInfo.userId,
+        userInfo.identity,
         userInfo
       );
       console.log(res);
@@ -251,13 +237,13 @@ const Profile = ({ activate }) => {
         console.log("Not updating the email is the same");
         setUpdating(false);
       } else {
-        await backendActor.updateKYCRequest(userInfo.userId, userInfo);
+        await backendActor.updateKYCRequest(userInfo.identity, userInfo);
 
         let uniqueString: string = String(uuidv4());
         const url = generateVerificationUrl(userInfo.id, uniqueString);
 
         await createVerificationEntry(
-          userInfo.userId,
+          userInfo.identity,
           userInfo.id,
           uniqueString
         );

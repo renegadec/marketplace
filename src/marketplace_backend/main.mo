@@ -154,9 +154,14 @@ actor Tswaanda {
 
   public shared query func getPendingKYCReaquest() : async [Customer] {
     let customersArray = Iter.toArray(mapOfCustomers.vals());
-    let pending = Array.filter<Customer>(customersArray, func customer = customer.status == "pending");
-    return pending;
+    return Array.filter<Customer>(customersArray, func customer = customer.status == "pending");
   };
+
+  public shared query func getApprovedKYC() : async [Customer] {
+    let customersArray = Iter.toArray(mapOfCustomers.vals());
+    return Array.filter<Customer>(customersArray, func customer = customer.status == "approved");
+  };
+
   public shared query func getPendingKYCReaquestSize() : async Nat {
     let customersArray = Iter.toArray(mapOfCustomers.vals());
     let pending = Array.filter<Customer>(customersArray, func customer = customer.status == "pending");
@@ -272,19 +277,18 @@ actor Tswaanda {
 
   // -------------------------------------------Favourites items methods---------------------------------------------------
 
-  public shared func addToFavourites(userId : Principal, productId : Text) : async Bool {
-    var favouriteItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {
+  public shared ({ caller }) func addToFavourites(productId : Text) : async Bool {
+    var favouriteItems : List.List<Text> = switch (customerFavouriteItems.get(caller)) {
       case (?value) { value };
       case (null) { List.nil<Text>() };
     };
     favouriteItems := List.push(productId, favouriteItems);
-    customerFavouriteItems.put(userId, favouriteItems);
+    customerFavouriteItems.put(caller, favouriteItems);
     return true;
   };
 
-  public shared func getMyFavItems(userId : Principal) : async [Product] {
-
-    var favItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {
+  public shared ({ caller }) func getMyFavItems() : async [Product] {
+    var favItems : List.List<Text> = switch (customerFavouriteItems.get(caller)) {
       case (?value) { value };
       case (null) { List.nil<Text>() };
     };
@@ -293,8 +297,8 @@ actor Tswaanda {
     return products;
   };
 
-  public shared func removeFromFavourites(userId : Principal, productId : Text) : async Bool {
-    var favItems : List.List<Text> = switch (customerFavouriteItems.get(userId)) {
+  public shared ({ caller }) func removeFromFavourites(productId : Text) : async Bool {
+    var favItems : List.List<Text> = switch (customerFavouriteItems.get(caller)) {
       case (?value) { value };
       case (null) { List.nil<Text>() };
     };
@@ -304,8 +308,19 @@ actor Tswaanda {
         item != productId;
       },
     );
-    customerFavouriteItems.put(userId, favItems);
+    customerFavouriteItems.put(caller, favItems);
     return true;
+  };
+
+  public shared query ({ caller }) func isProductFavoutite(productId : Text) : async Bool {
+    var favItems : List.List<Text> = switch (customerFavouriteItems.get(caller)) {
+      case (?value) { value };
+      case (null) { List.nil<Text>() };
+    };
+
+    let itemsArray = List.toArray(favItems);
+    let isFavourite = Array.find<Text>(itemsArray, func x = x == productId);
+    return isFavourite != null;
   };
 
   // -------------------------------------------Email Verification---------------------------------------------------
@@ -351,7 +366,7 @@ actor Tswaanda {
     return true;
   };
 
-    public shared query func checkIfEmailSubscribed(email : Text) : async [NewsLetterSubscription] {
+  public shared query func checkIfEmailSubscribed(email : Text) : async [NewsLetterSubscription] {
     let subscridedArray = Iter.toArray(newsLetterSubscriptions.vals());
     let entry = Array.filter<NewsLetterSubscription>(subscridedArray, func customer = customer.email == email);
     return entry;

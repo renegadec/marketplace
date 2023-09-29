@@ -24,7 +24,6 @@ const Support = lazy(() => import ('./pages/Support'))
 const VerifyEmail = lazy(() => import ('./pages/VerifyEmail'))
 
 import { UserContext } from "./UserContext";
-import { useAuth } from "./hooks";
 
 
 import ShoppingCart from "./pages/ShoppingCart";;
@@ -32,8 +31,8 @@ import ShoppingCart from "./pages/ShoppingCart";;
 import Orders from "./pages/Orders";
 import { setInit } from "./state/globalSlice";
 import { initActors } from "./utils/storage-config/functions";
-import { AuthClient } from "@dfinity/auth-client";
 import VerifyNewsLetterEmail from "./pages/VerifyNewsLetterEmail";
+import { useAuth } from "./components/ContextWrapper";
 
 export const loaderStyle: CSSProperties = {
   position: 'absolute',
@@ -50,16 +49,9 @@ const App = () => {
     minHeight: '100vh', // Ensures the container covers the whole viewport
   };
 
-
-  const [session, setSession] = useState<boolean>(false)
-
-  const { login, isLoggedIn } = useAuth(session, setSession);
+  const { checkAuth } = useAuth();
 
   const dispatch = useDispatch()
-
-    const checkAuth = async () => {
-      if(await isLoggedIn()) setSession(true)
-    }
 
     const init = async () => {
       const res = await initActors();
@@ -75,7 +67,6 @@ const App = () => {
 
     return (
       <main className="font-mont" style={containerStyle}>
-        <UserContext.Provider value={{session, setSession}}>
           <BrowserRouter>
           <Suspense fallback={<div style={loaderStyle}><Loader /></div>}>
 
@@ -199,7 +190,6 @@ const App = () => {
           </div>
           </Suspense>
           </BrowserRouter>
-        </UserContext.Provider>
       </main>
 
     )

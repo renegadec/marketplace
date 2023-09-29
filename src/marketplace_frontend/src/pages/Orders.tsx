@@ -1,39 +1,25 @@
 import React from "react";
 import OrderDetails from "../components/Orders/OrderDetails";
 import OrderHistory from "../components/Orders/OrderHistory";
-import { useContext, useEffect, useState } from "react";
-import { AuthClient } from "@dfinity/auth-client";
-import { backendActor } from "../hooks/config";
+import { useEffect, useState } from "react";
+import { useAuth } from "../components/ContextWrapper";
 
 const Orders = () => {
-  const [userId, setUserId] = useState(null);
+
+  const { backendActor, identity } = useAuth();
   const [rawOrders, setRawOrders] = useState(null);
   const [orders, setOrders] = useState(null);
 
-  const getPrincipalId = async () => {
-    const authClient = await AuthClient.create();
-
-    if (await authClient.isAuthenticated()) {
-      const identity = authClient.getIdentity();
-      const userPrincipal = identity.getPrincipal();
-      setUserId(userPrincipal);
-    }
-  };
-
-  useEffect(() => {
-    getPrincipalId();
-  }, []);
-
   const getOrders = async () => {
-    const res = await backendActor.getMyOrders(userId);
+    const res = await backendActor.getMyOrders(identity.getPrincipal());
     setRawOrders(res);
   };
 
   useEffect(() => {
-    if (userId) {
+    if (identity) {
       getOrders();
     }
-  }, [userId]);
+  }, [identity]);
 
   useEffect(() => {
     if (rawOrders) {

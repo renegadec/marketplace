@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { backendActor } from "../hooks/config";
 import { Loader } from "../components";
 import { loaderStyle } from "../App";
 import { KYCRequest, Result } from "../utils/types";
 import { toast } from "react-toastify";
+import { useAuth } from "../components/ContextWrapper";
 
 const VerifyEmail = () => {
+  const {backendActor } = useAuth();
+
   const navigate = useNavigate();
   const { userid, uniquestr } = useParams();
   const [record, setRecord] = useState(null);

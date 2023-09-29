@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard/ProductCard";
 import Loader from "./Loader";
-import { adminBackendActor} from "../hooks/config";
+import { useAuth } from "./ContextWrapper";
 
 const Features = (props) => {
+  const { adminBackendActor } = useAuth()
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState(null);
 
